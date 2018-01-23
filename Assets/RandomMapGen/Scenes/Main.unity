@@ -213,7 +213,7 @@ MonoBehaviour:
   scroll_speed: 50
   drag_speed: 4
   shift_modifier: 3
-  min_zoom: 1
+  min_zoom: 50
   max_zoom: 500
 --- !u!1 &496963844
 GameObject:
@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 496963845}
   m_Layer: 0
-  m_Name: Map
+  m_Name: Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 1687620250}
   - component: {fileID: 1687620251}
   m_Layer: 0
-  m_Name: RandomMapTester
+  m_Name: MapManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -284,10 +284,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd507134d6d94424885a494861f62946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map_width: 3
-  map_height: 3
+  map_width_: 20
+  map_height_: 20
+  map_texture: {fileID: 2800000, guid: b46202130bad6c04f9375e00a771741e, type: 3}
+  tile_size_: {x: 16, y: 16}
   map_container: {fileID: 496963844}
   tile_prefab: {fileID: 1818905929147216, guid: 1e1c65fca40e9954b93b3eee8b52aae7,
     type: 2}
-  tile_size: {x: 16, y: 16}
-  island_texture: {fileID: 2800000, guid: b46202130bad6c04f9375e00a771741e, type: 3}
+  editor_prefab: {fileID: 1491731824386106, guid: b099a143f6fb9794b8382c341a0ddf16,
+    type: 2}

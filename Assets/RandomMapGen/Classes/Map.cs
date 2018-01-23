@@ -1,20 +1,40 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public enum TileType
 {
     EMPTY = -1,
-    GRASS = 15
+    FILLED = 15
+}
+
+public enum TerrainType
+{
+    NONE,
+    GRASS,
+    ROCK
 }
 
 public class Map
 {
+    public int columns
+    {
+        get { return columns_; }
+        set { columns_ = value; area = columns * rows; }
+    }
+
+    public int rows
+    {
+        get { return rows_; }
+        set { rows_ = value; area = columns * rows; }
+    }
+
+    public int area { get; private set; }
+
     public Tile[] tiles;
-    public int columns;
-    public int rows;
-    public int area { get { return tiles.Length; } }
+
+    private int columns_;
+    private int rows_;
 
 
     public void CreateMap(int _width, int _height)
