@@ -7,7 +7,7 @@ public class CameraControls : MonoBehaviour
     [SerializeField] float scroll_speed = 50.0f;
     [SerializeField] float drag_speed = 4.0f;
     [SerializeField] float shift_modifier = 3.0f;
-    
+
     [Space]
     [SerializeField] float min_zoom = 1;
     [SerializeField] float max_zoom = 100;

@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    public int map_width { get { return map.columns; } }
-    public int map_height { get { return map.rows; } }
+    public int map_columns { get { return map.columns; } }
+    public int map_rows { get { return map.rows; } }
     public int map_area { get { return map.area; } }
 
     public Vector2 tile_size { get { return tile_size_; } }
     public Vector2 half_tile_size { get; private set; }
 
+    public Vector2 map_center { get; private set; }
+    public Vector2 map_size { get; private set; }
     public Bounds map_bounds { get; private set; }
 
     [Header("Map Dimensions")]
-    [SerializeField] int map_width_ = 20;
-    [SerializeField] int map_height_ = 20;
+    [SerializeField] int map_columns_ = 20;
+    [SerializeField] int map_rows_ = 20;
 
     [Header("Map Texture")]
     [SerializeField] Texture2D map_texture;
@@ -27,8 +29,8 @@ public class MapManager : MonoBehaviour
     [SerializeField] GameObject editor_prefab;
 
     private Map map;
-    private MapEditorControls map_editor;
-    
+    private MapEditor map_editor;
+
 
     public void CreateMap()
     {
@@ -37,7 +39,7 @@ public class MapManager : MonoBehaviour
 
         CleanUp();
 
-        map.CreateMap(map_width_, map_height_);
+        map.CreateMap(map_columns_, map_rows_);
 
         CreateBounds();
         CreateGrid();
@@ -54,8 +56,9 @@ public class MapManager : MonoBehaviour
         if (map_editor == null)
         {
             GameObject obj = Instantiate(editor_prefab);
+            obj.name = "MapEditor";
 
-            map_editor = obj.GetComponent<MapEditorControls>();
+            map_editor = obj.GetComponent<MapEditor>();
             map_editor.Init(this);
 
             Debug.Log("Created a new map editor");
@@ -107,7 +110,7 @@ public class MapManager : MonoBehaviour
 
     }
 
-    
+
     void Update()
     {
         half_tile_size = tile_size / 2;
@@ -142,11 +145,11 @@ public class MapManager : MonoBehaviour
 
     void CreateBounds()
     {
-        float map_center_x = (half_tile_size.x * map_width) - half_tile_size.x;
-        float map_center_y = -((half_tile_size.y * map_height) - half_tile_size.y);
+        float map_center_x = (half_tile_size.x * map_columns) - half_tile_size.x;
+        float map_center_y = -((half_tile_size.y * map_rows) - half_tile_size.y);
 
-        Vector3 map_center = new Vector2(map_center_x, map_center_y);
-        Vector3 map_size = new Vector2(tile_size.x * map_width, tile_size.y * map_height);
+        map_center = new Vector2(map_center_x, map_center_y);
+        map_size = new Vector2(tile_size.x * map_columns, tile_size.y * map_rows);
 
         map_bounds = new Bounds(map_center, map_size);
     }
@@ -155,6 +158,13 @@ public class MapManager : MonoBehaviour
     void CreateGrid()
     {
         Sprite[] sprites = Resources.LoadAll<Sprite>(map_texture.name);
+
+        /*
+        map.tiles[5].ClearNeighbours();
+        map.tiles[5].autotile_id = (int)TileType.EMPTY;
+        map.tiles[6].ClearNeighbours();
+        map.tiles[6].autotile_id = (int)TileType.EMPTY;
+        */
 
         for (int i = 0; i < map.area; ++i)
         {
@@ -168,12 +178,10 @@ public class MapManager : MonoBehaviour
             clone.transform.position = pos;
 
             Tile tile = map.tiles[i];
-            int sprite_id = tile.autotile_id;
-
-            if (sprite_id >= 0)
+            if (tile.autotile_id >= 0)
             {
                 SpriteRenderer sr = clone.GetComponent<SpriteRenderer>();
-                sr.sprite = sprites[sprite_id];
+                sr.sprite = sprites[tile.autotile_id];
             }
         }
     }

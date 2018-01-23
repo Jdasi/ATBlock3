@@ -284,9 +284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd507134d6d94424885a494861f62946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map_width_: 20
-  map_height_: 20
-  map_texture: {fileID: 2800000, guid: b46202130bad6c04f9375e00a771741e, type: 3}
+  map_columns_: 20
+  map_rows_: 20
+  map_texture: {fileID: 2800000, guid: e8f8f7860aa266f428fe42265f9b8405, type: 3}
   tile_size_: {x: 16, y: 16}
   map_container: {fileID: 496963844}
   tile_prefab: {fileID: 1818905929147216, guid: 1e1c65fca40e9954b93b3eee8b52aae7,

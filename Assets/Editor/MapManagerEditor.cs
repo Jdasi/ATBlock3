@@ -11,7 +11,7 @@ public class MapManagerEditor : Editor
         DrawDefaultInspector();
 
         MapManager script = (MapManager)target;
-        
+
         if (GUILayout.Button("Create Map"))
         {
             if (Application.isPlaying)

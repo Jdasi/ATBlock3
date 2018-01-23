@@ -9,7 +9,7 @@ public class PixelPerfectCamera : MonoBehaviour
 
     public Vector2 native_resolution = new Vector2(160, 144);
 
-    
+
     void Awake()
     {
         Camera cam = GetComponent<Camera>();
