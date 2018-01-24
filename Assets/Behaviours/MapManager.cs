@@ -7,6 +7,7 @@ public interface IMapManager
     bool PosInMapBounds(Vector2 _pos);
     Vector2 PosToTileCenter(Vector2 _pos);
     int PosToTileIndex(Vector2 _pos);
+    void Paint(Vector2 _pos, TerrainType _terrain_type);
 
     int map_columns { get; }
     int map_rows { get; }
@@ -53,11 +54,17 @@ public class MapManager : MonoBehaviour, IMapManager
     private Map map;
     private MapEditor map_editor;
 
+    private Sprite[] sprites;
+    private List<SpriteRenderer> sprite_tiles = new List<SpriteRenderer>();
+
 
     public void CreateMap()
     {
         if (map == null)
+        {
+            sprites = Resources.LoadAll<Sprite>(map_texture.name);
             map = new Map();
+        }
 
         CleanUp();
 
@@ -127,6 +134,36 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
+    public void Paint(Vector2 _pos, TerrainType _terrain_type)
+    {
+        if (!PosInMapBounds(_pos))
+            return;
+
+        int index = PosToTileIndex(_pos);
+        map.UpdateTerrainType(index, _terrain_type);
+
+        // Update sprites ..
+        int x = index % map_columns;
+        int y = index / map_rows;
+
+        for (int row = y - 1; row <= y + 1; ++row)
+        {
+            for (int col = x - 1; col <= x + 1; ++col)
+            {
+                if (col < 0 || col >= map_columns ||
+                    row < 0 || row >= map_rows)
+                {
+                    continue;
+                }
+
+                index = JHelper.CalculateIndex(col, row, map_columns);
+                sprite_tiles[index].sprite = map.TileEmpty(index) ?
+                    null : sprites[map.GetAutoTileID(index)];
+            }
+        }
+    }
+
+
     void Start()
     {
 
@@ -179,15 +216,6 @@ public class MapManager : MonoBehaviour, IMapManager
 
     void CreateGrid()
     {
-        Sprite[] sprites = Resources.LoadAll<Sprite>(map_texture.name);
-
-        /*
-        map.tiles[5].ClearNeighbours();
-        map.tiles[5].autotile_id = (int)TileType.EMPTY;
-        map.tiles[6].ClearNeighbours();
-        map.tiles[6].autotile_id = (int)TileType.EMPTY;
-        */
-
         for (int i = 0; i < map.area; ++i)
         {
             int x = i % map.columns;
@@ -199,12 +227,10 @@ public class MapManager : MonoBehaviour, IMapManager
             clone.name = "Tile" + i;
             clone.transform.position = pos;
 
-            Tile tile = map.tiles[i];
-            if (tile.autotile_id >= 0)
-            {
-                SpriteRenderer sr = clone.GetComponent<SpriteRenderer>();
-                sr.sprite = sprites[tile.autotile_id];
-            }
+            SpriteRenderer sr = clone.GetComponent<SpriteRenderer>();
+            sr.sprite = map.TileEmpty(i) ? null : sprites[map.GetAutoTileID(i)];
+
+            sprite_tiles.Add(sr);
         }
     }
 

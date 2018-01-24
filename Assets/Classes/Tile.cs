@@ -20,6 +20,7 @@ public class Tile
     public Tile[] neighbours = new Tile[4];
 
     public int autotile_id = 0;
+    public TerrainType terrain_type = TerrainType.NONE;
 
 
     public Tile(int _id)
@@ -67,14 +68,18 @@ public class Tile
     }
 
 
-    private void CalculateAutoTileID()
+    public void CalculateAutoTileID()
     {
         autotile_id = 0;
         int bit = 1;
 
         foreach (Tile neighbour in neighbours)
         {
-            autotile_id += neighbour == null ? 0 : bit;
+            bool neighbour_valid = neighbour != null &&
+                neighbour.terrain_type == terrain_type;
+
+            autotile_id += neighbour_valid ? bit : 0;
+
             bit *= 2;
         }
     }

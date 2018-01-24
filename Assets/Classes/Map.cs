@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileType
+public enum AutoIDType
 {
-    EMPTY = -1,
     FILLED = 15
 }
 
@@ -31,8 +30,7 @@ public class Map
 
     public int area { get; private set; }
 
-    public Tile[] tiles;
-
+    private Tile[] tiles;
     private int columns_;
     private int rows_;
 
@@ -47,6 +45,61 @@ public class Map
     }
 
 
+    public TerrainType TileTerrainType(int _tile_index)
+    {
+        if (!JHelper.ValidIndex(_tile_index, area))
+            return TerrainType.NONE;
+
+        return tiles[_tile_index].terrain_type;
+    }
+
+    
+    public bool TileEmpty(int _tile_index)
+    {
+        if (!JHelper.ValidIndex(_tile_index, area))
+            return true;
+
+        return TileTerrainType(_tile_index) == TerrainType.NONE;
+    }
+
+
+    public int GetAutoTileID(int _tile_index)
+    {
+        if (!JHelper.ValidIndex(_tile_index, area))
+            return 0;
+
+        return tiles[_tile_index].autotile_id;
+    }
+
+
+    public void UpdateTerrainType(int _tile_index, TerrainType _type)
+    {
+        if (!JHelper.ValidIndex(_tile_index, area))
+            return;
+
+        Tile tile = tiles[_tile_index];
+        tile.terrain_type = _type;
+
+        int x = _tile_index % columns;
+        int y = _tile_index / columns;
+
+        for (int row = y - 1; row <= y + 1; ++row)
+        {
+            for (int col = x - 1; col <= x + 1; ++col)
+            {
+                if (col < 0 || col >= columns ||
+                    row < 0 || row >= rows)
+                {
+                    continue;
+                }
+
+                int index = JHelper.CalculateIndex(col, row, columns);
+                tiles[index].CalculateAutoTileID();
+            }
+        }
+    }
+
+
     private void CreateTiles()
     {
         for (int i = 0; i < area; ++i)
@@ -55,20 +108,20 @@ public class Map
             tiles[i] = tile;
         }
 
-        FindNeighbours();
+        FindAllNeighbours();
     }
 
 
-    private void FindNeighbours()
+    private void FindAllNeighbours()
     {
         for (int i = 0; i < area; ++i)
         {
-            CalculateTileNeighbours(tiles[i]);
+            FindNeighbours(tiles[i]);
         }
     }
 
 
-    private void CalculateTileNeighbours(Tile _tile)
+    private void FindNeighbours(Tile _tile)
     {
         int x = _tile.id % columns;
         int y = _tile.id / columns;

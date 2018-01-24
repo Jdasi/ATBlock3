@@ -141,8 +141,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   line_thickness: 0.33
-  line_color: {r: 0, g: 1, b: 0, a: 1}
+  line_color: {r: 0, g: 1, b: 0, a: 0.5882353}
   line_material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  underlay_color: {r: 0, g: 0, b: 0, a: 0.5882353}
   sorting_layer: Default
   order_in_layer: 99
   grid_lines_container: {fileID: 1627900351839368}

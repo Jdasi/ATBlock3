@@ -10,6 +10,9 @@ public class MapEditor : MonoBehaviour
     [SerializeField] Material line_material;
 
     [Space]
+    [SerializeField] Color underlay_color = Color.black;
+
+    [Space]
     [SerializeField] string sorting_layer = "Default";
     [SerializeField] int order_in_layer;
 
@@ -34,6 +37,7 @@ public class MapEditor : MonoBehaviour
         highlight_tile.transform.localScale = _imap_manager.tile_size;
         underlay.transform.position = _imap_manager.map_center;
         underlay.transform.localScale = _imap_manager.map_size;
+        underlay.GetComponent<SpriteRenderer>().color = underlay_color;
 
         InitGridLines();
     }
@@ -54,10 +58,13 @@ public class MapEditor : MonoBehaviour
         TrackMouse();
         UpdateTileHighlight();
 
-        if (can_click && Input.GetMouseButtonDown(0))
+        if (can_click && Input.GetMouseButton(0))
         {
-            int index = imap_manager.PosToTileIndex(mouse_pos);
-            Debug.Log("Click at: " + index);
+            imap_manager.Paint(mouse_pos, TerrainType.GRASS);
+        }
+        else if (can_click && Input.GetMouseButton(2))
+        {
+            imap_manager.Paint(mouse_pos, TerrainType.NONE);
         }
     }
 
