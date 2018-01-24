@@ -2,7 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public interface IMapManager
+{
+    bool PosInMapBounds(Vector2 _pos);
+    Vector2 PosToTileCenter(Vector2 _pos);
+    int PosToTileIndex(Vector2 _pos);
+
+    int map_columns { get; }
+    int map_rows { get; }
+
+    Vector2 tile_size { get; }
+    Vector2 half_tile_size { get; }
+
+    Vector2 map_center { get; }
+    Vector2 map_size { get; }
+
+    Vector3 map_bounds_min { get; }
+    Vector3 map_bounds_max { get; }
+}
+
+public class MapManager : MonoBehaviour, IMapManager
 {
     public int map_columns { get { return map.columns; } }
     public int map_rows { get { return map.rows; } }
@@ -13,7 +32,10 @@ public class MapManager : MonoBehaviour
 
     public Vector2 map_center { get; private set; }
     public Vector2 map_size { get; private set; }
+
     public Bounds map_bounds { get; private set; }
+    public Vector3 map_bounds_min { get { return map_bounds.min; } }
+    public Vector3 map_bounds_max { get { return map_bounds.max; } }
 
     [Header("Map Dimensions")]
     [SerializeField] int map_columns_ = 20;
@@ -82,7 +104,7 @@ public class MapManager : MonoBehaviour
     }
 
 
-    public Vector3 PosToTileCenter(Vector2 _pos)
+    public Vector2 PosToTileCenter(Vector2 _pos)
     {
         int index = PosToTileIndex(_pos);
 

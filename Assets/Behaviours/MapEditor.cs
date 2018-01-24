@@ -20,20 +20,20 @@ public class MapEditor : MonoBehaviour
     [SerializeField] GameObject highlight_tile;
     [SerializeField] GameObject underlay;
 
-    private MapManager map_manager; // TODO: should be a ref to an interface or something really ..
+    private IMapManager imap_manager;
     private Vector3 mouse_pos;
     private int sorting_layer_id;
 
     bool can_click { get { return highlight_tile.activeSelf; } }
 
 
-    public void Init(MapManager _map_manager)
+    public void Init(IMapManager _imap_manager)
     {
-        map_manager = _map_manager;
+        imap_manager = _imap_manager;
 
-        highlight_tile.transform.localScale = _map_manager.tile_size;
-        underlay.transform.position = _map_manager.map_center;
-        underlay.transform.localScale = _map_manager.map_size;
+        highlight_tile.transform.localScale = _imap_manager.tile_size;
+        underlay.transform.position = _imap_manager.map_center;
+        underlay.transform.localScale = _imap_manager.map_size;
 
         InitGridLines();
     }
@@ -41,7 +41,7 @@ public class MapEditor : MonoBehaviour
 
     void Start()
     {
-        if (map_manager == null)
+        if (imap_manager == null)
         {
             Destroy(this.gameObject);
             return;
@@ -56,7 +56,7 @@ public class MapEditor : MonoBehaviour
 
         if (can_click && Input.GetMouseButtonDown(0))
         {
-            int index = map_manager.PosToTileIndex(mouse_pos);
+            int index = imap_manager.PosToTileIndex(mouse_pos);
             Debug.Log("Click at: " + index);
         }
     }
@@ -65,22 +65,22 @@ public class MapEditor : MonoBehaviour
     void InitGridLines()
     {
         sorting_layer_id = SortingLayer.GetLayerValueFromName(sorting_layer);
-        Vector3 origin = map_manager.map_bounds.min;
+        Vector3 origin = imap_manager.map_bounds_min;
 
         // Horizontal lines.
-        for (int i = 0; i <= map_manager.map_rows; ++i)
+        for (int i = 0; i <= imap_manager.map_rows; ++i)
         {
-            Vector3 start = new Vector3(origin.x, origin.y + (i * map_manager.tile_size.y));
-            Vector3 end = new Vector3(map_manager.map_bounds.max.x, start.y);
+            Vector3 start = new Vector3(origin.x, origin.y + (i * imap_manager.tile_size.y));
+            Vector3 end = new Vector3(imap_manager.map_bounds_max.x, start.y);
 
             CreateGridLine(start, end);
         }
 
         // Vertical lines.
-        for (int i = 0; i <= map_manager.map_columns; ++i)
+        for (int i = 0; i <= imap_manager.map_columns; ++i)
         {
-            Vector3 start = new Vector3(origin.x + (i * map_manager.tile_size.x), origin.y );
-            Vector3 end = new Vector3(start.x, map_manager.map_bounds.max.y);
+            Vector3 start = new Vector3(origin.x + (i * imap_manager.tile_size.x), origin.y );
+            Vector3 end = new Vector3(start.x, imap_manager.map_bounds_max.y);
 
             CreateGridLine(start, end);
         }
@@ -120,12 +120,12 @@ public class MapEditor : MonoBehaviour
 
     void UpdateTileHighlight()
     {
-        highlight_tile.SetActive(map_manager.PosInMapBounds(mouse_pos));
+        highlight_tile.SetActive(imap_manager.PosInMapBounds(mouse_pos));
 
         if (!can_click)
             return;
 
-        highlight_tile.transform.position = map_manager.PosToTileCenter(mouse_pos);
+        highlight_tile.transform.position = imap_manager.PosToTileCenter(mouse_pos);
     }
 
 }
