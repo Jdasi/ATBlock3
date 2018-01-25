@@ -39,8 +39,8 @@ public class MapManager : MonoBehaviour, IMapManager
     public Vector3 map_bounds_max { get { return map_bounds.max; } }
 
     [Header("Map Dimensions")]
-    [SerializeField] int map_columns_ = 20;
-    [SerializeField] int map_rows_ = 20;
+    [Range(1, 100)][SerializeField] int map_columns_ = 20;
+    [Range(1, 100)][SerializeField] int map_rows_ = 20;
 
     [Header("Map Texture")]
     [SerializeField] Texture2D map_texture;
@@ -130,7 +130,7 @@ public class MapManager : MonoBehaviour, IMapManager
         float offsety = _pos.y - half_tile_size.y;
         int iy = Mathf.Abs((int)(offsety / tile_size.y));
 
-        return (iy * map.rows) + ix;
+        return (iy * map.columns) + ix;
     }
 
 
@@ -144,7 +144,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
         // Update sprites ..
         int x = index % map_columns;
-        int y = index / map_rows;
+        int y = index / map_columns;
 
         for (int row = y - 1; row <= y + 1; ++row)
         {
@@ -179,6 +179,7 @@ public class MapManager : MonoBehaviour, IMapManager
     void CleanUp()
     {
         ClearMapContainer();
+        ClearSpriteTiles();
         ClearMapEditor();
     }
 
@@ -189,6 +190,12 @@ public class MapManager : MonoBehaviour, IMapManager
         {
             Destroy(child.gameObject);
         }
+    }
+
+
+    void ClearSpriteTiles()
+    {
+        sprite_tiles.Clear();
     }
 
 

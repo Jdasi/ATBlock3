@@ -128,7 +128,7 @@ public class Map
 
         if (y + 1 < rows)
         {
-            int i = ((y + 1) * rows) + x;
+            int i = ((y + 1) * columns) + x;
             //Debug.Log("Adding bottom neighbour: " + i + " to tile: " + _tile.id);
 
             _tile.AddNeighbour(Sides.BOTTOM, tiles[i]);
@@ -136,7 +136,7 @@ public class Map
 
         if (x + 1 < columns)
         {
-            int i = (y * rows) + (x + 1);
+            int i = (y * columns) + (x + 1);
             //Debug.Log("Adding right neighbour: " + i + " to tile: " + _tile.id);
 
             _tile.AddNeighbour(Sides.RIGHT, tiles[i]);
@@ -144,7 +144,7 @@ public class Map
 
         if (x - 1 >= 0)
         {
-            int i = (y * rows) + (x - 1);
+            int i = (y * columns) + (x - 1);
             //Debug.Log("Adding left neighbour: " + i + " to tile: " + _tile.id);
 
             _tile.AddNeighbour(Sides.LEFT, tiles[i]);
@@ -152,7 +152,7 @@ public class Map
 
         if (y - 1 >= 0)
         {
-            int i = ((y - 1) * rows) + x;
+            int i = ((y - 1) * columns) + x;
             //Debug.Log("Adding top neighbour: " + i + " to tile: " + _tile.id);
 
             _tile.AddNeighbour(Sides.TOP, tiles[i]);
