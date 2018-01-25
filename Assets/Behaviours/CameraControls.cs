@@ -12,6 +12,9 @@ public class CameraControls : MonoBehaviour
     [SerializeField] float min_zoom = 1;
     [SerializeField] float max_zoom = 100;
 
+    [Header("Debug")]
+    [SerializeField] GUIStyle gui_style;
+
     private float current_modifier = 1.0f;
     private float original_zoom;
 
@@ -22,15 +25,15 @@ public class CameraControls : MonoBehaviour
 
     public void ResetCamera()
     {
-        Camera.main.transform.position = last_reset_pos;
-        Camera.main.orthographicSize = original_zoom;
+        JHelper.main_camera.transform.position = last_reset_pos;
+        JHelper.main_camera.orthographicSize = original_zoom;
     }
 
 
     public void ResetCamera(Vector2 pos)
     {
         last_reset_pos = pos;
-        last_reset_pos.z = Camera.main.transform.position.z;
+        last_reset_pos.z = JHelper.main_camera.transform.position.z;
 
         ResetCamera();
     }
@@ -38,7 +41,7 @@ public class CameraControls : MonoBehaviour
 
 	void Start()
     {
-        original_zoom = Camera.main.orthographicSize;
+        original_zoom = JHelper.main_camera.orthographicSize;
 	}
 
 
@@ -62,12 +65,12 @@ public class CameraControls : MonoBehaviour
 
     void HandleKeyboardMovement()
     {
-        Vector3 temp = Camera.main.transform.position;
+        Vector3 temp = JHelper.main_camera.transform.position;
 
         temp.x += Input.GetAxis("Horizontal") * move_speed * Time.deltaTime * current_modifier;
         temp.y += Input.GetAxis("Vertical") * move_speed * Time.deltaTime * current_modifier;
 
-        Camera.main.transform.position = temp;
+        JHelper.main_camera.transform.position = temp;
     }
 
 
@@ -76,17 +79,17 @@ public class CameraControls : MonoBehaviour
     /// </summary>
     void HandleMouseMovement()
     {
-        float scaled_speed = drag_speed * Camera.main.orthographicSize;
+        float scaled_speed = drag_speed * JHelper.main_camera.orthographicSize;
 
         if (Input.GetMouseButtonDown(1))
         {
-            old_cam_pos = Camera.main.transform.position;
+            old_cam_pos = JHelper.main_camera.transform.position;
             drag_origin = Input.mousePosition;
         }
 
         if (Input.GetMouseButton(1))
         {
-            Vector3 drag_difference = Camera.main.ScreenToViewportPoint(Input.mousePosition - drag_origin);
+            Vector3 drag_difference = JHelper.main_camera.ScreenToViewportPoint(Input.mousePosition - drag_origin);
             Vector3 move = new Vector3(drag_difference.x * scaled_speed, drag_difference.y * (scaled_speed / 1.5f), 0);
 
             Camera.main.transform.position = old_cam_pos - move;
@@ -99,8 +102,15 @@ public class CameraControls : MonoBehaviour
     /// </summary>
     void HandleZoom()
     {
-        Camera.main.orthographicSize -= Input.GetAxis("MouseScroll") * scroll_speed * Time.deltaTime * current_modifier * Camera.main.orthographicSize;
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, min_zoom, max_zoom);
+        JHelper.main_camera.orthographicSize -= Input.GetAxis("MouseScroll") * scroll_speed * Time.deltaTime * current_modifier * JHelper.main_camera.orthographicSize;
+        JHelper.main_camera.orthographicSize = Mathf.Clamp(JHelper.main_camera.orthographicSize, min_zoom, max_zoom);
+    }
+
+
+    void OnGUI()
+    {
+        GUI.Label(new Rect(10, 10, 200, 30), "Camera Position: " + transform.position, gui_style);
+        GUI.Label(new Rect(10, 40, 200, 30), "Camera Zoom: " + JHelper.main_camera.orthographicSize, gui_style);
     }
 
 }
