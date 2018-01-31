@@ -7,7 +7,12 @@ public interface IMapManager
     bool PosInMapBounds(Vector2 _pos);
     Vector2 PosToTileCenter(Vector2 _pos);
     int PosToTileIndex(Vector2 _pos);
-    void Paint(Vector2 _pos, TerrainType _terrain_type);
+
+    void Paint(Vector2 _pos, TerrainType _terrain_type, bool _update_autoids = true);
+    void Paint(int _tile_index, TerrainType _terrain_type, bool _update_autoids = true);
+    void AddPartitionVisualisation(int _from_index, int _to_index);
+
+    void RefreshAutoTileIDs();
 
     int map_columns { get; }
     int map_rows { get; }
@@ -20,6 +25,26 @@ public interface IMapManager
 
     Vector3 map_bounds_min { get; }
     Vector3 map_bounds_max { get; }
+}
+
+[System.Serializable]
+public class GenerationSettings
+{
+    public enum GenerationMethod
+    {
+        BSP,
+        NYSTROM
+    }
+
+    [Range(1, 100)] public int columns = 30;
+    [Range(1, 100)] public int rows = 30;
+
+    public GenerationMethod method;
+
+    public int min_leaf_size = 5;
+    public int max_leaf_size = 15;
+
+    [Range(1, 100)] public float random_split_chance = 0.75f;
 }
 
 public class MapManager : MonoBehaviour, IMapManager
@@ -38,20 +63,23 @@ public class MapManager : MonoBehaviour, IMapManager
     public Vector3 map_bounds_min { get { return map_bounds.min; } }
     public Vector3 map_bounds_max { get { return map_bounds.max; } }
 
-    [Header("Map Dimensions")]
-    [Range(1, 100)][SerializeField] int map_columns_ = 20;
-    [Range(1, 100)][SerializeField] int map_rows_ = 20;
+    [Header("Generation Settings")]
+    [SerializeField] GenerationSettings settings;
 
     [Header("Map Texture")]
     [SerializeField] Texture2D map_texture;
     [SerializeField] Vector2 tile_size_ = new Vector2(16, 16);
 
-    [Header("References")]
-    [SerializeField] GameObject map_container;
+    [Header("Prefabs")]
     [SerializeField] GameObject tile_prefab;
     [SerializeField] GameObject editor_prefab;
 
+    [Header("References")]
+    [SerializeField] Transform map_container;
+    [SerializeField] Transform partition_lines;
+
     private Map map;
+    private Dungeon dungeon;
     private MapEditor map_editor;
 
     private Sprite[] sprites;
@@ -61,19 +89,16 @@ public class MapManager : MonoBehaviour, IMapManager
     public void CreateMap()
     {
         if (map == null)
-        {
-            sprites = Resources.LoadAll<Sprite>(map_texture.name);
-            map = new Map();
-        }
+            return;
 
         CleanUp();
 
-        map.CreateMap(map_columns_, map_rows_);
+        map.CreateMap(settings.columns, settings.rows);
 
         CreateBounds();
         CreateGrid();
 
-        Debug.Log("Created a new " + map.columns + "x" + map.rows + " map");
+        dungeon.GenerateDungeon(settings);
     }
 
 
@@ -89,8 +114,6 @@ public class MapManager : MonoBehaviour, IMapManager
 
             map_editor = obj.GetComponent<MapEditor>();
             map_editor.Init(this);
-
-            Debug.Log("Created a new map editor");
         }
         else
         {
@@ -99,8 +122,6 @@ public class MapManager : MonoBehaviour, IMapManager
                 Destroy(map_editor.gameObject);
                 map_editor = null;
             }
-
-            Debug.Log("Destroyed map editor");
         }
     }
 
@@ -134,17 +155,29 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    public void Paint(Vector2 _pos, TerrainType _terrain_type)
+    public void Paint(Vector2 _pos, TerrainType _terrain_type, bool _update_autoids)
     {
         if (!PosInMapBounds(_pos))
             return;
 
         int index = PosToTileIndex(_pos);
-        map.UpdateTerrainType(index, _terrain_type);
+        Paint(index, _terrain_type, _update_autoids);
+    }
 
-        // Update sprites ..
-        int x = index % map_columns;
-        int y = index / map_columns;
+
+    public void Paint(int _tile_index, TerrainType _terrain_type, bool _update_autoids)
+    {
+        if (!JHelper.ValidIndex(_tile_index, map_area))
+        {
+            Debug.Log("Tile Index Out of Bounds: " + _tile_index);
+            return;
+        }
+
+        map.UpdateTerrainType(_tile_index, _terrain_type);
+
+        // Update surrounding sprites ..
+        int x = _tile_index % map_columns;
+        int y = _tile_index / map_columns;
 
         for (int row = y - 1; row <= y + 1; ++row)
         {
@@ -156,17 +189,53 @@ public class MapManager : MonoBehaviour, IMapManager
                     continue;
                 }
 
-                index = JHelper.CalculateIndex(col, row, map_columns);
-                sprite_tiles[index].sprite = map.TileEmpty(index) ?
-                    null : sprites[map.GetAutoTileID(index)];
+                _tile_index = JHelper.CalculateIndex(col, row, map_columns);
+                sprite_tiles[_tile_index].sprite = map.TileEmpty(_tile_index) ?
+                    null : sprites[map.GetAutoTileID(_tile_index)];
             }
         }
     }
 
 
+    public void RefreshAutoTileIDs()
+    {
+        map.RefreshAutoTileIDs();
+    }
+
+
+    public void AddPartitionVisualisation(int _from_index, int _to_index)
+    {
+        if (!JHelper.ValidIndex(_from_index, map_area) ||
+            !JHelper.ValidIndex(_to_index, map_area))
+        {
+            return;
+        }
+
+        var container = new GameObject("PartitionVisualisation");
+        container.transform.SetParent(partition_lines);
+
+        var line = container.AddComponent<LineRenderer>();
+        line.positionCount = 5;
+
+        Vector3 tl = sprite_tiles[_from_index].transform.position - (Vector3)tile_size;
+        Vector3 br = sprite_tiles[_to_index].transform.position + (Vector3)tile_size;
+
+        //Debug.Log("From Index: " + _from_index + ", To Index: " + _to_index);
+
+        line.SetPosition(0, tl);
+        line.SetPosition(1, new Vector3(br.x, tl.y));
+        line.SetPosition(2, br);
+        line.SetPosition(3, new Vector3(br.y, tl.x));
+        line.SetPosition(4, tl);
+    }
+
+
     void Start()
     {
+        sprites = Resources.LoadAll<Sprite>(map_texture.name);
 
+        map = new Map();
+        dungeon = new Dungeon(this);
     }
 
 
@@ -179,6 +248,7 @@ public class MapManager : MonoBehaviour, IMapManager
     void CleanUp()
     {
         ClearMapContainer();
+        ClearPartitionLines();
         ClearSpriteTiles();
         ClearMapEditor();
     }
@@ -186,10 +256,15 @@ public class MapManager : MonoBehaviour, IMapManager
 
     void ClearMapContainer()
     {
-        foreach (Transform child in map_container.transform)
-        {
+        foreach (Transform child in map_container)
             Destroy(child.gameObject);
-        }
+    }
+
+
+    void ClearPartitionLines()
+    {
+        foreach (Transform child in partition_lines)
+            Destroy(child.gameObject);
     }
 
 
@@ -230,7 +305,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
             Vector2 pos = new Vector2(x * tile_size_.x, -y * tile_size_.y);
 
-            GameObject clone = Instantiate(tile_prefab, map_container.transform);
+            GameObject clone = Instantiate(tile_prefab, map_container);
             clone.name = "Tile" + i;
             clone.transform.position = pos;
 

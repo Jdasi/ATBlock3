@@ -100,7 +100,16 @@ public class Map
     }
 
 
-    private void CreateTiles()
+    public void RefreshAutoTileIDs()
+    {
+        for (int i = 0; i < area; ++i)
+        {
+            tiles[i].CalculateAutoTileID();
+        }
+    }
+
+
+    void CreateTiles()
     {
         for (int i = 0; i < area; ++i)
         {
@@ -112,7 +121,7 @@ public class Map
     }
 
 
-    private void FindAllNeighbours()
+    void FindAllNeighbours()
     {
         for (int i = 0; i < area; ++i)
         {
@@ -121,7 +130,7 @@ public class Map
     }
 
 
-    private void FindNeighbours(Tile _tile)
+    void FindNeighbours(Tile _tile)
     {
         int x = _tile.id % columns;
         int y = _tile.id / columns;

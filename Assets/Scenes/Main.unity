@@ -291,7 +291,7 @@ GameObject:
   m_Component:
   - component: {fileID: 496963845}
   m_Layer: 0
-  m_Name: Container
+  m_Name: MapContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,6 +337,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 496963845}
+  - {fileID: 1849125307}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -351,12 +352,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd507134d6d94424885a494861f62946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  map_columns_: 20
-  map_rows_: 20
+  settings:
+    columns: 2
+    rows: 3
+    method: 0
+    min_leaf_size: 2
+    max_leaf_size: 3
+    random_split_chance: 0.75
   map_texture: {fileID: 2800000, guid: b46202130bad6c04f9375e00a771741e, type: 3}
   tile_size_: {x: 16, y: 16}
-  map_container: {fileID: 496963844}
   tile_prefab: {fileID: 1818905929147216, guid: 1e1c65fca40e9954b93b3eee8b52aae7,
     type: 2}
   editor_prefab: {fileID: 1491731824386106, guid: b099a143f6fb9794b8382c341a0ddf16,
     type: 2}
+  map_container: {fileID: 496963845}
+  partition_lines: {fileID: 1849125307}
+--- !u!1 &1849125306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1849125307}
+  m_Layer: 0
+  m_Name: PartitionLines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1849125307
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1849125306}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1687620250}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
