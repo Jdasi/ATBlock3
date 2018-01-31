@@ -208,8 +208,12 @@ public class MapManager : MonoBehaviour, IMapManager
         if (!JHelper.ValidIndex(_from_index, map_area) ||
             !JHelper.ValidIndex(_to_index, map_area))
         {
+            Debug.Log("Add Partition Visualisation out of bounds");
             return;
         }
+
+        Vector3 tl = sprite_tiles[_from_index].transform.position - new Vector3(half_tile_size.x, -half_tile_size.y);
+        Vector3 br = sprite_tiles[_to_index].transform.position + new Vector3(half_tile_size.x, -half_tile_size.y);
 
         var container = new GameObject("PartitionVisualisation");
         container.transform.SetParent(partition_lines);
@@ -217,15 +221,12 @@ public class MapManager : MonoBehaviour, IMapManager
         var line = container.AddComponent<LineRenderer>();
         line.positionCount = 5;
 
-        Vector3 tl = sprite_tiles[_from_index].transform.position - (Vector3)tile_size;
-        Vector3 br = sprite_tiles[_to_index].transform.position + (Vector3)tile_size;
-
         //Debug.Log("From Index: " + _from_index + ", To Index: " + _to_index);
 
         line.SetPosition(0, tl);
         line.SetPosition(1, new Vector3(br.x, tl.y));
         line.SetPosition(2, br);
-        line.SetPosition(3, new Vector3(br.y, tl.x));
+        line.SetPosition(3, new Vector3(tl.x, br.y));
         line.SetPosition(4, tl);
     }
 

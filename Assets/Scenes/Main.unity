@@ -353,11 +353,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
-    columns: 2
-    rows: 3
+    columns: 50
+    rows: 50
     method: 0
-    min_leaf_size: 2
-    max_leaf_size: 3
+    min_leaf_size: 6
+    max_leaf_size: 12
     random_split_chance: 0.75
   map_texture: {fileID: 2800000, guid: b46202130bad6c04f9375e00a771741e, type: 3}
   tile_size_: {x: 16, y: 16}

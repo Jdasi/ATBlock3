@@ -60,10 +60,7 @@ public class Dungeon
                 continue;
 
             leaves.Add(leaf.left);
-            //imap_manager.AddPartitionVisualisation(leaf.left.start_tile, leaf.left.end_tile);
-
             leaves.Add(leaf.right);
-            //imap_manager.AddPartitionVisualisation(leaf.right.start_tile, leaf.right.end_tile);
         }
 
         root.CreateRooms(imap_manager);

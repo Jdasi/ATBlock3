@@ -116,11 +116,10 @@ public class Leaf
         else
         {
             // Create a room.
-            int tile_index = JHelper.CalculateIndex(x, y, map_columns);
-            _imap_manager.Paint(tile_index, TerrainType.GRASS);
+            _imap_manager.Paint(start_tile, TerrainType.GRASS);
+            _imap_manager.Paint(end_tile, TerrainType.GRASS);
 
-            tile_index = JHelper.CalculateIndex(x + (width - 1), y + (height - 1), map_columns);
-            _imap_manager.Paint(tile_index, TerrainType.GRASS);
+            _imap_manager.AddPartitionVisualisation(start_tile, end_tile);
         }
     }
 
