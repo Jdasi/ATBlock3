@@ -2,51 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMapManager
-{
-    bool PosInMapBounds(Vector2 _pos);
-    Vector2 PosToTileCenter(Vector2 _pos);
-    int PosToTileIndex(Vector2 _pos);
-
-    void Paint(Vector2 _pos, TerrainType _terrain_type, bool _update_autoids = true);
-    void Paint(int _tile_index, TerrainType _terrain_type, bool _update_autoids = true);
-    void AddPartitionVisualisation(int _from_index, int _to_index);
-
-    void RefreshAutoTileIDs();
-
-    int map_columns { get; }
-    int map_rows { get; }
-
-    Vector2 tile_size { get; }
-    Vector2 half_tile_size { get; }
-
-    Vector2 map_center { get; }
-    Vector2 map_size { get; }
-
-    Vector3 map_bounds_min { get; }
-    Vector3 map_bounds_max { get; }
-}
-
-[System.Serializable]
-public class GenerationSettings
-{
-    public enum GenerationMethod
-    {
-        BSP,
-        NYSTROM
-    }
-
-    [Range(1, 100)] public int columns = 30;
-    [Range(1, 100)] public int rows = 30;
-
-    public GenerationMethod method;
-
-    public int min_leaf_size = 5;
-    public int max_leaf_size = 15;
-
-    [Range(1, 100)] public float random_split_chance = 0.75f;
-}
-
 public class MapManager : MonoBehaviour, IMapManager
 {
     public int map_columns { get { return map.columns; } }
@@ -77,6 +32,9 @@ public class MapManager : MonoBehaviour, IMapManager
     [Header("References")]
     [SerializeField] Transform map_container;
     [SerializeField] Transform partition_lines;
+
+    [Header("Debug")]
+    [SerializeField] bool show_partition_lines = true;
 
     private Map map;
     private Dungeon dungeon;
@@ -175,6 +133,9 @@ public class MapManager : MonoBehaviour, IMapManager
 
         map.UpdateTerrainType(_tile_index, _terrain_type);
 
+        if (!_update_autoids)
+            return;
+
         // Update surrounding sprites ..
         int x = _tile_index % map_columns;
         int y = _tile_index / map_columns;
@@ -200,10 +161,16 @@ public class MapManager : MonoBehaviour, IMapManager
     public void RefreshAutoTileIDs()
     {
         map.RefreshAutoTileIDs();
+
+        for (int i = 0; i < map_area; ++i)
+        {
+            sprite_tiles[i].sprite = map.TileEmpty(i) ? 
+                null : sprites[map.GetAutoTileID(i)];
+        }
     }
 
 
-    public void AddPartitionVisualisation(int _from_index, int _to_index)
+    public void VisualisePartition(int _from_index, int _to_index)
     {
         if (!JHelper.ValidIndex(_from_index, map_area) ||
             !JHelper.ValidIndex(_to_index, map_area))
@@ -243,6 +210,7 @@ public class MapManager : MonoBehaviour, IMapManager
     void Update()
     {
         half_tile_size = tile_size / 2;
+        partition_lines.gameObject.SetActive(show_partition_lines);
     }
 
 
