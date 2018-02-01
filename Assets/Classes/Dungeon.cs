@@ -9,6 +9,7 @@ public class Dungeon
     private GenerationSettings settings;
 
     private List<Leaf> leaves = new List<Leaf>();
+    private Leaf root;
 
 
     public Dungeon(IMapManager _imap_manager)
@@ -36,7 +37,7 @@ public class Dungeon
     }
 
 
-    private void BSPGeneration()
+    void BSPGeneration()
     {
         leaves.Clear();
 
@@ -44,7 +45,7 @@ public class Dungeon
         Leaf.max_leaf_size = settings.max_leaf_size;
         Leaf.map_columns = settings.columns;
 
-        Leaf root = new Leaf(null, 0, 0, settings.columns, settings.rows);
+        root = new Leaf(null, 0, 0, settings.columns, settings.rows);
         leaves.Add(root);
 
         List<Leaf> working_list = new List<Leaf>();
@@ -72,21 +73,43 @@ public class Dungeon
             leaves.Add(leaf.right);
         }
 
-        root.CreateRooms(imap_manager);
+        BSPVisualisePartitions();
+        BSPCreateRoomsAndCorridors();
 
-        List<Leaf> parents = leaves.Where(node => !node.is_branch).ToList();
+        List<Leaf> lowest_leaves = leaves.Where(node => !node.is_branch).ToList();
+        foreach (Leaf leaf in lowest_leaves)
+        {
+            imap_manager.VisualiseRoom(leaf.room);
+            imap_manager.VisualiseRooms(leaf.corridors);
+        }
+    }
+
+
+    void BSPVisualisePartitions()
+    {
+        List<Leaf> lowest_leaves = leaves.Where(node => !node.is_branch).ToList();
+        foreach (Leaf leaf in lowest_leaves)
+        {
+            imap_manager.VisualisePartition(leaf.start_tile, leaf.end_tile);
+        }
+    }
+
+
+    void BSPCreateRoomsAndCorridors()
+    {
+        root.CreateRooms();
+
+        List<Leaf> parents = leaves.Where(node => node.is_branch).ToList();
         parents.Reverse(); // Start from the lowest level first.
 
         foreach (Leaf parent in parents)
         {
             // Connect the parent's child rooms and store the result.
         }
-
-        imap_manager.RefreshAutoTileIDs();
     }
 
 
-    private void NystromGeneration()
+    void NystromGeneration()
     {
         // Do stuff ..
     }

@@ -23,7 +23,7 @@ public class Leaf
     public Leaf right { get; private set; }
 
     public Room room;
-    public List<Room> halls;
+    public List<Room> corridors;
 
     public bool is_root { get { return parent == null; } }
     public bool is_branch { get { return left != null || right != null; } }
@@ -32,6 +32,7 @@ public class Leaf
     public Leaf(Leaf _parent, int _x, int _y, int _width, int _height)
     {
         parent = _parent;
+        corridors = new List<Room>();
 
         x = _x;
         y = _y;
@@ -94,19 +95,15 @@ public class Leaf
     }
 
 
-    public void CreateRooms(IMapManager _imap_manager)
+    public void CreateRooms()
     {
-        if (is_branch)
+        if (is_branch) // Cascade room creation down to children.
         {
-            // Cascade room creation down to children.
-            left.CreateRooms(_imap_manager);
-            right.CreateRooms(_imap_manager);
+            left.CreateRooms();
+            right.CreateRooms();
         }
-        else
+        else // We are a leaf, so we can create a room.
         {
-            // We are a leaf, so we can create a room.
-            _imap_manager.VisualisePartition(start_tile, end_tile);
-
             // Define room size.
             int room_size_x = Random.Range(3, width - 1);
             int room_size_y = Random.Range(3, height - 1);
@@ -116,11 +113,20 @@ public class Leaf
             int room_pos_y = y + Random.Range(1, height - room_size_y - 1);
 
             // Create room.
-            room = new Room(room_pos_x, room_pos_y, room_size_x, room_size_y, _imap_manager);
+            room = new Room(room_pos_x, room_pos_y, room_size_x, room_size_y);
         }
     }
 
     
+    public void ConnectRooms()
+    {
+        if (!is_branch || left.room == null || right.room == null)
+            return;
 
+        // Create a corridor that connects the rooms.
+
+        // My room becomes the result.
+        //room = left.room + right.room;
+    }
 
 }

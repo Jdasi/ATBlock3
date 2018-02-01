@@ -10,7 +10,10 @@ public interface IMapManager
 
     void Paint(Vector2 _pos, TerrainType _terrain_type, bool _update_autoids = true);
     void Paint(int _tile_index, TerrainType _terrain_type, bool _update_autoids = true);
+
     void VisualisePartition(int _from_index, int _to_index);
+    void VisualiseRoom(Room _room);
+    void VisualiseRooms(List<Room> _rooms);
 
     void RefreshAutoTileIDs();
 

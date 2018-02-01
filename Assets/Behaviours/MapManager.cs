@@ -198,6 +198,33 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
+    public void VisualiseRoom(Room _room)
+    {
+        if (_room == null)
+            return;
+
+        for (int row = _room.y; row < _room.y + _room.height; ++row)
+        {
+            for (int col = _room.x; col < _room.x + _room.width; ++col)
+            {
+                int index = JHelper.CalculateIndex(col, row, map_columns);
+                Paint(index, TerrainType.GRASS, false);
+            }
+        }
+
+        RefreshAutoTileIDs();
+    }
+
+
+    public void VisualiseRooms(List<Room> _rooms)
+    {
+        foreach (Room room in _rooms)
+        {
+            VisualiseRoom(room);
+        }
+    }
+
+
     void Start()
     {
         sprites = Resources.LoadAll<Sprite>(map_texture.name);
