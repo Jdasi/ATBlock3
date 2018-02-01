@@ -18,15 +18,21 @@ public class Leaf
     public int start_tile { get; private set; }
     public int end_tile { get; private set; }
 
+    public Leaf parent { get; private set; }
     public Leaf left { get; private set; }
     public Leaf right { get; private set; }
 
     public Room room;
     public List<Room> halls;
 
+    public bool is_root { get { return parent == null; } }
+    public bool is_branch { get { return left != null || right != null; } }
 
-    public Leaf(int _x, int _y, int _width, int _height)
+
+    public Leaf(Leaf _parent, int _x, int _y, int _width, int _height)
     {
+        parent = _parent;
+
         x = _x;
         y = _y;
             
@@ -35,12 +41,6 @@ public class Leaf
 
         start_tile = JHelper.CalculateIndex(x, y, map_columns);
         end_tile = JHelper.CalculateIndex(x + (width - 1), y + (height - 1), map_columns);
-    }
-
-
-    public bool HasChildren()
-    {
-        return (left != null || right != null);
     }
 
 
@@ -53,7 +53,7 @@ public class Leaf
     public bool Split()
     {
         // Prevent erroneous splitting.
-        if (HasChildren())
+        if (is_branch)
             return false;
 
         // Determine direction of split.
@@ -80,14 +80,14 @@ public class Leaf
         if (split_hor)
         {
             // Above/Below Children.
-            left = new Leaf(x, y, width, split);
-            right = new Leaf(x, y + split, width, height - split);
+            left = new Leaf(this, x, y, width, split);
+            right = new Leaf(this, x, y + split, width, height - split);
         }
         else
         {
             // Side-by-Side Children.
-            left = new Leaf(x, y, split, height);
-            right = new Leaf(x + split, y, width - split, height);
+            left = new Leaf(this, x, y, split, height);
+            right = new Leaf(this, x + split, y, width - split, height);
         }
 
         return true;
@@ -96,15 +96,15 @@ public class Leaf
 
     public void CreateRooms(IMapManager _imap_manager)
     {
-        if (HasChildren())
+        if (is_branch)
         {
+            // Cascade room creation down to children.
             left.CreateRooms(_imap_manager);
             right.CreateRooms(_imap_manager);
-
-            CreateHall(left.GetRoom(), right.GetRoom());
         }
         else
         {
+            // We are a leaf, so we can create a room.
             _imap_manager.VisualisePartition(start_tile, end_tile);
 
             // Define room size.
@@ -120,31 +120,7 @@ public class Leaf
         }
     }
 
+    
 
-    public void CreateHall(Room _left, Room _right)
-    {
-        if (_left == null || _right == null)
-            return;
-
-        
-    }
-
-
-    public Room GetRoom()
-    {
-        if (!HasChildren())
-            return room;
-
-        Room left_room = left.GetRoom();
-        Room right_room = right.GetRoom();
-
-        if (left_room != null && right_room != null)
-        {
-            bool pick_left = Random.Range(0, 1.0f) > 0.5f;
-            return pick_left ? left_room : right_room;
-        }
-
-        return left_room == null ? right_room : left_room;
-    }
 
 }

@@ -353,8 +353,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
-    columns: 25
-    rows: 25
+    columns: 15
+    rows: 15
     method: 0
     min_leaf_size: 5
     max_leaf_size: 10
