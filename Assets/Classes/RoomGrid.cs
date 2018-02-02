@@ -14,13 +14,20 @@ public class RoomGrid
 
     public int width { get; private set; }
     public int height { get; private set; }
+    public int product { get; private set; }
 
     public int[] data { get; private set; }
 
     private List<RoomGrid> rooms = new List<RoomGrid>();
-    private List<RoomGrid> corridors = new List<RoomGrid>();
 
 
+    /// <summary>
+    /// Creates a new freestanding RoomGrid.
+    /// </summary>
+    /// <param name="_x"></param>
+    /// <param name="_y"></param>
+    /// <param name="_width"></param>
+    /// <param name="_height"></param>
     public RoomGrid(int _x, int _y, int _width, int _height)
     {
         InitDimensions(_x, _y, _width, _height);
@@ -36,6 +43,12 @@ public class RoomGrid
     }
 
 
+    /// <summary>
+    /// Creates a new RoomGrid from the info of lhs and rhs and creates a
+    /// corridor that connects them.
+    /// </summary>
+    /// <param name="_lhs"></param>
+    /// <param name="_rhs"></param>
     public RoomGrid(RoomGrid _lhs, RoomGrid _rhs)
     {
         CollateLists(_lhs, _rhs);
@@ -64,6 +77,7 @@ public class RoomGrid
 
         width = _width;
         height = _height;
+        product = _width * _height;
 
         top = _y;
         bottom = _y + _height;
@@ -83,23 +97,20 @@ public class RoomGrid
 
         foreach (RoomGrid room in _rhs.rooms)
             rooms.Add(room);
-
-        foreach (RoomGrid corridor in _lhs.corridors)
-            corridors.Add(corridor);
-
-        foreach (RoomGrid corridor in _rhs.corridors)
-            corridors.Add(corridor);
     }
 
 
     void ExtractData(RoomGrid _grid)
     {
+        if (_grid == null)
+            return;
+
         for (int row = 0; row < _grid.height; ++row)
         {
             for (int col = 0; col < _grid.width; ++col)
             {
                 int index = JHelper.CalculateIndex(col, row, _grid.width);
-                int this_index = JHelper.CalculateIndex(col + _grid.left - x, row + _grid.top - y, width);
+                int this_index = JHelper.CalculateIndex(col + _grid.left - left, row + _grid.top - top, width);
 
                 data[this_index] = _grid.data[index];
             }
@@ -109,7 +120,59 @@ public class RoomGrid
 
     void CreateCorridor(RoomGrid _lhs, RoomGrid _rhs)
     {
-        
+        Coords lhs_point = GetRandomSolidPoint(_lhs);
+        Coords rhs_point = GetRandomSolidPoint(_rhs);
+
+        Coords digger = new Coords(lhs_point.x, lhs_point.y);
+
+        int moves = 0; // just to prevent infinite loops while testing ..
+        while ((digger.x != rhs_point.x || digger.y != rhs_point.y) && moves < 1000)
+        {
+            if (digger.x != rhs_point.x)
+            {
+                int move = digger.x > rhs_point.x ? -1 : 1;
+                digger.x += move;
+            }
+            else if (digger.y != rhs_point.y)
+            {
+                int move = digger.y > rhs_point.y ? -1 : 1;
+                digger.y += move;
+            }
+
+            int index = JHelper.CalculateIndex(digger.x - _lhs.x, digger.y - _lhs.y, width);
+            if (JHelper.ValidIndex(index, product))
+            {
+                data[index] = 1;
+            }
+            else
+            {
+                Debug.Log("Digger Index Out of Range");
+            }
+
+            ++moves;
+        }
     }
+
+
+    Coords GetRandomSolidPoint(RoomGrid _grid)
+    {
+        int tile_index = 0;
+        int tile_value = 0;
+
+        while (tile_value == 0)
+        {
+            tile_index = Random.Range(0, _grid.product);
+            tile_value = _grid.data[tile_index];
+        }
+
+        Coords coords = new Coords();
+
+        coords.x = _grid.left + (tile_index % _grid.width);
+        coords.y = _grid.top + (tile_index / _grid.width);
+
+        return coords;
+    }
+
+    
 
 }

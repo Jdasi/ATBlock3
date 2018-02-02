@@ -19,5 +19,5 @@ public class GenerationSettings
     [Range(4, 100)] public int min_leaf_size = 5;
     [Range(4, 100)] public int max_leaf_size = 15;
 
-    [Range(1, 100)] public float random_split_chance = 0.75f;
+    [Range(0,   1)] public float random_split_chance = 0.75f;
 }

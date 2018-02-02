@@ -93,38 +93,21 @@ public class Leaf
     }
 
 
-    public void CreateRooms()
+    public void CreateRoom()
     {
-        if (is_branch) // Cascade room creation down to children.
-        {
-            left.CreateRooms();
-            right.CreateRooms();
-        }
-        else // We are a leaf, so we can create a room.
-        {
-            // Define room size.
-            int room_size_x = Random.Range(3, width - 1);
-            int room_size_y = Random.Range(3, height - 1);
-
-            // Define room position.
-            int room_pos_x = x + Random.Range(1, width - room_size_x - 1);
-            int room_pos_y = y + Random.Range(1, height - room_size_y - 1);
-
-            // Create room.
-            room_grid = new RoomGrid(room_pos_x, room_pos_y, room_size_x, room_size_y);
-        }
-    }
-
-    
-    public void ConnectRooms()
-    {
-        if (!is_branch || left.room_grid == null || right.room_grid == null)
+        if (is_branch)
             return;
 
-        // Create a corridor that connects the rooms.
+        // Define room size.
+        int room_size_x = Random.Range(3, width - 1);
+        int room_size_y = Random.Range(3, height - 1);
 
-        // My room becomes the result.
-        //room = left.room + right.room;
+        // Define room position.
+        int room_pos_x = x + Random.Range(1, width - room_size_x - 1);
+        int room_pos_y = y + Random.Range(1, height - room_size_y - 1);
+
+        // Create room.
+        room_grid = new RoomGrid(room_pos_x, room_pos_y, room_size_x, room_size_y);
     }
 
 }
