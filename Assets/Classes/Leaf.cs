@@ -22,8 +22,7 @@ public class Leaf
     public Leaf left { get; private set; }
     public Leaf right { get; private set; }
 
-    public Room room;
-    public List<Room> corridors;
+    public RoomGrid room_grid;
 
     public bool is_root { get { return parent == null; } }
     public bool is_branch { get { return left != null || right != null; } }
@@ -32,7 +31,6 @@ public class Leaf
     public Leaf(Leaf _parent, int _x, int _y, int _width, int _height)
     {
         parent = _parent;
-        corridors = new List<Room>();
 
         x = _x;
         y = _y;
@@ -113,14 +111,14 @@ public class Leaf
             int room_pos_y = y + Random.Range(1, height - room_size_y - 1);
 
             // Create room.
-            room = new Room(room_pos_x, room_pos_y, room_size_x, room_size_y);
+            room_grid = new RoomGrid(room_pos_x, room_pos_y, room_size_x, room_size_y);
         }
     }
 
     
     public void ConnectRooms()
     {
-        if (!is_branch || left.room == null || right.room == null)
+        if (!is_branch || left.room_grid == null || right.room_grid == null)
             return;
 
         // Create a corridor that connects the rooms.

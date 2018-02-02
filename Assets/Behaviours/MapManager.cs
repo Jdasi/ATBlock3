@@ -188,8 +188,6 @@ public class MapManager : MonoBehaviour, IMapManager
         var line = container.AddComponent<LineRenderer>();
         line.positionCount = 5;
 
-        //Debug.Log("From Index: " + _from_index + ", To Index: " + _to_index);
-
         line.SetPosition(0, tl);
         line.SetPosition(1, new Vector3(br.x, tl.y));
         line.SetPosition(2, br);
@@ -198,30 +196,24 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    public void VisualiseRoom(Room _room)
+    public void VisualiseRoomGrid(RoomGrid _grid)
     {
-        if (_room == null)
+        if (_grid == null)
             return;
 
-        for (int row = _room.y; row < _room.y + _room.height; ++row)
+        for (int i = 0; i < _grid.data.Length; ++i)
         {
-            for (int col = _room.x; col < _room.x + _room.width; ++col)
-            {
-                int index = JHelper.CalculateIndex(col, row, map_columns);
-                Paint(index, TerrainType.GRASS, false);
-            }
+            if (_grid.data[i] == 0)
+                continue;
+
+            int x = _grid.x + (i % _grid.width);
+            int y = _grid.y + (i / _grid.width);
+
+            int index = JHelper.CalculateIndex(x, y, map_columns);
+            Paint(index, TerrainType.GRASS, false);
         }
 
         RefreshAutoTileIDs();
-    }
-
-
-    public void VisualiseRooms(List<Room> _rooms)
-    {
-        foreach (Room room in _rooms)
-        {
-            VisualiseRoom(room);
-        }
     }
 
 

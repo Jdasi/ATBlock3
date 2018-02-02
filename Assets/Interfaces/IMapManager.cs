@@ -12,8 +12,7 @@ public interface IMapManager
     void Paint(int _tile_index, TerrainType _terrain_type, bool _update_autoids = true);
 
     void VisualisePartition(int _from_index, int _to_index);
-    void VisualiseRoom(Room _room);
-    void VisualiseRooms(List<Room> _rooms);
+    void VisualiseRoomGrid(RoomGrid _grid);
 
     void RefreshAutoTileIDs();
 

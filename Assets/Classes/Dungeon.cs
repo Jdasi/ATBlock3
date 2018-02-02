@@ -76,12 +76,7 @@ public class Dungeon
         BSPVisualisePartitions();
         BSPCreateRoomsAndCorridors();
 
-        List<Leaf> lowest_leaves = leaves.Where(node => !node.is_branch).ToList();
-        foreach (Leaf leaf in lowest_leaves)
-        {
-            imap_manager.VisualiseRoom(leaf.room);
-            imap_manager.VisualiseRooms(leaf.corridors);
-        }
+        imap_manager.VisualiseRoomGrid(root.room_grid);
     }
 
 
@@ -104,7 +99,8 @@ public class Dungeon
 
         foreach (Leaf parent in parents)
         {
-            // Connect the parent's child rooms and store the result.
+            // Group and connect the parent's child rooms.
+            parent.room_grid = new RoomGrid(parent.left.room_grid, parent.right.room_grid);
         }
     }
 
