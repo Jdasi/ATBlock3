@@ -20,6 +20,13 @@ public class RoomGrid
 
     private List<RoomGrid> rooms = new List<RoomGrid>();
 
+    private enum DataType
+    {
+        EMPTY,
+        ROOM,
+        CORRIDOR
+    }
+
 
     /// <summary>
     /// Creates a new freestanding RoomGrid.
@@ -35,7 +42,7 @@ public class RoomGrid
         // Square room generation.
         for (int i = 0; i < data.Length; ++i)
         {
-            data[i] = 1;
+            data[i] = (int)DataType.ROOM;
         }
 
         // This RoomGrid contains one room.
@@ -139,7 +146,8 @@ public class RoomGrid
             }
 
             int index = JHelper.CalculateIndex(digger.x, digger.y, width);
-            data[index] = 1;
+            if (data[index] == (int)DataType.EMPTY)
+                data[index] = (int)DataType.CORRIDOR;
         }
     }
 

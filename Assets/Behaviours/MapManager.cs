@@ -43,18 +43,33 @@ public class MapManager : MonoBehaviour, IMapManager
     private Sprite[] sprites;
     private List<SpriteRenderer> sprite_tiles = new List<SpriteRenderer>();
 
+    private int prev_map_columns = 0;
+    private int prev_map_rows = 0;
+
+    private bool map_different
+    {
+        get
+        {
+            return settings.columns != prev_map_columns ||
+                settings.rows != prev_map_rows;
+        }
+    }
+
 
     public void CreateMap()
     {
-        if (map == null)
-            return;
-
         CleanUp();
 
         map.CreateMap(settings.columns, settings.rows);
 
-        CreateBounds();
-        CreateGrid();
+        if (map_different)
+        {
+            CreateBounds();
+            CreateGrid();
+
+            prev_map_columns = map_columns;
+            prev_map_rows = map_rows;
+        }
 
         dungeon.GenerateDungeon(settings);
     }
@@ -62,7 +77,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
     public void ToggleMapEditor()
     {
-        if (map == null)
+        if (sprite_tiles.Count == 0)
             return;
 
         if (map_editor == null)
@@ -235,9 +250,13 @@ public class MapManager : MonoBehaviour, IMapManager
 
     void CleanUp()
     {
-        ClearMapContainer();
+        if (map_different)
+        {
+            ClearMapContainer();
+            ClearSpriteTiles();
+        }
+
         ClearPartitionLines();
-        ClearSpriteTiles();
         ClearMapEditor();
     }
 
