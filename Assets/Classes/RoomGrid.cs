@@ -125,8 +125,7 @@ public class RoomGrid
 
         Coords digger = new Coords(lhs_point.x, lhs_point.y);
 
-        int moves = 0; // just to prevent infinite loops while testing ..
-        while ((digger.x != rhs_point.x || digger.y != rhs_point.y) && moves < 1000)
+        while (digger.x != rhs_point.x || digger.y != rhs_point.y)
         {
             if (digger.x != rhs_point.x)
             {
@@ -139,17 +138,8 @@ public class RoomGrid
                 digger.y += move;
             }
 
-            int index = JHelper.CalculateIndex(digger.x - _lhs.x, digger.y - _lhs.y, width);
-            if (JHelper.ValidIndex(index, product))
-            {
-                data[index] = 1;
-            }
-            else
-            {
-                Debug.Log("Digger Index Out of Range");
-            }
-
-            ++moves;
+            int index = JHelper.CalculateIndex(digger.x, digger.y, width);
+            data[index] = 1;
         }
     }
 
@@ -165,14 +155,9 @@ public class RoomGrid
             tile_value = _grid.data[tile_index];
         }
 
-        Coords coords = new Coords();
-
-        coords.x = _grid.left + (tile_index % _grid.width);
-        coords.y = _grid.top + (tile_index / _grid.width);
-
-        return coords;
+        return new Coords(
+            (tile_index % _grid.width) + _grid.left - left,
+            (tile_index / _grid.width) + _grid.top - top);
     }
-
-    
 
 }
