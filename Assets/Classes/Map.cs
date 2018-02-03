@@ -135,36 +135,27 @@ public class Map
         int x = _tile.id % columns;
         int y = _tile.id / columns;
 
-        if (y + 1 < rows)
+        int side = 0;
+        for (int row = y - 1; row <= y + 1; ++row)
         {
-            int i = ((y + 1) * columns) + x;
-            //Debug.Log("Adding bottom neighbour: " + i + " to tile: " + _tile.id);
+            for (int col = x - 1; col <= x + 1; ++col)
+            {
+                if (col < 0 || col >= columns ||
+                    row < 0 || row >= rows)
+                {
+                    ++side;
+                    continue;
+                }
 
-            _tile.AddNeighbour(Sides.BOTTOM, tiles[i]);
-        }
+                // A tile can't be its own neighbour.
+                if (col == x && row == y)
+                    continue;
 
-        if (x + 1 < columns)
-        {
-            int i = (y * columns) + (x + 1);
-            //Debug.Log("Adding right neighbour: " + i + " to tile: " + _tile.id);
+                int index = JHelper.CalculateIndex(col, row, columns);
+                _tile.AddNeighbour(side, tiles[index]);
 
-            _tile.AddNeighbour(Sides.RIGHT, tiles[i]);
-        }
-
-        if (x - 1 >= 0)
-        {
-            int i = (y * columns) + (x - 1);
-            //Debug.Log("Adding left neighbour: " + i + " to tile: " + _tile.id);
-
-            _tile.AddNeighbour(Sides.LEFT, tiles[i]);
-        }
-
-        if (y - 1 >= 0)
-        {
-            int i = ((y - 1) * columns) + x;
-            //Debug.Log("Adding top neighbour: " + i + " to tile: " + _tile.id);
-
-            _tile.AddNeighbour(Sides.TOP, tiles[i]);
+                ++side;
+            }
         }
     }
 

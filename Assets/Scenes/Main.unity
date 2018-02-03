@@ -359,7 +359,7 @@ MonoBehaviour:
     min_leaf_size: 5
     max_leaf_size: 10
     random_split_chance: 0.75
-  map_texture: {fileID: 2800000, guid: b46202130bad6c04f9375e00a771741e, type: 3}
+  map_texture: {fileID: 2800000, guid: c804f523f6360044d92ca7af768687ea, type: 3}
   tile_size_: {x: 16, y: 16}
   tile_prefab: {fileID: 1818905929147216, guid: 1e1c65fca40e9954b93b3eee8b52aae7,
     type: 2}
