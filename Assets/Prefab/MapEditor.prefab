@@ -145,7 +145,7 @@ MonoBehaviour:
   line_material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   underlay_color: {r: 0, g: 0, b: 0, a: 0.5882353}
   sorting_layer: Default
-  order_in_layer: 99
+  order_in_layer: 75
   grid_lines_container: {fileID: 1627900351839368}
   highlight_tile: {fileID: 1918155212104450}
   underlay: {fileID: 1241888863994212}

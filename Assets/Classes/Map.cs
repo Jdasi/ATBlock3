@@ -10,7 +10,7 @@ public enum AutoIDType
 public enum TerrainType
 {
     NONE,
-    GRASS,
+    STONE,
     ROCK
 }
 
@@ -30,6 +30,7 @@ public class Map
 
     public int area { get; private set; }
 
+    private TerrainType starting_terrain_type = TerrainType.ROCK;
     private Tile[] tiles;
     private int columns_;
     private int rows_;
@@ -114,6 +115,8 @@ public class Map
         for (int i = 0; i < area; ++i)
         {
             Tile tile = new Tile(i);
+            tile.terrain_type = starting_terrain_type;
+
             tiles[i] = tile;
         }
 

@@ -14,7 +14,7 @@ public class MapEditor : MonoBehaviour
 
     [Space]
     [SerializeField] string sorting_layer = "Default";
-    [SerializeField] int order_in_layer;
+    [SerializeField] int order_in_layer = 75;
 
     [Space]
     [SerializeField] GameObject grid_lines_container;
@@ -60,11 +60,11 @@ public class MapEditor : MonoBehaviour
 
         if (can_click && Input.GetMouseButton(0))
         {
-            imap_manager.Paint(mouse_pos, TerrainType.GRASS);
+            imap_manager.Paint(mouse_pos, TerrainType.STONE);
         }
         else if (can_click && Input.GetMouseButton(2))
         {
-            imap_manager.Paint(mouse_pos, TerrainType.NONE);
+            imap_manager.Paint(mouse_pos, TerrainType.ROCK);
         }
     }
 

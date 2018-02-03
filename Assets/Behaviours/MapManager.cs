@@ -22,7 +22,7 @@ public class MapManager : MonoBehaviour, IMapManager
     [SerializeField] GenerationSettings settings;
 
     [Header("Map Texture")]
-    [SerializeField] Texture2D map_texture;
+    [SerializeField] List<Texture2D> map_textures;
     [SerializeField] Vector2 tile_size_ = new Vector2(16, 16);
 
     [Header("Prefabs")]
@@ -33,14 +33,18 @@ public class MapManager : MonoBehaviour, IMapManager
     [SerializeField] Transform map_container;
     [SerializeField] Transform partition_lines;
 
-    [Header("Debug")]
+    [Header("Partition Lines")]
+    [SerializeField] string sorting_layer = "Default";
+    [SerializeField] int order_in_layer = 76;
+    [SerializeField] Material line_material;
+    [SerializeField] Color line_color;
     [SerializeField] bool show_partition_lines = true;
 
     private Map map;
     private Dungeon dungeon;
     private MapEditor map_editor;
 
-    private Sprite[] sprites;
+    private List<Sprite[]> sprites_list = new List<Sprite[]>();
     private List<SpriteRenderer> sprite_tiles = new List<SpriteRenderer>();
 
     private int prev_map_columns = 0;
@@ -166,8 +170,17 @@ public class MapManager : MonoBehaviour, IMapManager
                 }
 
                 _tile_index = JHelper.CalculateIndex(col, row, map_columns);
-                sprite_tiles[_tile_index].sprite = map.TileEmpty(_tile_index) ?
-                    null : sprites[map.GetAutoTileID(_tile_index)];
+                SpriteRenderer tile = sprite_tiles[_tile_index];
+
+                if (map.TileEmpty(_tile_index))
+                {
+                    tile.sprite = null;
+                }
+                else
+                {
+                    var sprite_list = sprites_list[(int)map.TileTerrainType(_tile_index) - 1];
+                    tile.sprite = sprite_list[map.GetAutoTileID(_tile_index)];
+                }
             }
         }
     }
@@ -179,8 +192,17 @@ public class MapManager : MonoBehaviour, IMapManager
 
         for (int i = 0; i < map_area; ++i)
         {
-            sprite_tiles[i].sprite = map.TileEmpty(i) ? 
-                null : sprites[map.GetAutoTileID(i)];
+            SpriteRenderer tile = sprite_tiles[i];
+
+            if (map.TileEmpty(i))
+            {
+                tile.sprite = null;
+            }
+            else
+            {
+                var sprite_list = sprites_list[(int)map.TileTerrainType(i) - 1];
+                tile.sprite = sprite_list[map.GetAutoTileID(i)];
+            }
         }
     }
 
@@ -201,6 +223,8 @@ public class MapManager : MonoBehaviour, IMapManager
         container.transform.SetParent(partition_lines);
 
         var line = container.AddComponent<LineRenderer>();
+        line.receiveShadows = false;
+        line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         line.positionCount = 5;
 
         line.SetPosition(0, tl);
@@ -208,6 +232,13 @@ public class MapManager : MonoBehaviour, IMapManager
         line.SetPosition(2, br);
         line.SetPosition(3, new Vector3(tl.x, br.y));
         line.SetPosition(4, tl);
+
+        line.material = line_material;
+        line.startColor = line_color;
+        line.endColor = line_color;
+
+        line.sortingLayerID = SortingLayer.GetLayerValueFromName(sorting_layer);
+        line.sortingOrder = order_in_layer;
     }
 
 
@@ -225,7 +256,7 @@ public class MapManager : MonoBehaviour, IMapManager
             int y = _grid.y + (i / _grid.width);
 
             int index = JHelper.CalculateIndex(x, y, map_columns);
-            Paint(index, TerrainType.GRASS, false);
+            Paint(index, TerrainType.STONE, false);
         }
 
         RefreshAutoTileIDs();
@@ -234,7 +265,10 @@ public class MapManager : MonoBehaviour, IMapManager
 
     void Start()
     {
-        sprites = Resources.LoadAll<Sprite>(map_texture.name);
+        for (int i = 0; i < map_textures.Count; ++i)
+        {
+            sprites_list.Add(Resources.LoadAll<Sprite>(map_textures[i].name));
+        }
 
         map = new Map();
         dungeon = new Dungeon(this);
@@ -316,10 +350,19 @@ public class MapManager : MonoBehaviour, IMapManager
             clone.name = "Tile" + i;
             clone.transform.position = pos;
 
-            SpriteRenderer sr = clone.GetComponent<SpriteRenderer>();
-            sr.sprite = map.TileEmpty(i) ? null : sprites[map.GetAutoTileID(i)];
+            SpriteRenderer tile = clone.GetComponent<SpriteRenderer>();
 
-            sprite_tiles.Add(sr);
+            if (map.TileEmpty(i))
+            {
+                tile.sprite = null;
+            }
+            else
+            {
+                var sprite_list = sprites_list[(int)map.TileTerrainType(i) - 1];
+                tile.sprite = sprite_list[map.GetAutoTileID(i)];
+            }
+
+            sprite_tiles.Add(tile);
         }
     }
 
