@@ -2,18 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Side
-{
-    NORTHWEST,
-    NORTH,
-    NORTHEAST,
-    WEST,
-    EAST,
-    SOUTHWEST,
-    SOUTH,
-    SOUTHEAST
-}
-
 public class Tile
 {
     public int id = 0;

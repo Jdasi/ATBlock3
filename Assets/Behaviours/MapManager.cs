@@ -23,11 +23,13 @@ public class MapManager : MonoBehaviour, IMapManager
 
     [Header("Map Texture")]
     [SerializeField] List<Texture2D> map_textures;
+    [SerializeField] List<Sprite> entity_sprites;
     [SerializeField] Vector2 tile_size_ = new Vector2(16, 16);
 
     [Header("Prefabs")]
     [SerializeField] GameObject tile_prefab;
     [SerializeField] GameObject editor_prefab;
+    [SerializeField] GameObject dungeon_entity;
 
     [Header("References")]
     [SerializeField] Transform map_container;
@@ -38,7 +40,7 @@ public class MapManager : MonoBehaviour, IMapManager
     [SerializeField] int order_in_layer = 76;
     [SerializeField] Material line_material;
     [SerializeField] Color line_color;
-    [SerializeField] bool show_partition_lines = true;
+    [SerializeField] bool draw_partition_lines = true;
 
     private Map map;
     private Dungeon dungeon;
@@ -46,6 +48,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
     private List<Sprite[]> sprites_list = new List<Sprite[]>();
     private List<SpriteRenderer> sprite_tiles = new List<SpriteRenderer>();
+    private List<DungeonEntity> dungeon_entities = new List<DungeonEntity>();
 
     private int prev_map_columns = 0;
     private int prev_map_rows = 0;
@@ -112,11 +115,7 @@ public class MapManager : MonoBehaviour, IMapManager
     public Vector2 PosToTileCenter(Vector2 _pos)
     {
         int index = PosToTileIndex(_pos);
-
-        int x = index % map.columns;
-        int y = index / map.columns;
-
-        return new Vector2(x * tile_size.x, -(y * tile_size.y));
+        return TileIndexToTileCenter(index);
     }
 
 
@@ -132,17 +131,26 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    public void Paint(Vector2 _pos, TerrainType _terrain_type, bool _update_autoids)
+    public Vector2 TileIndexToTileCenter(int _tile_index)
+    {
+        int x = _tile_index % map.columns;
+        int y = _tile_index / map.columns;
+
+        return new Vector2(x * tile_size.x, -(y * tile_size.y));
+    }
+
+
+    public void Paint(Vector2 _pos, TerrainType _terrain_type, bool _single_sprite)
     {
         if (!PosInMapBounds(_pos))
             return;
 
         int index = PosToTileIndex(_pos);
-        Paint(index, _terrain_type, _update_autoids);
+        Paint(index, _terrain_type, _single_sprite);
     }
 
 
-    public void Paint(int _tile_index, TerrainType _terrain_type, bool _update_autoids)
+    public void Paint(int _tile_index, TerrainType _terrain_type, bool _single_sprite)
     {
         if (!JHelper.ValidIndex(_tile_index, map_area))
         {
@@ -152,7 +160,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
         map.UpdateTerrainType(_tile_index, _terrain_type);
 
-        if (!_update_autoids)
+        if (_single_sprite)
             return;
 
         // Update surrounding sprites ..
@@ -182,6 +190,63 @@ public class MapManager : MonoBehaviour, IMapManager
                     tile.sprite = sprite_list[map.GetAutoTileID(_tile_index)];
                 }
             }
+        }
+    }
+
+
+    public void AddEntity(Vector2 _pos, EntityType _entity_type)
+    {
+        if (!PosInMapBounds(_pos))
+            return;
+
+        int index = PosToTileIndex(_pos);
+        AddEntity(index, _entity_type);
+    }
+
+
+    public void AddEntity(int _tile_index, EntityType _entity_type)
+    {
+        bool entity_placed = false;
+
+        foreach (DungeonEntity entity in dungeon_entities)
+        {
+            if (entity.tile_index != _tile_index)
+                continue;
+
+            entity.SetEntity(_entity_type, null, _tile_index);
+            entity_placed = true;
+
+            break;
+        }
+
+        if (!entity_placed)
+        {
+            Vector3 pos = TileIndexToTileCenter(_tile_index);
+            var clone = Instantiate(dungeon_entity, pos, Quaternion.identity);
+            var entity = clone.GetComponent<DungeonEntity>();
+        }
+    }
+
+
+    public void RemoveEntity(Vector2 _pos)
+    {
+        if (!PosInMapBounds(_pos))
+            return;
+
+        int index = PosToTileIndex(_pos);
+        RemoveEntity(index);
+    }
+
+
+    public void RemoveEntity(int _tile_index)
+    {
+        foreach (DungeonEntity entity in dungeon_entities)
+        {
+            if (entity.tile_index != _tile_index)
+                continue;
+
+            Destroy(entity.gameObject);
+            break;
         }
     }
 
@@ -256,7 +321,7 @@ public class MapManager : MonoBehaviour, IMapManager
             int y = _grid.y + (i / _grid.width);
 
             int index = JHelper.CalculateIndex(x, y, map_columns);
-            Paint(index, TerrainType.STONE, false);
+            Paint(index, TerrainType.STONE, true);
         }
 
         RefreshAutoTileIDs();
@@ -278,7 +343,7 @@ public class MapManager : MonoBehaviour, IMapManager
     void Update()
     {
         half_tile_size = tile_size / 2;
-        partition_lines.gameObject.SetActive(show_partition_lines);
+        partition_lines.gameObject.SetActive(draw_partition_lines);
     }
 
 

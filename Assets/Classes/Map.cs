@@ -2,18 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AutoIDType
-{
-    FILLED = 15
-}
-
-public enum TerrainType
-{
-    NONE,
-    STONE,
-    ROCK
-}
-
 public class Map
 {
     public int columns

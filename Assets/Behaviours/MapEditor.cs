@@ -4,10 +4,20 @@ using UnityEngine;
 
 public class MapEditor : MonoBehaviour
 {
+    private enum PaintMode
+    {
+        TILES,
+        ENTITIES
+    }
+
     [Header("Grid Lines")]
     [SerializeField] float line_thickness = 0.25f;
     [SerializeField] Color line_color = Color.green;
     [SerializeField] Material line_material;
+
+    [Header("Highlight Tile")]
+    [SerializeField] Color tile_mode_color;
+    [SerializeField] Color entity_mode_color;
 
     [Space]
     [SerializeField] Color underlay_color = Color.black;
@@ -19,15 +29,22 @@ public class MapEditor : MonoBehaviour
     [Space]
     [SerializeField] GameObject grid_lines_container;
 
+    [Space]
+    [SerializeField] List<Sprite> placable_entities;
+
     [Header("References")]
     [SerializeField] GameObject highlight_tile;
     [SerializeField] GameObject underlay;
+    [SerializeField] MapEditorUI editor_ui;
 
     private IMapManager imap_manager;
     private Vector3 mouse_pos;
     private int sorting_layer_id;
 
-    bool can_click { get { return highlight_tile.activeSelf; } }
+    bool can_paint;
+    bool cursor_over_ui;
+
+    private PaintMode paint_mode = PaintMode.TILES;
 
 
     public void Init(IMapManager _imap_manager)
@@ -43,6 +60,33 @@ public class MapEditor : MonoBehaviour
     }
 
 
+    public void TogglePaintMode()
+    {
+        if (paint_mode == PaintMode.TILES)
+        {
+            SetPaintModeEntities();
+        }
+        else
+        {
+            SetPaintModeTiles();
+        }
+    }
+
+
+    public void SetPaintModeTiles()
+    {
+        paint_mode = PaintMode.TILES;
+        highlight_tile.GetComponent<SpriteRenderer>().color = tile_mode_color;
+    }
+
+
+    public void SetPaintModeEntities()
+    {
+        paint_mode = PaintMode.ENTITIES;
+        highlight_tile.GetComponent<SpriteRenderer>().color = entity_mode_color;
+    }
+
+
     void Start()
     {
         if (imap_manager == null)
@@ -50,6 +94,8 @@ public class MapEditor : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+
+        SetPaintModeTiles();
     }
 
 
@@ -58,13 +104,11 @@ public class MapEditor : MonoBehaviour
         TrackMouse();
         UpdateTileHighlight();
 
-        if (can_click && Input.GetMouseButton(0))
+        HandlePainting();
+
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            imap_manager.Paint(mouse_pos, TerrainType.STONE);
-        }
-        else if (can_click && Input.GetMouseButton(2))
-        {
-            imap_manager.Paint(mouse_pos, TerrainType.ROCK);
+            editor_ui.ToggleMenuVisible();
         }
     }
 
@@ -122,17 +166,50 @@ public class MapEditor : MonoBehaviour
     void TrackMouse()
     {
         mouse_pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        cursor_over_ui = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+
+        can_paint = imap_manager.PosInMapBounds(mouse_pos) && !cursor_over_ui;
     }
 
 
     void UpdateTileHighlight()
     {
-        highlight_tile.SetActive(imap_manager.PosInMapBounds(mouse_pos));
+        highlight_tile.SetActive(can_paint);
 
-        if (!can_click)
+        if (can_paint)
+        {
+            highlight_tile.transform.position = imap_manager.PosToTileCenter(mouse_pos);
+        }
+    }
+
+
+    void HandlePainting()
+    {
+        if (!can_paint)
             return;
 
-        highlight_tile.transform.position = imap_manager.PosToTileCenter(mouse_pos);
+        if (paint_mode == PaintMode.TILES)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                imap_manager.Paint(mouse_pos, TerrainType.STONE);
+            }
+            else if (Input.GetMouseButton(2))
+            {
+                imap_manager.Paint(mouse_pos, TerrainType.ROCK);
+            }
+        }
+        else if (paint_mode == PaintMode.ENTITIES)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                //imap_manager.AddEntity(mouse_pos, EntityType.DOOR);
+            }
+            else if (Input.GetMouseButtonDown(2))
+            {
+                //imap_manager.RemoveEntity(mouse_pos);
+            }
+        }
     }
 
 }
