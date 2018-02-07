@@ -98,6 +98,24 @@ public class Map
     }
 
 
+    public void SetEntityType(int _tile_index, EntityType _entity_type)
+    {
+        if (!JHelper.ValidIndex(_tile_index, area))
+            return;
+
+        tiles[_tile_index].residing_entity = _entity_type;
+    }
+
+
+    public EntityType GetEntityType(int _tile_index)
+    {
+        if (!JHelper.ValidIndex(_tile_index, area))
+            return EntityType.NONE;
+
+        return tiles[_tile_index].residing_entity;
+    }
+
+
     void CreateTiles()
     {
         for (int i = 0; i < area; ++i)

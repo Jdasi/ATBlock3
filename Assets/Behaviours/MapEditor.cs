@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapEditor : MonoBehaviour
 {
-    private enum PaintMode
+    public enum PaintMode
     {
         TILES,
         ENTITIES
@@ -14,25 +14,21 @@ public class MapEditor : MonoBehaviour
     [SerializeField] float line_thickness = 0.25f;
     [SerializeField] Color line_color = Color.green;
     [SerializeField] Material line_material;
+    [SerializeField] string sorting_layer = "Default";
+    [SerializeField] int order_in_layer = 75;
 
     [Header("Highlight Tile")]
     [SerializeField] Color tile_mode_color;
     [SerializeField] Color entity_mode_color;
 
-    [Space]
+    [Header("Underlay")]
     [SerializeField] Color underlay_color = Color.black;
 
-    [Space]
-    [SerializeField] string sorting_layer = "Default";
-    [SerializeField] int order_in_layer = 75;
-
-    [Space]
-    [SerializeField] GameObject grid_lines_container;
-
-    [Space]
-    [SerializeField] List<Sprite> placable_entities;
+    [Header("Events")]
+    [SerializeField] CustomEvents.PaintModeEvent mode_changed_events;
 
     [Header("References")]
+    [SerializeField] GameObject grid_lines_container;
     [SerializeField] GameObject highlight_tile;
     [SerializeField] GameObject underlay;
     [SerializeField] MapEditorUI editor_ui;
@@ -41,8 +37,8 @@ public class MapEditor : MonoBehaviour
     private Vector3 mouse_pos;
     private int sorting_layer_id;
 
-    bool can_paint;
-    bool cursor_over_ui;
+    private bool can_paint;
+    private bool cursor_over_ui;
 
     private PaintMode paint_mode = PaintMode.TILES;
 
@@ -77,6 +73,8 @@ public class MapEditor : MonoBehaviour
     {
         paint_mode = PaintMode.TILES;
         highlight_tile.GetComponent<SpriteRenderer>().color = tile_mode_color;
+
+        mode_changed_events.Invoke(paint_mode);
     }
 
 
@@ -84,6 +82,8 @@ public class MapEditor : MonoBehaviour
     {
         paint_mode = PaintMode.ENTITIES;
         highlight_tile.GetComponent<SpriteRenderer>().color = entity_mode_color;
+
+        mode_changed_events.Invoke(paint_mode);
     }
 
 
@@ -201,13 +201,13 @@ public class MapEditor : MonoBehaviour
         }
         else if (paint_mode == PaintMode.ENTITIES)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0))
             {
-                //imap_manager.AddEntity(mouse_pos, EntityType.DOOR);
+                imap_manager.AddEntity(mouse_pos, editor_ui.selected_entity_type);
             }
-            else if (Input.GetMouseButtonDown(2))
+            else if (Input.GetMouseButton(2))
             {
-                //imap_manager.RemoveEntity(mouse_pos);
+                imap_manager.RemoveEntity(mouse_pos);
             }
         }
     }

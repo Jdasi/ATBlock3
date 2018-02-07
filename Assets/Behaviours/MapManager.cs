@@ -31,9 +31,10 @@ public class MapManager : MonoBehaviour, IMapManager
     [SerializeField] GameObject editor_prefab;
     [SerializeField] GameObject dungeon_entity;
 
-    [Header("References")]
+    [Header("Containers")]
     [SerializeField] Transform map_container;
-    [SerializeField] Transform partition_lines;
+    [SerializeField] Transform lines_container;
+    [SerializeField] Transform entities_container;
 
     [Header("Partition Lines")]
     [SerializeField] string sorting_layer = "Default";
@@ -48,7 +49,10 @@ public class MapManager : MonoBehaviour, IMapManager
 
     private List<Sprite[]> sprites_list = new List<Sprite[]>();
     private List<SpriteRenderer> sprite_tiles = new List<SpriteRenderer>();
-    private List<DungeonEntity> dungeon_entities = new List<DungeonEntity>();
+    private Dictionary<int, DungeonEntity> dungeon_entities = new Dictionary<int, DungeonEntity>();
+
+    private DungeonEntity player_spawn = null;
+    private DungeonEntity level_exit = null;
 
     private int prev_map_columns = 0;
     private int prev_map_rows = 0;
@@ -189,6 +193,9 @@ public class MapManager : MonoBehaviour, IMapManager
                     var sprite_list = sprites_list[(int)map.TileTerrainType(_tile_index) - 1];
                     tile.sprite = sprite_list[map.GetAutoTileID(_tile_index)];
                 }
+
+                EntityType residing_entity = map.GetEntityType(_tile_index);
+                UpdateAutoRotatingEntity(_tile_index, residing_entity);
             }
         }
     }
@@ -206,24 +213,44 @@ public class MapManager : MonoBehaviour, IMapManager
 
     public void AddEntity(int _tile_index, EntityType _entity_type)
     {
-        bool entity_placed = false;
-
-        foreach (DungeonEntity entity in dungeon_entities)
+        if (_entity_type == EntityType.NONE)
         {
-            if (entity.tile_index != _tile_index)
-                continue;
-
-            entity.SetEntity(_entity_type, null, _tile_index);
-            entity_placed = true;
-
-            break;
+            RemoveEntity(_tile_index);
+            return;
         }
 
-        if (!entity_placed)
+        DungeonEntity entity = null;
+
+        if (!dungeon_entities.ContainsKey(_tile_index))
         {
             Vector3 pos = TileIndexToTileCenter(_tile_index);
+
             var clone = Instantiate(dungeon_entity, pos, Quaternion.identity);
-            var entity = clone.GetComponent<DungeonEntity>();
+            clone.transform.SetParent(entities_container);
+
+            entity = clone.GetComponent<DungeonEntity>();
+
+            dungeon_entities.Add(_tile_index, entity);
+        }
+        else
+        {
+            entity = dungeon_entities[_tile_index];
+        }
+
+        int type_id = (int)_entity_type;
+        Sprite spr = type_id >= 0 ? entity_sprites[type_id] : null;
+        entity.SetEntity(_entity_type, spr, _tile_index);
+
+        map.SetEntityType(_tile_index, _entity_type);
+        UpdateAutoRotatingEntity(_tile_index, _entity_type);
+
+        if (_entity_type == EntityType.PLAYER_SPAWN)
+        {
+            SetSpawn(_tile_index);
+        }
+        else if (_entity_type == EntityType.STAIRS)
+        {
+            SetExit(_tile_index);
         }
     }
 
@@ -240,14 +267,13 @@ public class MapManager : MonoBehaviour, IMapManager
 
     public void RemoveEntity(int _tile_index)
     {
-        foreach (DungeonEntity entity in dungeon_entities)
-        {
-            if (entity.tile_index != _tile_index)
-                continue;
+        if (!dungeon_entities.ContainsKey(_tile_index))
+            return;
 
-            Destroy(entity.gameObject);
-            break;
-        }
+        Destroy(dungeon_entities[_tile_index].gameObject);
+        map.SetEntityType(_tile_index, EntityType.NONE);
+
+        dungeon_entities.Remove(_tile_index);
     }
 
 
@@ -268,6 +294,9 @@ public class MapManager : MonoBehaviour, IMapManager
                 var sprite_list = sprites_list[(int)map.TileTerrainType(i) - 1];
                 tile.sprite = sprite_list[map.GetAutoTileID(i)];
             }
+
+            EntityType residing_entity = map.GetEntityType(i);
+            UpdateAutoRotatingEntity(i, residing_entity);
         }
     }
 
@@ -285,7 +314,7 @@ public class MapManager : MonoBehaviour, IMapManager
         Vector3 br = sprite_tiles[_to_index].transform.position + new Vector3(half_tile_size.x, -half_tile_size.y);
 
         var container = new GameObject("PartitionVisualisation");
-        container.transform.SetParent(partition_lines);
+        container.transform.SetParent(lines_container);
 
         var line = container.AddComponent<LineRenderer>();
         line.receiveShadows = false;
@@ -314,14 +343,21 @@ public class MapManager : MonoBehaviour, IMapManager
 
         for (int i = 0; i < _grid.data.Length; ++i)
         {
-            if (_grid.data[i] == 0)
-                continue;
-
             int x = _grid.x + (i % _grid.width);
             int y = _grid.y + (i / _grid.width);
 
             int index = JHelper.CalculateIndex(x, y, map_columns);
-            Paint(index, TerrainType.STONE, true);
+
+            if (_grid.data[i] > 0)
+            {
+                Paint(index, TerrainType.STONE, true);
+            }
+
+            EntityType residing_entity = map.GetEntityType(i);
+            if (residing_entity != EntityType.NONE)
+            {
+                AddEntity(i, residing_entity);
+            }
         }
 
         RefreshAutoTileIDs();
@@ -343,7 +379,7 @@ public class MapManager : MonoBehaviour, IMapManager
     void Update()
     {
         half_tile_size = tile_size / 2;
-        partition_lines.gameObject.SetActive(draw_partition_lines);
+        lines_container.gameObject.SetActive(draw_partition_lines);
     }
 
 
@@ -351,32 +387,37 @@ public class MapManager : MonoBehaviour, IMapManager
     {
         if (map_different)
         {
-            ClearMapContainer();
             ClearSpriteTiles();
         }
 
+        ClearDungeonEntities();
         ClearPartitionLines();
         ClearMapEditor();
     }
 
 
-    void ClearMapContainer()
-    {
-        foreach (Transform child in map_container)
-            Destroy(child.gameObject);
-    }
-
-
     void ClearPartitionLines()
     {
-        foreach (Transform child in partition_lines)
+        foreach (Transform child in lines_container)
             Destroy(child.gameObject);
     }
 
 
     void ClearSpriteTiles()
     {
+        foreach (Transform child in map_container)
+            Destroy(child.gameObject);
+
         sprite_tiles.Clear();
+    }
+
+
+    void ClearDungeonEntities()
+    {
+        foreach (Transform child in entities_container)
+            Destroy(child.gameObject);
+
+        dungeon_entities.Clear();
     }
 
 
@@ -429,6 +470,60 @@ public class MapManager : MonoBehaviour, IMapManager
 
             sprite_tiles.Add(tile);
         }
+    }
+
+
+    void UpdateAutoRotatingEntity(int _tile_index, EntityType _entity_type)
+    {
+        if (!JHelper.ValidIndex(_tile_index, map_area) ||
+            !dungeon_entities.ContainsKey(_tile_index))
+        {
+            return;
+        }
+
+        if (_entity_type == EntityType.DOOR ||
+            _entity_type == EntityType.LOCKED_DOOR)
+        {
+            int x = _tile_index % map_columns;
+            int y = _tile_index / map_columns;
+
+            int right_index = JHelper.CalculateIndex(x + 1, y, map_columns);
+            int left_index = JHelper.CalculateIndex(x - 1, y, map_columns);
+
+            if (map.TileTerrainType(right_index) == TerrainType.ROCK &&
+                map.TileTerrainType(left_index) == TerrainType.ROCK)
+            {
+                Sprite spr = entity_sprites[(int)_entity_type];
+                dungeon_entities[_tile_index].SetEntity(_entity_type, spr, _tile_index);
+            }
+            else
+            {
+                Sprite spr = entity_sprites[(int)_entity_type + 1];
+                dungeon_entities[_tile_index].SetEntity(_entity_type + 1, spr, _tile_index);
+            }
+        }
+    }
+
+
+    void SetSpawn(int _tile_index)
+    {
+        if (player_spawn != null && player_spawn.tile_index != _tile_index)
+        {
+            RemoveEntity(player_spawn.tile_index);
+        }
+
+        player_spawn = dungeon_entities[_tile_index];
+    }
+
+
+    void SetExit(int _tile_index)
+    {
+        if (level_exit != null && level_exit.tile_index != _tile_index)
+        {
+            RemoveEntity(level_exit.tile_index);
+        }
+
+        level_exit = dungeon_entities[_tile_index];
     }
 
 }

@@ -9,6 +9,7 @@ public class Tile
 
     public int autotile_id = 0;
     public TerrainType terrain_type = TerrainType.NONE;
+    public EntityType residing_entity = EntityType.NONE;
 
     private static Dictionary<int, int> lookup_table = null;
 
