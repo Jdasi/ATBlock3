@@ -29,9 +29,9 @@ public class Dungeon
                 BSPGeneration();
             } break;
             
-            case GenerationSettings.GenerationMethod.NYSTROM:
+            case GenerationSettings.GenerationMethod.MAZE:
             {
-                NystromGeneration();
+                MazeGeneration();
             } break;
         }
     }
@@ -59,7 +59,7 @@ public class Dungeon
             if (leaf.is_branch)
                 continue;
 
-            bool randomly_split = Random.Range(0, 1.0f) >= settings.random_split_chance;
+            bool randomly_split = Random.Range(0, 100) < settings.random_split_chance;
             if (!leaf.BiggerThanMax() && !randomly_split)
                 continue;
 
@@ -106,11 +106,50 @@ public class Dungeon
 
     void BSPCreateDungeonEntities()
     {
-        root.CreateDoors();
+        var room_grid = root.room_grid;
+        for (int row = 0; row < room_grid.height; ++row)
+        {
+            for (int col = 0; col < room_grid.width; ++col)
+            {
+                bool random_door = Random.Range(0, 100) < settings.door_density;
+                if (!random_door)
+                    continue;
+
+                // Doors can't be next to grid edges.
+                if (col == 0 || col == room_grid.width - 1 ||
+                    row == 0 || row == room_grid.height - 1)
+                {
+                    continue;
+                }
+
+                int center = JHelper.CalculateIndex(col, row, room_grid.width);
+                if (room_grid.data[center] != DataType.CORRIDOR)
+                    continue;
+
+                int right = JHelper.CalculateIndex(col + 1, row, room_grid.width);
+                int left = JHelper.CalculateIndex(col - 1, row, room_grid.width);
+
+                int up = JHelper.CalculateIndex(col, row - 1, room_grid.width);
+                int down = JHelper.CalculateIndex(col, row + 1, room_grid.width);
+
+                if (((room_grid.data[right] == DataType.CORRIDOR && room_grid.data[left] == DataType.ROOM) ||
+                     (room_grid.data[right] == DataType.ROOM && room_grid.data[left] == DataType.CORRIDOR)) &&
+                    (room_grid.data[up] == DataType.EMPTY && room_grid.data[down] == DataType.EMPTY))
+                {
+                    room_grid.data[center] = DataType.DOOR;
+                }
+                else if (((room_grid.data[up] == DataType.CORRIDOR && room_grid.data[down] == DataType.ROOM) ||
+                          (room_grid.data[up] == DataType.ROOM && room_grid.data[down] == DataType.CORRIDOR)) &&
+                         (room_grid.data[left] == DataType.EMPTY && room_grid.data[right] == DataType.EMPTY))
+                {
+                    room_grid.data[center] = DataType.DOOR;
+                }
+            }
+        }
     }
 
 
-    void NystromGeneration()
+    void MazeGeneration()
     {
         // Do stuff ..
     }

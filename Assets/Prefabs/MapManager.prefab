@@ -144,7 +144,8 @@ MonoBehaviour:
     method: 0
     min_leaf_size: 5
     max_leaf_size: 10
-    random_split_chance: 0.75
+    random_split_chance: 25
+    door_density: 50
   map_textures:
   - {fileID: 2800000, guid: ff7190c878a0f4d448a7720fca0dd697, type: 3}
   - {fileID: 2800000, guid: 535caed256017544588ecd369d0998b6, type: 3}
