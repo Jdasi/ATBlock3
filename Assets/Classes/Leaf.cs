@@ -110,4 +110,44 @@ public class Leaf
         room_grid = new RoomGrid(room_pos_x, room_pos_y, room_size_x, room_size_y);
     }
 
+
+    public void CreateDoors()
+    {
+        for (int row = 0; row < room_grid.height; ++row)
+        {
+            for (int col = 0; col < room_grid.width; ++col)
+            {
+                // Doors can't be next to grid edges.
+                if (col == 0 || col == room_grid.width - 1 ||
+                    row == 0 || row == room_grid.height - 1)
+                {
+                    continue;
+                }
+
+                int center = JHelper.CalculateIndex(col, row, room_grid.width);
+                if (room_grid.data[center] != DataType.CORRIDOR)
+                    continue;
+
+                int right = JHelper.CalculateIndex(col + 1, row, room_grid.width);
+                int left = JHelper.CalculateIndex(col - 1, row, room_grid.width);
+
+                int up = JHelper.CalculateIndex(col, row - 1, room_grid.width);
+                int down = JHelper.CalculateIndex(col, row + 1, room_grid.width);
+
+                if (((room_grid.data[right] == DataType.CORRIDOR && room_grid.data[left] == DataType.ROOM) ||
+                    (room_grid.data[right] == DataType.ROOM && room_grid.data[left] == DataType.CORRIDOR)) &&
+                    (room_grid.data[up] == DataType.EMPTY && room_grid.data[down] == DataType.EMPTY))
+                {
+                    room_grid.data[center] = DataType.DOOR;
+                }
+                else if (((room_grid.data[up] == DataType.CORRIDOR && room_grid.data[down] == DataType.ROOM) ||
+                    (room_grid.data[up] == DataType.ROOM && room_grid.data[down] == DataType.CORRIDOR)) &&
+                    (room_grid.data[left] == DataType.EMPTY && room_grid.data[right] == DataType.EMPTY))
+                {
+                    room_grid.data[center] = DataType.DOOR;
+                }
+            }
+        }
+    }
+
 }

@@ -343,20 +343,22 @@ public class MapManager : MonoBehaviour, IMapManager
 
         for (int i = 0; i < _grid.data.Length; ++i)
         {
+            DataType data = _grid.data[i];
+            if (data == DataType.EMPTY)
+                continue;
+
             int x = _grid.x + (i % _grid.width);
             int y = _grid.y + (i / _grid.width);
 
             int index = JHelper.CalculateIndex(x, y, map_columns);
+            Paint(index, TerrainType.STONE, true);
 
-            if (_grid.data[i] > 0)
+            switch(data)
             {
-                Paint(index, TerrainType.STONE, true);
-            }
-
-            EntityType residing_entity = map.GetEntityType(i);
-            if (residing_entity != EntityType.NONE)
-            {
-                AddEntity(i, residing_entity);
+                case DataType.DOOR:
+                {
+                    AddEntity(index, EntityType.DOOR);
+                } break;
             }
         }
 

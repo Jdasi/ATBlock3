@@ -76,6 +76,7 @@ public class Dungeon
         }
 
         BSPCreateRoomsAndCorridors();
+        BSPCreateDungeonEntities();
 
         imap_manager.VisualiseRoomGrid(root.room_grid);
     }
@@ -100,6 +101,12 @@ public class Dungeon
             // Group and connect the parent's child rooms.
             parent.room_grid = new RoomGrid(parent.left.room_grid, parent.right.room_grid);
         }
+    }
+
+
+    void BSPCreateDungeonEntities()
+    {
+        root.CreateDoors();
     }
 
 

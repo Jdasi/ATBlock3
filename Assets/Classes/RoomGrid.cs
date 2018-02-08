@@ -16,16 +16,9 @@ public class RoomGrid
     public int height { get; private set; }
     public int product { get; private set; }
 
-    public int[] data { get; private set; }
+    public DataType[] data { get; private set; }
 
     private List<RoomGrid> rooms = new List<RoomGrid>();
-
-    private enum DataType
-    {
-        EMPTY,
-        ROOM,
-        CORRIDOR
-    }
 
 
     /// <summary>
@@ -42,7 +35,7 @@ public class RoomGrid
         // Square room generation.
         for (int i = 0; i < data.Length; ++i)
         {
-            data[i] = (int)DataType.ROOM;
+            data[i] = DataType.ROOM;
         }
 
         // This RoomGrid contains one room.
@@ -93,7 +86,7 @@ public class RoomGrid
         right = _x + _width;
 
         // Represents solid and empty spaces within the grid.
-        data = new int[_width * _height];
+        data = new DataType[_width * _height];
     }
 
 
@@ -146,8 +139,8 @@ public class RoomGrid
             }
 
             int index = JHelper.CalculateIndex(digger.x, digger.y, width);
-            if (data[index] == (int)DataType.EMPTY)
-                data[index] = (int)DataType.CORRIDOR;
+            if (data[index] == DataType.EMPTY)
+                data[index] = DataType.CORRIDOR;
         }
     }
 
@@ -155,9 +148,9 @@ public class RoomGrid
     Coords GetRandomSolidPoint(RoomGrid _grid)
     {
         int tile_index = 0;
-        int tile_value = 0;
+        DataType tile_value = DataType.EMPTY;
 
-        while (tile_value == 0)
+        while (tile_value == DataType.EMPTY)
         {
             tile_index = Random.Range(0, _grid.product);
             tile_value = _grid.data[tile_index];
