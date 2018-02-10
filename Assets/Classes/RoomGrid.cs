@@ -18,7 +18,25 @@ public class RoomGrid
 
     public DataType[] data { get; private set; }
 
-    private List<RoomGrid> rooms = new List<RoomGrid>();
+    public List<RoomGrid> rooms = new List<RoomGrid>();
+
+    public RoomType type;
+
+
+    public static Coords ConvertCoordsAtoB(int _x, int _y, RoomGrid _a, RoomGrid _b)
+    {
+        int x = _x + _a.left - _b.left;
+        int y = _y + _a.top - _b.top;
+
+        return new Coords(x, y);
+    }
+
+
+    public static int ConvertIndexAtoB(int _x, int _y, RoomGrid _a, RoomGrid _b)
+    {
+        Coords coords = ConvertCoordsAtoB(_x, _y, _a, _b);
+        return JHelper.CalculateIndex(coords.x, coords.y, _b.width);
+    }
 
 
     /// <summary>
@@ -110,7 +128,7 @@ public class RoomGrid
             for (int col = 0; col < _grid.width; ++col)
             {
                 int index = JHelper.CalculateIndex(col, row, _grid.width);
-                int this_index = JHelper.CalculateIndex(col + _grid.left - left, row + _grid.top - top, width);
+                int this_index = ConvertIndexAtoB(col, row, _grid, this);
 
                 data[this_index] = _grid.data[index];
             }
@@ -156,9 +174,10 @@ public class RoomGrid
             tile_value = _grid.data[tile_index];
         }
 
-        return new Coords(
-            (tile_index % _grid.width) + _grid.left - left,
-            (tile_index / _grid.width) + _grid.top - top);
+        int x = (tile_index % _grid.width);
+        int y = (tile_index / _grid.width);
+
+        return ConvertCoordsAtoB(x, y, _grid, this);
     }
 
 }

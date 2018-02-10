@@ -164,6 +164,9 @@ public class MapManager : MonoBehaviour, IMapManager
 
         map.UpdateTerrainType(_tile_index, _terrain_type);
 
+        if (_terrain_type == TerrainType.ROCK)
+            RemoveEntity(_tile_index);
+
         if (_single_sprite)
             return;
 
@@ -217,6 +220,10 @@ public class MapManager : MonoBehaviour, IMapManager
         {
             RemoveEntity(_tile_index);
             return;
+        }
+        else if (map.TileTerrainType(_tile_index) == TerrainType.ROCK)
+        {
+            Paint(_tile_index, TerrainType.STONE, false);
         }
 
         DungeonEntity entity = null;
@@ -272,6 +279,15 @@ public class MapManager : MonoBehaviour, IMapManager
 
         Destroy(dungeon_entities[_tile_index].gameObject);
         map.SetEntityType(_tile_index, EntityType.NONE);
+
+        if (player_spawn != null && player_spawn.tile_index == _tile_index)
+        {
+            player_spawn = null;
+        }
+        else if (level_exit != null && level_exit.tile_index == _tile_index)
+        {
+            level_exit = null;
+        }
 
         dungeon_entities.Remove(_tile_index);
     }
@@ -358,6 +374,16 @@ public class MapManager : MonoBehaviour, IMapManager
                 case DataType.DOOR:
                 {
                     AddEntity(index, EntityType.DOOR);
+                } break;
+
+                case DataType.SPAWN:
+                {
+                    AddEntity(index, EntityType.PLAYER_SPAWN);
+                } break;
+
+                case DataType.EXIT:
+                {
+                    AddEntity(index, EntityType.STAIRS);
                 } break;
             }
         }
@@ -515,6 +541,7 @@ public class MapManager : MonoBehaviour, IMapManager
         }
 
         player_spawn = dungeon_entities[_tile_index];
+        player_spawn.gameObject.name = "Spawn";
     }
 
 
@@ -526,6 +553,7 @@ public class MapManager : MonoBehaviour, IMapManager
         }
 
         level_exit = dungeon_entities[_tile_index];
+        level_exit.gameObject.name = "Exit";
     }
 
 }

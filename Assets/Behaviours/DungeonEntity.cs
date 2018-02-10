@@ -18,8 +18,6 @@ public class DungeonEntity : MonoBehaviour
 
         entity_type = _type;
         sprite_renderer.sprite = _sprite;
-
-        // TODO: attach some module based on the new entity_type ..
     }
 
 }

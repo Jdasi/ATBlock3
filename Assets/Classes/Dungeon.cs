@@ -76,7 +76,9 @@ public class Dungeon
         }
 
         BSPCreateRoomsAndCorridors();
-        BSPCreateDungeonEntities();
+        BSPCreateDoors();
+        BSPCreateSpawnAndExit();
+        BSPCreateEntities();
 
         imap_manager.VisualiseRoomGrid(root.room_grid);
     }
@@ -104,13 +106,14 @@ public class Dungeon
     }
 
 
-    void BSPCreateDungeonEntities()
+    void BSPCreateDoors()
     {
         var room_grid = root.room_grid;
         for (int row = 0; row < room_grid.height; ++row)
         {
             for (int col = 0; col < room_grid.width; ++col)
             {
+                // Random door chance.
                 bool random_door = Random.Range(0, 100) < settings.door_density;
                 if (!random_door)
                     continue;
@@ -132,12 +135,14 @@ public class Dungeon
                 int up = JHelper.CalculateIndex(col, row - 1, room_grid.width);
                 int down = JHelper.CalculateIndex(col, row + 1, room_grid.width);
 
+                // Check for single width horizontal corridor.
                 if (((room_grid.data[right] == DataType.CORRIDOR && room_grid.data[left] == DataType.ROOM) ||
                      (room_grid.data[right] == DataType.ROOM && room_grid.data[left] == DataType.CORRIDOR)) &&
                     (room_grid.data[up] == DataType.EMPTY && room_grid.data[down] == DataType.EMPTY))
                 {
                     room_grid.data[center] = DataType.DOOR;
                 }
+                // Check for single width vertical corridor.
                 else if (((room_grid.data[up] == DataType.CORRIDOR && room_grid.data[down] == DataType.ROOM) ||
                           (room_grid.data[up] == DataType.ROOM && room_grid.data[down] == DataType.CORRIDOR)) &&
                          (room_grid.data[left] == DataType.EMPTY && room_grid.data[right] == DataType.EMPTY))
@@ -146,6 +151,28 @@ public class Dungeon
                 }
             }
         }
+    }
+
+
+    void BSPCreateSpawnAndExit()
+    {
+        RoomGrid left_room = root.left.room_grid.rooms[Random.Range(0, root.left.room_grid.rooms.Count)];
+        RoomGrid right_room = root.right.room_grid.rooms[Random.Range(0, root.right.room_grid.rooms.Count)];
+
+        int left_center = RoomGrid.ConvertIndexAtoB((left_room.width / 2), (left_room.height / 2), left_room, root.room_grid);
+        int right_center = RoomGrid.ConvertIndexAtoB((right_room.width / 2), (right_room.height / 2), right_room, root.room_grid);
+
+        left_room.type = RoomType.SPAWN;
+        right_room.type = RoomType.EXIT;
+
+        root.room_grid.data[left_center] = DataType.SPAWN;
+        root.room_grid.data[right_center] = DataType.EXIT;
+    }
+
+
+    void BSPCreateEntities()
+    {
+        // TODO: spawn monsters/items ..
     }
 
 
