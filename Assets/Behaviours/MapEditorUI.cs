@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class MapEditorUI : MonoBehaviour
 {
-    public EntityType selected_entity_type { get; private set; }
+    public EntityType selected_entity_type;
 
     [SerializeField] List<EntityType> paintable_types;
 
     [Header("References")]
     [SerializeField] RectTransform menu_panel;
-    [SerializeField] Button btn_paint_mode;
+    [SerializeField] List<MapEditorUIButton> buttons;
 
     private bool menu_visible = true;
 
@@ -37,15 +37,11 @@ public class MapEditorUI : MonoBehaviour
 
     public void PaintModeChanged(MapEditor.PaintMode _mode)
     {
-        if (_mode == MapEditor.PaintMode.TILES)
+        OnButtonClick();
+
+        foreach (var btn in buttons)
         {
-            string str = "Switch to Entities Mode";
-            btn_paint_mode.GetComponentInChildren<Text>().text = str;
-        }
-        else if (_mode == MapEditor.PaintMode.ENTITIES)
-        {
-            string str = "Switch to Tiles Mode";
-            btn_paint_mode.GetComponentInChildren<Text>().text = str;
+            btn.SetOutlineEnabled(false);
         }
     }
 
@@ -75,16 +71,8 @@ public class MapEditorUI : MonoBehaviour
     void Start()
     {
         HideMenu();
-        CreateButtons();
-    }
 
-
-    void CreateButtons()
-    {
-        foreach (EntityType type in paintable_types)
-        {
-            //string str = type.ToString();
-        }
+        buttons[0].Click();
     }
 
 }
