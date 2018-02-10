@@ -329,10 +329,11 @@ public class MapManager : MonoBehaviour, IMapManager
         Vector3 tl = sprite_tiles[_from_index].transform.position - new Vector3(half_tile_size.x, -half_tile_size.y);
         Vector3 br = sprite_tiles[_to_index].transform.position + new Vector3(half_tile_size.x, -half_tile_size.y);
 
-        var container = new GameObject("PartitionVisualisation");
-        container.transform.SetParent(lines_container);
+        GameObject obj = new GameObject("PartitionVisualisation");
+        obj.transform.SetParent(lines_container);
+        obj.isStatic = true;
 
-        var line = container.AddComponent<LineRenderer>();
+        LineRenderer line = obj.AddComponent<LineRenderer>();
         line.receiveShadows = false;
         line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         line.positionCount = 5;
@@ -369,22 +370,16 @@ public class MapManager : MonoBehaviour, IMapManager
             int index = JHelper.CalculateIndex(x, y, map_columns);
             Paint(index, TerrainType.STONE, true);
 
-            switch(data)
+            switch (data)
             {
-                case DataType.DOOR:
-                {
-                    AddEntity(index, EntityType.DOOR);
-                } break;
-
-                case DataType.SPAWN:
-                {
-                    AddEntity(index, EntityType.PLAYER_SPAWN);
-                } break;
-
-                case DataType.EXIT:
-                {
-                    AddEntity(index, EntityType.STAIRS);
-                } break;
+                case DataType.DOOR:             AddEntity(index, EntityType.DOOR            ); break;
+                case DataType.SPAWN:            AddEntity(index, EntityType.PLAYER_SPAWN    ); break;
+                case DataType.EXIT:             AddEntity(index, EntityType.STAIRS          ); break;
+                case DataType.ENEMY_EASY:       AddEntity(index, EntityType.ENEMY_EASY      ); break;
+                case DataType.ENEMY_HARD:       AddEntity(index, EntityType.ENEMY_HARD      ); break;
+                case DataType.TREASURE_HEALTH:  AddEntity(index, EntityType.POTION_HEALTH   ); break;
+                case DataType.TREASURE_MANA:    AddEntity(index, EntityType.POTION_MANA     ); break;
+                case DataType.TREASURE:         AddEntity(index, EntityType.TREASURE        ); break;
             }
         }
 
@@ -527,7 +522,7 @@ public class MapManager : MonoBehaviour, IMapManager
             else
             {
                 Sprite spr = entity_sprites[(int)_entity_type + 1];
-                dungeon_entities[_tile_index].SetEntity(_entity_type + 1, spr, _tile_index);
+                dungeon_entities[_tile_index].SetEntity(_entity_type, spr, _tile_index);
             }
         }
     }
@@ -541,7 +536,6 @@ public class MapManager : MonoBehaviour, IMapManager
         }
 
         player_spawn = dungeon_entities[_tile_index];
-        player_spawn.gameObject.name = "Spawn";
     }
 
 
@@ -553,7 +547,6 @@ public class MapManager : MonoBehaviour, IMapManager
         }
 
         level_exit = dungeon_entities[_tile_index];
-        level_exit.gameObject.name = "Exit";
     }
 
 }

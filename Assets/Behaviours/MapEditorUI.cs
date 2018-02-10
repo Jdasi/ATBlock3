@@ -83,7 +83,7 @@ public class MapEditorUI : MonoBehaviour
     {
         foreach (EntityType type in paintable_types)
         {
-            string str = type.ToString();
+            //string str = type.ToString();
         }
     }
 

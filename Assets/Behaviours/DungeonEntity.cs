@@ -18,6 +18,8 @@ public class DungeonEntity : MonoBehaviour
 
         entity_type = _type;
         sprite_renderer.sprite = _sprite;
+
+        gameObject.name = _type.ToString();
     }
 
 }

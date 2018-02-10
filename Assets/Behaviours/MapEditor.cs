@@ -142,6 +142,7 @@ public class MapEditor : MonoBehaviour
     {
         GameObject obj = new GameObject("GridLine");
         obj.transform.SetParent(grid_lines_container.transform);
+        obj.isStatic = true;
 
         LineRenderer line = obj.AddComponent<LineRenderer>();
         line.receiveShadows = false;

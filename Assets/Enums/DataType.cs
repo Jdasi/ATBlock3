@@ -8,8 +8,11 @@ public enum DataType
     LOCKED_DOOR,
     SPAWN,
     EXIT,
+    ENEMY_EASY,
+    ENEMY_HARD,
     TREASURE_HEALTH,
     TREASURE_MANA,
-    ENEMY_EASY,
-    ENEMY_HARD
+    TREASURE,
+
+    COUNT
 }

@@ -11,29 +11,20 @@ public class Dungeon
     private List<Leaf> leaves = new List<Leaf>();
     private Leaf root;
 
+    private DungeonPopulator populator = new DungeonPopulator();
+
 
     public Dungeon(IMapManager _imap_manager)
     {
         imap_manager = _imap_manager;
+        populator.Init();
     }
 
 
     public void GenerateDungeon(GenerationSettings _settings)
     {
         settings = _settings;
-
-        switch (_settings.method)
-        {
-            case GenerationSettings.GenerationMethod.BSP:
-            {
-                BSPGeneration();
-            } break;
-            
-            case GenerationSettings.GenerationMethod.MAZE:
-            {
-                MazeGeneration();
-            } break;
-        }
+        BSPGeneration();
     }
 
 
@@ -75,16 +66,17 @@ public class Dungeon
             leaves.Add(leaf.right);
         }
 
-        BSPCreateRoomsAndCorridors();
-        BSPCreateDoors();
-        BSPCreateSpawnAndExit();
-        BSPCreateEntities();
+        CreateRoomsAndCorridors();
+        CreateDoors();
+        CreateSpawnAndExit();
+
+        populator.PopulateDungeon(settings, root.room_grid);
 
         imap_manager.VisualiseRoomGrid(root.room_grid);
     }
 
 
-    void BSPCreateRoomsAndCorridors()
+    void CreateRoomsAndCorridors()
     {
         List<Leaf> lowest_leaves = leaves.Where(node => !node.is_branch).ToList();
         foreach (Leaf leaf in lowest_leaves)
@@ -106,7 +98,7 @@ public class Dungeon
     }
 
 
-    void BSPCreateDoors()
+    void CreateDoors()
     {
         var room_grid = root.room_grid;
         for (int row = 0; row < room_grid.height; ++row)
@@ -154,7 +146,7 @@ public class Dungeon
     }
 
 
-    void BSPCreateSpawnAndExit()
+    void CreateSpawnAndExit()
     {
         RoomGrid left_room = root.left.room_grid.rooms[Random.Range(0, root.left.room_grid.rooms.Count)];
         RoomGrid right_room = root.right.room_grid.rooms[Random.Range(0, root.right.room_grid.rooms.Count)];
@@ -167,18 +159,6 @@ public class Dungeon
 
         root.room_grid.data[left_center] = DataType.SPAWN;
         root.room_grid.data[right_center] = DataType.EXIT;
-    }
-
-
-    void BSPCreateEntities()
-    {
-        // TODO: spawn monsters/items ..
-    }
-
-
-    void MazeGeneration()
-    {
-        // Do stuff ..
     }
 
 }
