@@ -522,7 +522,7 @@ public class MapManager : MonoBehaviour, IMapManager
             else
             {
                 Sprite spr = entity_sprites[(int)_entity_type + 1];
-                dungeon_entities[_tile_index].SetEntity(_entity_type, spr, _tile_index);
+                dungeon_entities[_tile_index].SetEntity(_entity_type + 1, spr, _tile_index);
             }
         }
     }
