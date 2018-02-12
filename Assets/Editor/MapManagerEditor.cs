@@ -12,11 +12,19 @@ public class MapManagerEditor : Editor
 
         MapManager script = (MapManager)target;
 
-        if (GUILayout.Button("Create Map"))
+        if (GUILayout.Button("Generate Map"))
         {
             if (Application.isPlaying)
             {
-                script.CreateMap();
+                script.GenerateMap();
+            }
+        }
+
+        if (GUILayout.Button("Load Map"))
+        {
+            if (Application.isPlaying)
+            {
+                script.LoadMap();
             }
         }
 

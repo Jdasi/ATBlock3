@@ -26,15 +26,27 @@ public class Map
 
     public void CreateMap(int _width, int _height)
     {
-        columns = _width;
-        rows = _height;
-
-        tiles = new Tile[_width * _height];
-        CreateTiles();
+        Init(_width, _height);
     }
 
 
-    public TerrainType TileTerrainType(int _tile_index)
+    public void CreateMap(PackedMap _pmap)
+    {
+        Init(_pmap.columns, _pmap.rows);
+
+        for (int i = 0; i < area; ++i)
+        {
+            Tile tile = tiles[i];
+
+            tile.id = _pmap.tile_ids[i];
+            tile.autotile_id = _pmap.tile_autoids[i];
+            tile.terrain_type = (TerrainType)_pmap.tile_terraintype_ids[i];
+            tile.residing_entity = (EntityType)_pmap.tile_entitytype_ids[i];
+        }
+    }
+
+
+    public TerrainType GetTerrainType(int _tile_index)
     {
         if (!JHelper.ValidIndex(_tile_index, area))
             return TerrainType.NONE;
@@ -48,7 +60,7 @@ public class Map
         if (!JHelper.ValidIndex(_tile_index, area))
             return true;
 
-        return TileTerrainType(_tile_index) == TerrainType.NONE;
+        return GetTerrainType(_tile_index) == TerrainType.NONE;
     }
 
 
@@ -116,8 +128,19 @@ public class Map
     }
 
 
+    void Init(int _columns, int _rows)
+    {
+        columns = _columns;
+        rows = _rows;
+
+        CreateTiles();
+    }
+
+
     void CreateTiles()
     {
+        tiles = new Tile[columns * rows];
+
         for (int i = 0; i < area; ++i)
         {
             Tile tile = new Tile(i);
