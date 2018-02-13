@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour, IMapManager
 {
@@ -43,6 +44,9 @@ public class MapManager : MonoBehaviour, IMapManager
     [SerializeField] Color line_color;
     [SerializeField] bool draw_partition_lines = true;
 
+    [Header("Events")]
+    [SerializeField] UnityEvent map_created_events;
+
     private Map map;
     private Dungeon dungeon;
     private MapEditor map_editor;
@@ -73,6 +77,8 @@ public class MapManager : MonoBehaviour, IMapManager
         VisualiseMap();
 
         dungeon.GenerateDungeon(settings);
+
+        map_created_events.Invoke();
     }
 
 
@@ -80,6 +86,8 @@ public class MapManager : MonoBehaviour, IMapManager
     {
         map.CreateMap(FileIO.LoadMap("map.json"));
         VisualiseMap();
+
+        map_created_events.Invoke();
     }
 
 

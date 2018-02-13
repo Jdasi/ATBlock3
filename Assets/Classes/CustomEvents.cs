@@ -15,6 +15,9 @@ public class CustomEvents
     public class BooleanEvent : UnityEvent<bool> {}
 
     [System.Serializable]
+    public class StringEvent : UnityEvent<string> {}
+
+    [System.Serializable]
     public class Vector3Event : UnityEvent<Vector3> {}
 
     [System.Serializable]

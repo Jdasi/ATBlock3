@@ -47,11 +47,7 @@ public class Dungeon
             Leaf leaf = working_list[0];
             working_list.Remove(leaf);
 
-            if (leaf.is_branch)
-                continue;
-
-            bool randomly_split = Random.Range(0, 100) < settings.random_split_chance;
-            if (!leaf.BiggerThanMax() && !randomly_split)
+            if (leaf.is_branch || !leaf.BiggerThanMax())
                 continue;
 
             if (!leaf.Split())

@@ -12,9 +12,6 @@ public class CameraControls : MonoBehaviour
     [SerializeField] float min_zoom = 1;
     [SerializeField] float max_zoom = 100;
 
-    [Header("Debug")]
-    [SerializeField] GUIStyle gui_style;
-
     private float current_modifier = 1.0f;
     private float original_zoom;
 
@@ -104,13 +101,6 @@ public class CameraControls : MonoBehaviour
     {
         JHelper.main_camera.orthographicSize -= Input.GetAxis("MouseScroll") * scroll_speed * Time.deltaTime * current_modifier * JHelper.main_camera.orthographicSize;
         JHelper.main_camera.orthographicSize = Mathf.Clamp(JHelper.main_camera.orthographicSize, min_zoom, max_zoom);
-    }
-
-
-    void OnGUI()
-    {
-        GUI.Label(new Rect(10, 10, 200, 30), "Camera Position: " + transform.position, gui_style);
-        GUI.Label(new Rect(10, 40, 200, 30), "Camera Zoom: " + JHelper.main_camera.orthographicSize, gui_style);
     }
 
 }
