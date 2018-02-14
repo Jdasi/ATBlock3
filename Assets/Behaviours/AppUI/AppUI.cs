@@ -13,6 +13,9 @@ public class AppUI : MonoBehaviour
     [SerializeField] Button btn_play;
     [SerializeField] Button btn_editor;
 
+    [Header("Panels")]
+    [SerializeField] AppPanel panel_settings;
+
     [Header("Text")]
     [SerializeField] Text lbl_tooltip;
     [SerializeField] Text lbl_camera_readout;
@@ -44,6 +47,29 @@ public class AppUI : MonoBehaviour
     }
 
 
+    public void OpenPanel(string _panel_name)
+    {
+        if (_panel_name == "SavePanel")
+        {
+            return;
+        }
+        else if (_panel_name == "LoadPanel")
+        {
+            return;
+        }
+        else if (_panel_name == "SettingsPanel")
+        {
+            SmartToggle(panel_settings);
+        }
+    }
+
+
+    public void ClosePanels()
+    {
+        panel_settings.Deactivate();
+    }
+
+
     void Update()
     {
         UpdateCameraReadout();
@@ -54,6 +80,18 @@ public class AppUI : MonoBehaviour
     {
         lbl_camera_readout.text = "Camera Position: " + JHelper.main_camera.transform.position;
         lbl_camera_readout.text += "\nCamera Zoom: " + JHelper.main_camera.orthographicSize;
+    }
+
+
+    void SmartToggle(AppPanel _panel)
+    {
+        bool already_open = _panel.IsActive();
+
+        // Deactivate all other panels.
+        ClosePanels();
+
+        if (!already_open)
+            _panel.Activate();
     }
 
 }

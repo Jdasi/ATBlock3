@@ -20,7 +20,7 @@ public class MapManager : MonoBehaviour, IMapManager
     public Vector3 map_bounds_max { get { return map_bounds.max; } }
 
     [Header("Generation Settings")]
-    [SerializeField] GenerationSettings settings;
+    public GenerationSettings settings;
 
     [Header("Map Texture")]
     [SerializeField] List<Texture2D> map_textures;
@@ -68,6 +68,12 @@ public class MapManager : MonoBehaviour, IMapManager
             return map_columns != prev_map_columns ||
                 map_rows != prev_map_rows;
         }
+    }
+
+
+    public bool MapValid()
+    {
+        return map.MapValid();
     }
 
 

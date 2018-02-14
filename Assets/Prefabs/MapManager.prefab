@@ -143,7 +143,6 @@ MonoBehaviour:
     rows: 30
     min_leaf_size: 5
     max_leaf_size: 10
-    random_split_chance: 25
     door_density: 50
     empty_room_chance: 5
   map_textures:

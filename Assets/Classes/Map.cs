@@ -24,6 +24,12 @@ public class Map
     private int rows_;
 
 
+    public bool MapValid()
+    {
+        return columns != 0 && rows != 0 && tiles != null;
+    }
+
+
     public void CreateMap(int _width, int _height)
     {
         Init(_width, _height);
