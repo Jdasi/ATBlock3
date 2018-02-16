@@ -37,11 +37,6 @@ public class GameManager : MonoBehaviour
         {
             Application.Quit();
         }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
     }
 
 

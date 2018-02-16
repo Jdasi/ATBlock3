@@ -21,6 +21,9 @@ public interface IMapManager
 
     void RefreshAutoTileIDs();
 
+    string map_name { get; }
+    string map_description { get; }
+
     int map_columns { get; }
     int map_rows { get; }
 

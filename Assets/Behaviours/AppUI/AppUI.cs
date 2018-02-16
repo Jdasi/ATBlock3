@@ -21,17 +21,12 @@ public class AppUI : MonoBehaviour
     [Header("Text")]
     [SerializeField] Text lbl_tooltip;
     [SerializeField] Text lbl_camera_readout;
+    [SerializeField] Text lbl_map_readout;
 
 
     public void OnButtonClick()
     {
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
-    }
-
-
-    public void EnableSave()
-    {
-        btn_save.interactable = true;
     }
 
 
@@ -74,6 +69,26 @@ public class AppUI : MonoBehaviour
     }
 
 
+    public void MapCreated()
+    {
+        btn_save.interactable = true;
+        lbl_map_readout.text = "-";
+    }
+
+
+    public void MapLoaded()
+    {
+        btn_save.interactable = true;
+        lbl_map_readout.text = GameManager.scene.map_manager.map_name;
+    }
+
+
+    void Awake()
+    {
+        lbl_map_readout.text = "-";
+    }
+
+
     void Update()
     {
         UpdateCameraReadout();
@@ -82,7 +97,7 @@ public class AppUI : MonoBehaviour
 
     void UpdateCameraReadout()
     {
-        lbl_camera_readout.text = "Camera Position: " + JHelper.main_camera.transform.position;
+        lbl_camera_readout.text = "Camera Position: " + (Vector2)JHelper.main_camera.transform.position;
         lbl_camera_readout.text += "\nCamera Zoom: " + JHelper.main_camera.orthographicSize;
     }
 

@@ -36,7 +36,7 @@ public class LoadPanel : AppPanel
 
     public void DropdownChanged(int _newindex)
     {
-        selected_map = FileIO.LoadMap(dropdown_menu.options[_newindex].text);
+        selected_map = FileIO.LoadMap(dropdown_menu.options[dropdown_menu.value].text);
         UpdateInfoDisplay();
     }
 

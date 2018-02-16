@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour, IMapManager
 {
+    public string map_name { get { return map.name; } }
+    public string map_description { get { return map.description; } }
+
     public int map_columns { get { return map.columns; } }
     public int map_rows { get { return map.rows; } }
     public int map_area { get { return map.area; } }
@@ -45,7 +48,9 @@ public class MapManager : MonoBehaviour, IMapManager
     [SerializeField] bool draw_partition_lines = true;
 
     [Header("Events")]
-    [SerializeField] UnityEvent map_created_events;
+    [SerializeField] UnityEvent map_generated_events;
+    [SerializeField] UnityEvent map_loaded_events;
+    [SerializeField] UnityEvent map_saved_events;
 
     private Map map;
     private Dungeon dungeon;
@@ -84,7 +89,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
         dungeon.GenerateDungeon(settings);
 
-        map_created_events.Invoke();
+        map_generated_events.Invoke();
     }
 
 
@@ -96,7 +101,7 @@ public class MapManager : MonoBehaviour, IMapManager
         map.CreateMap(_pmap);
         VisualiseMap();
 
-        map_created_events.Invoke();
+        map_loaded_events.Invoke();
     }
 
 
@@ -113,6 +118,8 @@ public class MapManager : MonoBehaviour, IMapManager
 
         map.InitDescriptionData(_name, _description);
         FileIO.ExportMap(map);
+
+        map_saved_events.Invoke();
     }
 
 

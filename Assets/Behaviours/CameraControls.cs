@@ -45,7 +45,7 @@ public class CameraControls : MonoBehaviour
 	void Update()
     {
         HandleSpeedModifier();
-        HandleKeyboardMovement();
+        //HandleKeyboardMovement();
         HandleMouseMovement();
         HandleZoom();
 	}
