@@ -8,7 +8,6 @@ public class PackedMap
     public int columns;
     public int rows;
 
-    public int[] tile_ids;
     public int[] tile_autoids;
     public int[] tile_terraintype_ids;
     public int[] tile_entitytype_ids;
@@ -23,7 +22,6 @@ public class PackedMap
 
         for (int i = 0; i < area; ++i)
         {
-            tile_ids[i] = (int)_data["tile_ids"][i];
             tile_autoids[i] = (int)_data["tile_autoids"][i];
             tile_terraintype_ids[i] = (int)_data["tile_terraintype_ids"][i];
             tile_entitytype_ids[i] = (int)_data["tile_entitytype_ids"][i];
@@ -38,7 +36,6 @@ public class PackedMap
 
         for (int i = 0; i < area; ++i)
         {
-            tile_ids[i] = i;
             tile_autoids[i] = _map.GetAutoTileID(i);
             tile_terraintype_ids[i] = (int)_map.GetTerrainType(i);
             tile_entitytype_ids[i] = (int)_map.GetEntityType(i);
@@ -60,7 +57,6 @@ public class PackedMap
 
         area = columns * rows;
 
-        tile_ids = new int[area];
         tile_autoids = new int[area];
         tile_terraintype_ids = new int[area];
         tile_entitytype_ids = new int[area];

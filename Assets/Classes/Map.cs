@@ -49,7 +49,7 @@ public class Map
         {
             Tile tile = tiles[i];
 
-            tile.id = _pmap.tile_ids[i];
+            tile.id = i;
             tile.autotile_id = _pmap.tile_autoids[i];
             tile.terrain_type = (TerrainType)_pmap.tile_terraintype_ids[i];
             tile.residing_entity = (EntityType)_pmap.tile_entitytype_ids[i];
