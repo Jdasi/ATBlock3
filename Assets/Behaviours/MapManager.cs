@@ -88,12 +88,31 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    public void LoadMap()
+    public void LoadMap(PackedMap _pmap)
     {
-        map.CreateMap(FileIO.LoadMap("map.json"));
+        if (_pmap == null)
+            return;
+
+        map.CreateMap(_pmap);
         VisualiseMap();
 
         map_created_events.Invoke();
+    }
+
+
+    public void LoadMap(string _mapname)
+    {
+        LoadMap(FileIO.LoadMap(_mapname));
+    }
+
+
+    public void ExportMap(string _name, string _description)
+    {
+        if (!map.MapValid())
+            return;
+
+        map.InitDescriptionData(_name, _description);
+        FileIO.ExportMap(map);
     }
 
 
@@ -414,11 +433,6 @@ public class MapManager : MonoBehaviour, IMapManager
     {
         half_tile_size = tile_size / 2;
         lines_container.gameObject.SetActive(draw_partition_lines);
-
-        if (Input.GetKeyDown(KeyCode.Equals))
-        {
-            FileIO.ExportMap(map);
-        }
     }
 
 

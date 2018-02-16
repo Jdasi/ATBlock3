@@ -2,6 +2,9 @@
 
 public class PackedMap
 {
+    public string name;
+    public string description;
+
     public int columns;
     public int rows;
 
@@ -15,7 +18,8 @@ public class PackedMap
 
     public PackedMap(JsonData _data)
     {
-        Init((int)_data["columns"], (int)_data["rows"]);
+        InitDescriptionData((string)_data["name"], (string)_data["description"]);
+        InitTileData((int)_data["columns"], (int)_data["rows"]);
 
         for (int i = 0; i < area; ++i)
         {
@@ -29,7 +33,8 @@ public class PackedMap
 
     public PackedMap(Map _map)
     {
-        Init(_map.columns, _map.rows);
+        InitDescriptionData(_map.name, _map.description);
+        InitTileData(_map.columns, _map.rows);
 
         for (int i = 0; i < area; ++i)
         {
@@ -41,7 +46,14 @@ public class PackedMap
     }
 
 
-    void Init(int _columns, int _rows)
+    void InitDescriptionData(string _name, string _description)
+    {
+        name = _name;
+        description = _description;
+    }
+
+
+    void InitTileData(int _columns, int _rows)
     {
         columns = _columns;
         rows = _rows;

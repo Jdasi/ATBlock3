@@ -20,14 +20,6 @@ public class MapManagerEditor : Editor
             }
         }
 
-        if (GUILayout.Button("Load Map"))
-        {
-            if (Application.isPlaying)
-            {
-                script.LoadMap();
-            }
-        }
-
         if (GUILayout.Button("Toggle Map Editor"))
         {
             if (Application.isPlaying)

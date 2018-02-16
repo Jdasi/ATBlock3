@@ -14,6 +14,8 @@ public class AppUI : MonoBehaviour
     [SerializeField] Button btn_editor;
 
     [Header("Panels")]
+    [SerializeField] AppPanel panel_save;
+    [SerializeField] AppPanel panel_load;
     [SerializeField] AppPanel panel_settings;
 
     [Header("Text")]
@@ -51,11 +53,11 @@ public class AppUI : MonoBehaviour
     {
         if (_panel_name == "SavePanel")
         {
-            return;
+            SmartToggle(panel_save);
         }
         else if (_panel_name == "LoadPanel")
         {
-            return;
+            SmartToggle(panel_load);
         }
         else if (_panel_name == "SettingsPanel")
         {
@@ -66,7 +68,9 @@ public class AppUI : MonoBehaviour
 
     public void ClosePanels()
     {
-        panel_settings.Deactivate();
+        ClosePanel(panel_save);
+        ClosePanel(panel_load);
+        ClosePanel(panel_settings);
     }
 
 
@@ -85,6 +89,9 @@ public class AppUI : MonoBehaviour
 
     void SmartToggle(AppPanel _panel)
     {
+        if (_panel == null)
+            return;
+
         bool already_open = _panel.IsActive();
 
         // Deactivate all other panels.
@@ -92,6 +99,15 @@ public class AppUI : MonoBehaviour
 
         if (!already_open)
             _panel.Activate();
+    }
+
+
+    void ClosePanel(AppPanel _panel)
+    {
+        if (_panel == null)
+            return;
+
+        _panel.Deactivate();
     }
 
 }

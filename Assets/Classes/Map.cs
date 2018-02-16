@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Map
 {
+    public string name { get; private set; }
+    public string description { get; private set; }
+
     public int columns
     {
         get { return columns_; }
@@ -32,13 +35,15 @@ public class Map
 
     public void CreateMap(int _width, int _height)
     {
-        Init(_width, _height);
+        InitDescriptionData("", "");
+        InitTileData(_width, _height);
     }
 
 
     public void CreateMap(PackedMap _pmap)
     {
-        Init(_pmap.columns, _pmap.rows);
+        InitDescriptionData(_pmap.name, _pmap.description);
+        InitTileData(_pmap.columns, _pmap.rows);
 
         for (int i = 0; i < area; ++i)
         {
@@ -134,7 +139,14 @@ public class Map
     }
 
 
-    void Init(int _columns, int _rows)
+    public void InitDescriptionData(string _name, string _description)
+    {
+        name = _name;
+        description = _description;
+    }
+
+
+    void InitTileData(int _columns, int _rows)
     {
         columns = _columns;
         rows = _rows;
