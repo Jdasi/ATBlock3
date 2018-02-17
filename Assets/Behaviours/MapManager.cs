@@ -88,6 +88,15 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
+    public void EraseMatchingMapName(string _mapname)
+    {
+        if (map_name != _mapname)
+            return;
+
+        map.InitDescriptionData("", "");
+    }
+
+
     public void GenerateMap()
     {
         map.CreateMap(settings.columns, settings.rows);

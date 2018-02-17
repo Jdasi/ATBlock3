@@ -7,6 +7,12 @@ public static class FileIO
     private static string maps_path = Application.streamingAssetsPath + "/Maps/";
 
 
+    public static void DeleteMap(string _mapname)
+    {
+        File.Delete(maps_path + _mapname + ".json");
+    }
+
+
     public static bool MapExists(string _mapname)
     {
         return File.Exists(maps_path + _mapname);

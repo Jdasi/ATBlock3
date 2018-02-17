@@ -15,6 +15,18 @@ public struct TempSceneRefs
         }
     }
 
+    public AppUI app_ui
+    {
+        get
+        {
+            if (app_ui_ == null)
+                app_ui_ = GameObject.FindObjectOfType<AppUI>();
+
+            return app_ui_;
+        }
+    }
+
     private MapManager map_manager_;
+    private AppUI app_ui_;
 
 }

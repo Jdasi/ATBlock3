@@ -89,6 +89,15 @@ public class AppUI : MonoBehaviour
     }
 
 
+    public void OptionDeleted(string _option_name)
+    {
+        if (lbl_map_readout.text != _option_name)
+            return;
+
+        lbl_map_readout.text = "";
+    }
+
+
     void Awake()
     {
         lbl_map_readout.text = "";

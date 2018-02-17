@@ -11,6 +11,7 @@ public class LoadPanel : AppPanel
 
     [Header("Buttons")]
     [SerializeField] Button btn_load;
+    [SerializeField] Button btn_delete;
 
     [Header("Text")]
     [SerializeField] Text name_display;
@@ -47,6 +48,24 @@ public class LoadPanel : AppPanel
         Deactivate();
     }
 
+    
+    public void DeleteButton()
+    {
+        string map_name = dropdown_menu.options[dropdown_menu.value].text;
+
+        // Inform other systems of map deletion and delete matching file.
+        GameManager.scene.map_manager.EraseMatchingMapName(map_name);
+        GameManager.scene.app_ui.OptionDeleted(map_name);
+        FileIO.DeleteMap(map_name);
+
+        // Update list of options.
+        var options = dropdown_menu.options;
+        options.RemoveAt(dropdown_menu.value);
+        dropdown_menu.options = options;
+
+        UpdateInteractables();
+    }
+
 
     void EnumerateOptions()
     {
@@ -78,10 +97,16 @@ public class LoadPanel : AppPanel
 
         dropdown_menu.interactable = options_exist;
         btn_load.interactable = options_exist;
+        btn_delete.interactable = options_exist;
 
         if (options_exist)
         {
             DropdownChanged(0);
+        }
+        else
+        {
+            name_display.text = "";
+            description_display.text = "";
         }
     }
 
