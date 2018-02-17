@@ -82,6 +82,12 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
+    public PackedMap GetPackedMap()
+    {
+        return map.MapValid() ? new PackedMap(map) : null;
+    }
+
+
     public void GenerateMap()
     {
         map.CreateMap(settings.columns, settings.rows);
@@ -424,8 +430,10 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    void Start()
+    void Awake()
     {
+        half_tile_size = tile_size / 2;
+
         for (int i = 0; i < map_textures.Count; ++i)
         {
             sprites_list.Add(Resources.LoadAll<Sprite>(map_textures[i].name));
@@ -438,7 +446,6 @@ public class MapManager : MonoBehaviour, IMapManager
 
     void Update()
     {
-        half_tile_size = tile_size / 2;
         lines_container.gameObject.SetActive(draw_partition_lines);
     }
 

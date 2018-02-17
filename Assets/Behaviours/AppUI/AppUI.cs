@@ -61,6 +61,12 @@ public class AppUI : MonoBehaviour
     }
 
 
+    public void ButtonPlaytest()
+    {
+        GameManager.StartPlaytest(GameManager.scene.map_manager.GetPackedMap());
+    }
+
+
     public void ClosePanels()
     {
         ClosePanel(panel_save);
@@ -72,7 +78,7 @@ public class AppUI : MonoBehaviour
     public void MapCreated()
     {
         btn_save.interactable = true;
-        lbl_map_readout.text = "-";
+        lbl_map_readout.text = "";
     }
 
 
@@ -85,7 +91,7 @@ public class AppUI : MonoBehaviour
 
     void Awake()
     {
-        lbl_map_readout.text = "-";
+        lbl_map_readout.text = "";
     }
 
 

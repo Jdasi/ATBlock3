@@ -9,14 +9,14 @@ public class DungeonEntity : MonoBehaviour
     [Header("References")]
     [SerializeField] SpriteRenderer sprite_renderer;
 
-    private EntityType entity_type;
+    //private EntityType entity_type;
 
 
     public void SetEntity(EntityType _type, Sprite _sprite, int _tile_index)
     {
         tile_index = _tile_index;
 
-        entity_type = _type;
+        //entity_type = _type;
         sprite_renderer.sprite = _sprite;
 
         gameObject.name = _type.ToString();
