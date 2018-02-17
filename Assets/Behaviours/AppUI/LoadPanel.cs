@@ -63,6 +63,12 @@ public class LoadPanel : AppPanel
         options.RemoveAt(dropdown_menu.value);
         dropdown_menu.options = options;
 
+        if (dropdown_menu.value >= options.Count && options.Count > 0)
+        {
+            dropdown_menu.value = options.Count - 1;
+            DropdownChanged(dropdown_menu.value);
+        }
+
         UpdateInteractables();
     }
 
