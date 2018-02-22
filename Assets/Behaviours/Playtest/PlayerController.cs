@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
     [SerializeField] Transform eyes_transform;
+    [SerializeField] PlayerStaff staff;
 
     private PlayerInventory inventory;
 
@@ -34,9 +35,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private Vector3 prev_pos;
-    private float current_speed;
-
 
     void Awake()
     {
@@ -46,15 +44,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        current_speed = (prev_pos - transform.position).magnitude;
-
         horizontal = Input.GetAxis("Horizontal") * Time.deltaTime;
         vertical = Input.GetAxis("Vertical") * Time.deltaTime;
 
         strafing = Input.GetMouseButton(1);
         sprinting = Input.GetKey(KeyCode.LeftShift);
 
-        prev_pos = transform.position;
+        staff.Sway(vertical * modified_speed);
 
         HandleInteraction();
     }
