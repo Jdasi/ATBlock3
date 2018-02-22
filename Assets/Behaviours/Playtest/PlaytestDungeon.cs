@@ -13,6 +13,9 @@ public class PlaytestDungeon : MonoBehaviour
     [SerializeField] GameObject door_prefab;
     [SerializeField] GameObject easy_enemy_prefab;
     [SerializeField] GameObject hard_enemy_prefab;
+    [SerializeField] GameObject potion_health_prefab;
+    [SerializeField] GameObject potion_mana_prefab;
+    [SerializeField] GameObject treasure_prefab;
 
     [Header("Player Stuff")]
     [SerializeField] GameObject player;
@@ -56,6 +59,7 @@ public class PlaytestDungeon : MonoBehaviour
 
                 clone.name = "DungeonTile" + tile_count++;
                 clone.transform.position = tile_pos;
+                clone.isStatic = true;
 
                 ParseEntityType(col, row, index, pmap.tile_entitytype_ids[index]);
             }
@@ -100,6 +104,26 @@ public class PlaytestDungeon : MonoBehaviour
             case EntityType.ENEMY_HARD:
             {
                 entity = Instantiate(hard_enemy_prefab, entity_pos, Quaternion.identity);
+            } break;
+
+            case EntityType.POTION_HEALTH:
+            {
+                entity = Instantiate(potion_health_prefab, entity_pos, Quaternion.identity);
+            } break;
+
+            case EntityType.POTION_MANA:
+            {
+                entity = Instantiate(potion_mana_prefab, entity_pos, Quaternion.identity);
+            } break;
+
+            case EntityType.TREASURE:
+            {
+                entity = Instantiate(treasure_prefab, entity_pos, Quaternion.identity);
+            } break;
+
+            case EntityType.STAIRS:
+            {
+
             } break;
         }
 

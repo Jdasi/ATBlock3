@@ -318,6 +318,12 @@ MonoBehaviour:
     type: 2}
   hard_enemy_prefab: {fileID: 1608456881428030, guid: 52fd8856a1ae52a47b00d1dfadc9961b,
     type: 2}
+  potion_health_prefab: {fileID: 1827363204155216, guid: 069926773d02cb9419e298b3ddb44209,
+    type: 2}
+  potion_mana_prefab: {fileID: 1806521773260230, guid: 3b30d4746b8c4c346b9fb983126a1452,
+    type: 2}
+  treasure_prefab: {fileID: 1104112216265170, guid: e24f6852926b35c4dbab0e1ba1060070,
+    type: 2}
   player: {fileID: 1908918609}
   debug: 1
 --- !u!1 &1565593736

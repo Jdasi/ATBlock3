@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Light))]
 public class Torch : MonoBehaviour
 {
-    [SerializeField] float original_intensity = 10;
+    [SerializeField] float original_intensity = 1;
     [SerializeField] float flicker_variance = 0.1f;
 
     private Light light;

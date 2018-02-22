@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Rigidbody rigid_body;
     [SerializeField] Transform eyes_transform;
 
+    private PlayerInventory inventory;
+
     private float horizontal;
     private float vertical;
 
@@ -36,9 +38,9 @@ public class PlayerController : MonoBehaviour
     private float current_speed;
 
 
-    void Start()
+    void Awake()
     {
-
+        inventory = this.gameObject.AddComponent<PlayerInventory>();
     }
 
 
