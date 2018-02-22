@@ -11,8 +11,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float back_speed_modifier = 0.75f;
     [SerializeField] float sprint_speed_modifier = 1.5f;
 
+    [Header("Interaction Parameters")]
+    [SerializeField] float interaction_distance = 2;
+
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
+    [SerializeField] Transform eyes_transform;
 
     private float horizontal;
     private float vertical;
@@ -49,12 +53,34 @@ public class PlayerController : MonoBehaviour
         sprinting = Input.GetKey(KeyCode.LeftShift);
 
         prev_pos = transform.position;
+
+        HandleInteraction();
     }
 
 
     void FixedUpdate()
     {
         HandleMovement();
+    }
+
+
+    void HandleInteraction()
+    {
+        if (!Input.GetKeyDown(KeyCode.Space))
+            return;
+
+        RaycastHit hit;
+        if (!Physics.Raycast(eyes_transform.position, eyes_transform.forward,
+            out hit, interaction_distance, ~LayerMask.NameToLayer("Player")))
+        {
+            return;
+        }
+
+        var i = hit.collider.GetComponentInParent<DungeonInteractable>();
+        if (i != null)
+        {
+            i.Activate();
+        }
     }
 
 

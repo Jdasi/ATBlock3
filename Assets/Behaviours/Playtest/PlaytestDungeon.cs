@@ -6,6 +6,7 @@ public class PlaytestDungeon : MonoBehaviour
 {
     [Header("Dungeon Stuff")]
     [SerializeField] List<GameObject> dungeon_tile_prefabs;
+    [SerializeField] GameObject door_prefab;
     [SerializeField] Transform tile_container;
 
     [Header("Player Stuff")]
@@ -14,9 +15,10 @@ public class PlaytestDungeon : MonoBehaviour
     [Header("Debug")]
     [SerializeField] bool debug;
 
+    private PackedMap pmap;
+
     private List<GameObject> dungeon_tiles = new List<GameObject>();
-    private int columns;
-    private int rows;
+    private List<GameObject> dungeon_entities = new List<GameObject>();
 
     private float model_scale = 2;
     private float half_model_scale;
@@ -29,34 +31,32 @@ public class PlaytestDungeon : MonoBehaviour
 
         CleanUp();
 
-        columns = _pmap.columns;
-        rows = _pmap.rows;
-
-        ParseTileData(_pmap);
+        pmap = _pmap;
+        ParseTileData();
     }
 
 
-    void ParseTileData(PackedMap _pmap)
+    void ParseTileData()
     {
-        for (int row = 0; row < _pmap.rows; ++row)
+        for (int row = 0; row < pmap.rows; ++row)
         {
-            for (int col = 0; col < _pmap.columns; ++col)
+            for (int col = 0; col < pmap.columns; ++col)
             {
-                int index = JHelper.CalculateIndex(col, row, _pmap.columns);
-                if (_pmap.tile_terraintype_ids[index] != (int)TerrainType.STONE)
+                int index = JHelper.CalculateIndex(col, row, pmap.columns);
+                if (pmap.tile_terraintype_ids[index] != (int)TerrainType.STONE)
                     continue;
 
                 Vector3 tile_pos = CoordsToTilePos(col, row);
 
-                int autotile_id = _pmap.tile_autoids[index];
+                int autotile_id = pmap.tile_autoids[index];
                 var clone = Instantiate(dungeon_tile_prefabs[autotile_id], tile_container);
 
                 clone.name = "DungeonTile" + index;
                 clone.transform.position = tile_pos;
 
-                ParseEntityType(col, row, index, _pmap.tile_entitytype_ids[index]);
-
                 dungeon_tiles.Add(clone);
+
+                ParseEntityType(col, row, index, pmap.tile_entitytype_ids[index]);
             }
         }
     }
@@ -67,12 +67,31 @@ public class PlaytestDungeon : MonoBehaviour
         if (_entityid == (int)EntityType.NONE)
             return;
 
+        Vector3 entity_pos = CoordsToTilePos(_x, _y);
+
         switch ((EntityType)_entityid)
         {
             case EntityType.PLAYER_SPAWN:
             {
-                Vector3 start_pos = CoordsToTilePos(_x, _y);
-                player.transform.position = start_pos;
+                player.transform.position = entity_pos;
+            } break;
+
+            case EntityType.DOOR:
+            {
+                int left_index = JHelper.CalculateIndex(_x + 1, _y, pmap.columns);
+                int right_index = JHelper.CalculateIndex(_x - 1, _y, pmap.columns);
+
+                bool horizontal = pmap.tile_terraintype_ids[left_index] != (int)TerrainType.STONE &&
+                    pmap.tile_terraintype_ids[right_index] != (int)TerrainType.STONE;
+
+                GameObject clone = Instantiate(door_prefab, entity_pos, Quaternion.identity);
+
+                if (!horizontal)
+                {
+                    clone.transform.Rotate(0, 90, 0);
+                }
+
+                dungeon_entities.Add(clone);
             } break;
         }
     }
@@ -84,6 +103,11 @@ public class PlaytestDungeon : MonoBehaviour
             Destroy(obj);
 
         dungeon_tiles.Clear();
+
+        foreach (var obj in dungeon_entities)
+            Destroy(obj);
+
+        dungeon_entities.Clear();
     }
 
 
@@ -104,8 +128,8 @@ public class PlaytestDungeon : MonoBehaviour
 
     Vector3 IndexToTilePos(int _index)
     {
-        int x = _index % columns;
-        int y = _index / columns;
+        int x = _index % pmap.columns;
+        int y = _index / pmap.columns;
 
         return CoordsToTilePos(x, y);
     }
