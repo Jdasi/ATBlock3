@@ -15,7 +15,7 @@ public class GameStatePlay : GameState
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.E) && Input.GetKeyDown(KeyCode.Escape))
         {
             GameManager.ExitPlaytest();
             return;

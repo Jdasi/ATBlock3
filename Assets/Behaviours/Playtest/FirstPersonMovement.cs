@@ -22,6 +22,14 @@ public class FirstPersonMovement : MonoBehaviour
     public bool noclip;
 
     private bool sprinting;
+
+    private float current_speed
+    {
+        get
+        {
+            return (noclip ? noclip_speed : speed) * (1 + (sprinting ? sprint_speed_modifier : 0));
+        }
+    }
     
 
     void Start()
@@ -35,8 +43,8 @@ public class FirstPersonMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.N))
             noclip = !noclip;
 
-        horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * CurrentSpeed() * strafe_speed_modifier;
-        vertical = Input.GetAxis("Vertical") * Time.deltaTime * CurrentSpeed();
+        horizontal = Input.GetAxis("Horizontal") * Time.deltaTime * current_speed * strafe_speed_modifier;
+        vertical = Input.GetAxis("Vertical") * Time.deltaTime * current_speed;
 
         sprinting = Input.GetKey(KeyCode.LeftShift);
 
@@ -71,12 +79,6 @@ public class FirstPersonMovement : MonoBehaviour
 
             rigid_body.MovePosition(rigid_body.position + move);
         }
-    }
-
-
-    float CurrentSpeed()
-    {
-        return (noclip ? noclip_speed : speed) * (1 + (sprinting ? sprint_speed_modifier : 0));
     }
 
 }

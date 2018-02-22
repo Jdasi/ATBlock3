@@ -15,7 +15,7 @@ public static class FileIO
 
     public static bool MapExists(string _mapname)
     {
-        return File.Exists(maps_path + _mapname);
+        return File.Exists(maps_path + _mapname + ".json");
     }
 
 

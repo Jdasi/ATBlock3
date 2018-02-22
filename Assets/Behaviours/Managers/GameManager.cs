@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static PackedMap playtest_map { get; private set; }
+    public static PackedMap playtest_map;
     public static TempSceneRefs scene = new TempSceneRefs();
 
     private static GameManager instance;
@@ -45,11 +45,7 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(this.gameObject);
-
-        // Clicking Play in Editor does not call OnLevelWasLoaded. Thanks Unity.
-#if UNITY_EDITOR
-        OnLevelWasLoaded(0);
-#endif
+        SceneManager.sceneLoaded += SceneLoaded;
     }
 
 
@@ -70,7 +66,7 @@ public class GameManager : MonoBehaviour
 
 
     // Find the GameState in the scene when its loaded.
-    void OnLevelWasLoaded(int _level)
+    void SceneLoaded(Scene _scene, LoadSceneMode _mode)
     {
         if (instance != this)
             return;
