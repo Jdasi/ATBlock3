@@ -6,8 +6,13 @@ public class PlaytestDungeon : MonoBehaviour
 {
     [Header("Dungeon Stuff")]
     [SerializeField] List<GameObject> dungeon_tile_prefabs;
-    [SerializeField] GameObject door_prefab;
     [SerializeField] Transform tile_container;
+    [SerializeField] Transform entity_container;
+
+    [Space]
+    [SerializeField] GameObject door_prefab;
+    [SerializeField] GameObject easy_enemy_prefab;
+    [SerializeField] GameObject hard_enemy_prefab;
 
     [Header("Player Stuff")]
     [SerializeField] GameObject player;
@@ -16,9 +21,6 @@ public class PlaytestDungeon : MonoBehaviour
     [SerializeField] bool debug;
 
     private PackedMap pmap;
-
-    private List<GameObject> dungeon_tiles = new List<GameObject>();
-    private List<GameObject> dungeon_entities = new List<GameObject>();
 
     private float model_scale = 2;
     private float half_model_scale;
@@ -38,6 +40,7 @@ public class PlaytestDungeon : MonoBehaviour
 
     void ParseTileData()
     {
+        int tile_count = 0;
         for (int row = 0; row < pmap.rows; ++row)
         {
             for (int col = 0; col < pmap.columns; ++col)
@@ -51,10 +54,8 @@ public class PlaytestDungeon : MonoBehaviour
                 int autotile_id = pmap.tile_autoids[index];
                 var clone = Instantiate(dungeon_tile_prefabs[autotile_id], tile_container);
 
-                clone.name = "DungeonTile" + index;
+                clone.name = "DungeonTile" + tile_count++;
                 clone.transform.position = tile_pos;
-
-                dungeon_tiles.Add(clone);
 
                 ParseEntityType(col, row, index, pmap.tile_entitytype_ids[index]);
             }
@@ -67,6 +68,7 @@ public class PlaytestDungeon : MonoBehaviour
         if (_entityid == (int)EntityType.NONE)
             return;
 
+        GameObject entity = null;
         Vector3 entity_pos = CoordsToTilePos(_x, _y);
 
         switch ((EntityType)_entityid)
@@ -84,30 +86,37 @@ public class PlaytestDungeon : MonoBehaviour
                 bool horizontal = pmap.tile_terraintype_ids[left_index] != (int)TerrainType.STONE &&
                     pmap.tile_terraintype_ids[right_index] != (int)TerrainType.STONE;
 
-                GameObject clone = Instantiate(door_prefab, entity_pos, Quaternion.identity);
+                entity = Instantiate(door_prefab, entity_pos, Quaternion.identity);
 
                 if (!horizontal)
-                {
-                    clone.transform.Rotate(0, 90, 0);
-                }
-
-                dungeon_entities.Add(clone);
+                    entity.transform.Rotate(0, 90, 0);
             } break;
+
+            case EntityType.ENEMY_EASY:
+            {
+                entity = Instantiate(easy_enemy_prefab, entity_pos, Quaternion.identity);
+            } break;
+
+            case EntityType.ENEMY_HARD:
+            {
+                entity = Instantiate(hard_enemy_prefab, entity_pos, Quaternion.identity);
+            } break;
+        }
+
+        if (entity != null)
+        {
+            entity.transform.SetParent(entity_container);
         }
     }
 
 
     void CleanUp()
     {
-        foreach (var obj in dungeon_tiles)
-            Destroy(obj);
+        foreach (Transform child in tile_container)
+            Destroy(child.gameObject);
 
-        dungeon_tiles.Clear();
-
-        foreach (var obj in dungeon_entities)
-            Destroy(obj);
-
-        dungeon_entities.Clear();
+        foreach (Transform child in entity_container)
+            Destroy(child.gameObject);
     }
 
 
@@ -115,7 +124,7 @@ public class PlaytestDungeon : MonoBehaviour
     {
         half_model_scale = model_scale / 2;
 
-        if (debug)
+        if (debug && GameManager.playtest_map == null)
         {
             if (FileIO.MapExists("Map1"))
             {
