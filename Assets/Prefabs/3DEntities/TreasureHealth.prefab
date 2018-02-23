@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4335008793148810}
   - component: {fileID: 108243654977554684}
   - component: {fileID: 114370395566767392}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Torch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4225747321315950}
   - component: {fileID: 212208758212999104}
   - component: {fileID: 114307857269463200}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 54702401226496926}
   - component: {fileID: 136391151418145104}
   - component: {fileID: 114012666074027962}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TreasureHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1656561457f65f4f836eae4cd6a0e4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  original_intensity: 1
   flicker_variance: 0.1
 --- !u!136 &136391151418145104
 CapsuleCollider:

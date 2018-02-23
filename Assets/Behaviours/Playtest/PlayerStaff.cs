@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerStaff : MonoBehaviour
 {
+    [Header("Sway Settings")]
     [SerializeField] float horizontal_sway = 0.5f;
     [SerializeField] float horizontal_time_factor = 1.0f;
 
@@ -14,11 +15,33 @@ public class PlayerStaff : MonoBehaviour
     [Space]
     [SerializeField] float sway_speed = 10;
 
+    [Header("Attack Settings")]
+    [SerializeField] float attack_cooldown = 0.4f;
+    [SerializeField] GameObject projectile_prefab;
+    [SerializeField] Transform shoot_point;
+
+    [Space]
+    [SerializeField] AnimationCurve swing_curve;
+    [SerializeField] Vector3 swing_rotation = new Vector3(33, 0, 0);
+    [SerializeField] float swing_duration = 0.5f;
+
+    [Header("References")]
+    [SerializeField] SpriteRenderer staff_sprite;
+    [SerializeField] Transform animation_joint;
+
     private Vector3 origin;
     private float sway_target;
 
     private float sway_timer;
     private float sway_amount;
+
+    private float swing_timer;
+    private float next_shoot_timestamp;
+
+    private bool can_shoot
+    {
+        get { return Time.time >= next_shoot_timestamp; }
+    }
 
 
     public void Sway(float _target)
@@ -27,13 +50,34 @@ public class PlayerStaff : MonoBehaviour
     }
 
 
+    public void Shoot()
+    {
+        if (!can_shoot)
+            return;
+
+        swing_timer = 0;
+        next_shoot_timestamp = Time.time + attack_cooldown;
+
+        Instantiate(projectile_prefab, shoot_point.position + shoot_point.forward,
+            Quaternion.LookRotation(transform.forward));
+    }
+
+
     void Awake()
     {
-        origin = transform.localPosition;
+        origin = animation_joint.transform.localPosition;
+        swing_timer = swing_duration;
     }
 
 
     void Update()
+    {
+        HandleSway();
+        HandleSwing();
+    }
+
+
+    void HandleSway()
     {
         sway_timer += Time.deltaTime * sway_speed;
         sway_amount = Mathf.Lerp(sway_amount, sway_target, sway_speed * Time.deltaTime);
@@ -41,7 +85,19 @@ public class PlayerStaff : MonoBehaviour
         float h_sway = Mathf.Sin(sway_timer * horizontal_time_factor) * horizontal_sway;
         float v_sway = Mathf.Sin(sway_timer * vertical_time_factor) * vertical_sway;
 
-        transform.localPosition = origin + (new Vector3(h_sway, v_sway) * sway_amount);
+        animation_joint.transform.localPosition = origin + (new Vector3(h_sway, v_sway) * sway_amount);
+    }
+
+
+    void HandleSwing()
+    {
+        if (swing_timer >= swing_duration)
+            return;
+
+        swing_timer += Time.deltaTime;
+
+        float curve_step = swing_curve.Evaluate(swing_timer / swing_duration);
+        animation_joint.transform.localRotation = Quaternion.Euler(swing_rotation * curve_step);
     }
 
 }

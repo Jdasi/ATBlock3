@@ -26,7 +26,6 @@ public class PlaytestDungeon : MonoBehaviour
     private PackedMap pmap;
 
     private float model_scale = 2;
-    private float half_model_scale;
 
 
     public void InitialiseDungeon(PackedMap _pmap)
@@ -146,8 +145,6 @@ public class PlaytestDungeon : MonoBehaviour
 
     void Awake()
     {
-        half_model_scale = model_scale / 2;
-
         if (debug && GameManager.playtest_map == null)
         {
             if (FileIO.MapExists("Map1"))

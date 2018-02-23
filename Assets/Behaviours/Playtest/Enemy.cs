@@ -4,19 +4,33 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] int max_health;
+    [Header("Parameters")]
     [SerializeField] float move_speed;
-    [SerializeField] float detection_radius;
 
-    private const float update_radius = 10;
+    [Header("References")]
+    [SerializeField] FadableGraphic damage_fade;
+
+    private const float update_radius = 200;
 
     private PlayerController player;
-    private int health;
+    private bool active;
+
+
+    public void Kill()
+    {
+        Destroy(this.gameObject);
+    }
+
+
+    public void Damage()
+    {
+        damage_fade.FadeOut(0.3f);
+    }
 
 
     void Awake()
     {
-        health = max_health;
+
     }
 
 
@@ -25,10 +39,18 @@ public class Enemy : MonoBehaviour
         if (player == null)
             player = GameObject.FindObjectOfType<PlayerController>();
 
-        if ((transform.position - player.transform.position).sqrMagnitude > update_radius)
+        active = (transform.position - player.transform.position).sqrMagnitude <= update_radius;
+        if (!active)
             return;
 
         // TODO: enemy logic ..
+    }
+
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = active ? Color.green : Color.red;
+        Gizmos.DrawSphere(transform.position + (Vector3.up * 1.5f), 0.2f);
     }
 
 }

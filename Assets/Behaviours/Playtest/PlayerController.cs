@@ -29,10 +29,7 @@ public class PlayerController : MonoBehaviour
 
     private float modified_speed
     {
-        get
-        {
-            return speed * (1 + (sprinting ? sprint_speed_modifier : 0));
-        }
+        get { return speed * (1 + (sprinting ? sprint_speed_modifier : 0)); }
     }
 
 
@@ -46,6 +43,11 @@ public class PlayerController : MonoBehaviour
     {
         strafing = Input.GetMouseButton(1);
         sprinting = Input.GetKey(KeyCode.LeftShift);
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            staff.Shoot();
+        }
 
         staff.Sway(vertical * modified_speed);
 

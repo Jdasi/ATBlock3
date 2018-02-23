@@ -5,21 +5,34 @@ using UnityEngine;
 [RequireComponent(typeof(Light))]
 public class Torch : MonoBehaviour
 {
-    [SerializeField] float original_intensity = 1;
     [SerializeField] float flicker_variance = 0.1f;
 
-    private Light light;
+    private Light torch_light;
+    private float original_intensity = 1;
+
+
+    void OnEnable()
+    {
+        torch_light.enabled = true;
+    }
+
+
+    void OnDisable()
+    {
+        torch_light.enabled = false;
+    }
 
 
     void Awake()
     {
-        light = GetComponent<Light>();
+        torch_light = GetComponent<Light>();
+        original_intensity = torch_light.intensity;
     }
 
 
     void Update()
     {
-        light.intensity = Random.Range(
+        torch_light.intensity = Random.Range(
             original_intensity - (original_intensity * flicker_variance),
             original_intensity + (original_intensity * flicker_variance));
     }
