@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        strafing = Input.GetMouseButton(1);
+        strafing = Input.GetMouseButton(0);
         sprinting = Input.GetKey(KeyCode.LeftShift);
 
         if (Input.GetKey(KeyCode.E))
