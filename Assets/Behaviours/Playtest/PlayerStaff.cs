@@ -69,7 +69,7 @@ public class PlayerStaff : MonoBehaviour
 
         if (shot_obstructed)
         {
-            bolt.Explode();
+            bolt.Explode(hit.collider);
         }
     }
 

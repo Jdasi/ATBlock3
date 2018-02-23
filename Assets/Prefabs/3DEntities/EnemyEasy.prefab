@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4013486824105932}
   - component: {fileID: 212471679848607858}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: LeftEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,9 +39,9 @@ GameObject:
   - component: {fileID: 136435173480308702}
   - component: {fileID: 114482151821367046}
   - component: {fileID: 114728811350375750}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: EnemyEasy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 4187347601536956}
   - component: {fileID: 212775086023311434}
   - component: {fileID: 114412133706870254}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Silhouette
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 4831454340977834}
   - component: {fileID: 212744906361742512}
   - component: {fileID: 114030543533473912}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4620365563104194}
   - component: {fileID: 212282840065426482}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RightEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,8 +218,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8615c62fa16aa2645bf4293c9ee2a1d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  move_speed: 5
+  eblob: {fileID: 11400000, guid: 6884c996780115d488f15761dd26271c, type: 2}
+  blocking_layers:
+    serializedVersion: 2
+    m_Bits: 769
   damage_fade: {fileID: 114412133706870254}
+  body_transform: {fileID: 4831454340977834}
+  rigid_body: {fileID: 54782405732345170}
 --- !u!114 &114728811350375750
 MonoBehaviour:
   m_ObjectHideFlags: 1

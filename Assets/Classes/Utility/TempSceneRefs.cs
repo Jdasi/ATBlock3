@@ -26,7 +26,19 @@ public struct TempSceneRefs
         }
     }
 
+    public PlayerController player
+    {
+        get
+        {
+            if (player_ == null)
+                player_ = GameObject.FindObjectOfType<PlayerController>();
+
+            return player_;
+        }
+    }
+
     private MapManager map_manager_;
     private AppUI app_ui_;
+    private PlayerController player_;
 
 }

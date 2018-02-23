@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4550466571055548}
   - component: {fileID: 114750585272736784}
   m_Layer: 12
-  m_Name: FireBoltHit
+  m_Name: FelBoltHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,7 +111,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
-  m_Color: {r: 1, g: 0.3931034, b: 0, a: 1}
+  m_Color: {r: 0.43924958, g: 0.89705884, b: 0, a: 1}
   m_Intensity: 3
   m_Range: 10
   m_SpotAngle: 30
@@ -1125,8 +1125,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.89705884, g: 0.43379074, b: 0.013192055, a: 1}
-        key1: {r: 1, g: 0.77281946, b: 0.17647058, a: 0}
+        key0: {r: 0.22653916, g: 0.89705884, b: 0.013192055, a: 1}
+        key1: {r: 0.8941177, g: 0.26274514, b: 0.30193377, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}

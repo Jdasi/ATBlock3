@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 54907352274551352}
   - component: {fileID: 136046680772679620}
   - component: {fileID: 114316474069089086}
+  - component: {fileID: 114507222505858020}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -285,7 +286,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1461934040883308}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 0.010004938, z: -4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4056720352720526}
@@ -675,6 +676,44 @@ MonoBehaviour:
   rigid_body: {fileID: 54907352274551352}
   eyes_transform: {fileID: 4056720352720526}
   staff: {fileID: 114210501115198974}
+--- !u!114 &114507222505858020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1461934040883308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e3de9d4ca5e4148838d8f729d5205a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_health: 100
+  thresholds: []
+  on_death_event:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+GameObjectEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  on_damage_event:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  on_heal_event:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  on_health_changed_event:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  on_health_percentage_changed_event:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+FloatEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &114759271200310958
 MonoBehaviour:
   m_ObjectHideFlags: 1
