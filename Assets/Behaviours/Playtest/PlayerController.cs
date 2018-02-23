@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public LifeForce life { get { return life_; } }
+    public PlayerInventory inventory { get; private set; }
+
+    public CustomEvents.FloatEvent mana_percent_changed_events;
+    public CustomEvents.FloatEvent mana_percent_changed_events_quiet;
+
     [Header("Movement Parameters")]
     [SerializeField] float speed = 6;
     [SerializeField] float turn_speed = 150;
@@ -14,12 +20,21 @@ public class PlayerController : MonoBehaviour
     [Header("Interaction Parameters")]
     [SerializeField] float interaction_distance = 2;
 
+    [Space]
+    [SerializeField] int max_mana = 100;
+    [SerializeField] int attack_mana_cost = 5;
+    [SerializeField] int mana_regen_per_second = 3;
+
+    [Space]
+    [SerializeField] int health_on_potion = 30;
+    [SerializeField] int mana_on_potion = 30;
+
     [Header("References")]
     [SerializeField] Rigidbody rigid_body;
     [SerializeField] Transform eyes_transform;
     [SerializeField] PlayerStaff staff;
-
-    private PlayerInventory inventory;
+    [SerializeField] LifeForce life_;
+    [SerializeField] ShakeModule shake;
 
     private float horizontal;
     private float vertical;
@@ -27,15 +42,26 @@ public class PlayerController : MonoBehaviour
     private bool strafing;
     private bool sprinting;
 
+    private int mana;
+    private float mana_percent { get { return (float)mana / max_mana; } }
+    private float mana_regen_timer;
+
     private float modified_speed
     {
         get { return speed * (1 + (sprinting ? sprint_speed_modifier : 0)); }
     }
 
 
+    public void Damage(int _amount)
+    {
+        shake.Shake(0.1f, 0.1f);
+    }
+
+
     void Awake()
     {
         inventory = this.gameObject.AddComponent<PlayerInventory>();
+        mana = max_mana;
     }
 
 
@@ -44,20 +70,28 @@ public class PlayerController : MonoBehaviour
         strafing = Input.GetMouseButton(0);
         sprinting = Input.GetKey(KeyCode.LeftShift);
 
-        if (Input.GetKey(KeyCode.E))
-        {
-            staff.Shoot();
-        }
-
         staff.Sway(vertical * modified_speed);
 
+        HandleAttack();
         HandleInteraction();
+        HandlePotionConsumption();
+        HandleManaRegen();
     }
 
 
     void FixedUpdate()
     {
         HandleMovement();
+    }
+
+
+    void HandleAttack()
+    {
+        if (!staff.can_shoot || mana < attack_mana_cost || !Input.GetKey(KeyCode.E))
+            return;
+
+        mana_regen_timer = 0;
+        staff.Shoot();
     }
 
 
@@ -110,6 +144,60 @@ public class PlayerController : MonoBehaviour
         }
 
         rigid_body.MovePosition(transform.position + move);
+    }
+
+
+    void HandlePotionConsumption()
+    {
+        if (inventory.health_potions > 0 && Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (life.IsFullyHealed())
+            {
+                // Can't drink, health full.
+            }
+            else
+            {
+                inventory.RemoveHealthPotion();
+                life.Heal(health_on_potion);
+            }
+        }
+
+        if (inventory.mana_potions > 0 && Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            if (mana >= max_mana)
+            {
+                // Can't drink, mana full.
+            }
+            else
+            {
+                mana += mana_on_potion;
+
+                inventory.RemoveManaPotion();
+                mana_percent_changed_events.Invoke(mana_percent);
+            }
+        }
+    }
+
+
+    void HandleManaRegen()
+    {
+        if (mana >= max_mana)
+        {
+            mana_regen_timer = 0;
+            return;
+        }
+
+        mana_regen_timer += Time.deltaTime;
+
+        if (mana_regen_timer >= 1)
+        {
+            mana_regen_timer = 0;
+
+            mana += mana_regen_per_second;
+            mana = Mathf.Clamp(mana, 0, max_mana);
+
+            mana_percent_changed_events_quiet.Invoke(mana_percent);
+        }
     }
 
 }

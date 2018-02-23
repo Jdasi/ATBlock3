@@ -17,9 +17,6 @@ public class PlaytestDungeon : MonoBehaviour
     [SerializeField] GameObject potion_mana_prefab;
     [SerializeField] GameObject treasure_prefab;
 
-    [Header("Player Stuff")]
-    [SerializeField] GameObject player;
-
     [Header("Debug")]
     [SerializeField] bool debug;
 
@@ -78,7 +75,7 @@ public class PlaytestDungeon : MonoBehaviour
         {
             case EntityType.PLAYER_SPAWN:
             {
-                player.transform.position = entity_pos;
+                GameManager.scene.player.transform.position = entity_pos;
             } break;
 
             case EntityType.DOOR:

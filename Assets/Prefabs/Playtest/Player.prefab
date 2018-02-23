@@ -45,6 +45,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1419567110118490
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4443592145666460}
+  - component: {fileID: 114156214499895806}
+  m_Layer: 9
+  m_Name: CameraMount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1461934040883308
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,8 +236,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4648261591378186}
-  - {fileID: 4653774307900804}
+  - {fileID: 4443592145666460}
   m_Father: {fileID: 4590897654876164}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -279,6 +294,21 @@ Transform:
   m_Father: {fileID: 4317971165647732}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4443592145666460
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1419567110118490}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4648261591378186}
+  - {fileID: 4653774307900804}
+  m_Father: {fileID: 4056720352720526}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4590897654876164
 Transform:
   m_ObjectHideFlags: 1
@@ -302,11 +332,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1789361528046374}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4056720352720526}
+  m_Father: {fileID: 4443592145666460}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4648383121419176
@@ -333,7 +363,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4056720352720526}
+  m_Father: {fileID: 4443592145666460}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4661257861729520
@@ -596,6 +626,42 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114156214499895806
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1419567110118490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d47ba12a4f61994f8e352faffb56209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  paused: 0
+  decay_rate:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &114210501115198974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -667,15 +733,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb66072bb2d8b648bcf91af37797373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mana_percent_changed_events:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+FloatEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  mana_percent_changed_events_quiet:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: CustomEvents+FloatEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   speed: 5
   turn_speed: 170
   strafe_speed_modifier: 0.75
   back_speed_modifier: 0.75
   sprint_speed_modifier: 1
   interaction_distance: 2
+  max_mana: 100
+  attack_mana_cost: 5
+  mana_regen_per_second: 0
+  health_on_potion: 30
+  mana_on_potion: 30
   rigid_body: {fileID: 54907352274551352}
   eyes_transform: {fileID: 4056720352720526}
   staff: {fileID: 114210501115198974}
+  life_: {fileID: 114507222505858020}
+  shake: {fileID: 114156214499895806}
 --- !u!114 &114507222505858020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -696,7 +779,18 @@ MonoBehaviour:
       PublicKeyToken=null
   on_damage_event:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114316474069089086}
+        m_MethodName: Damage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   on_heal_event:
@@ -709,7 +803,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  on_health_percentage_changed_event:
+  health_percent_changed_events:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: CustomEvents+FloatEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,

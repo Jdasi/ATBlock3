@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerStaff : MonoBehaviour
 {
+    public bool can_shoot
+    {
+        get { return Time.time >= next_shoot_timestamp; }
+    }
+
     [Header("Sway Settings")]
     [SerializeField] float horizontal_sway = 0.5f;
     [SerializeField] float horizontal_time_factor = 1.0f;
@@ -38,10 +43,7 @@ public class PlayerStaff : MonoBehaviour
     private float swing_timer;
     private float next_shoot_timestamp;
 
-    private bool can_shoot
-    {
-        get { return Time.time >= next_shoot_timestamp; }
-    }
+
 
 
     public void Sway(float _target)

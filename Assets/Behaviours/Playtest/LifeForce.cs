@@ -19,7 +19,7 @@ public class LifeForce : MonoBehaviour
     public CustomEvents.IntEvent on_damage_event;
     public CustomEvents.IntEvent on_heal_event;
     public CustomEvents.IntEvent on_health_changed_event;
-    public CustomEvents.FloatEvent on_health_percentage_changed_event;
+    public CustomEvents.FloatEvent health_percent_changed_events;
 
     public int current_health { get; private set; }
 
@@ -53,7 +53,7 @@ public class LifeForce : MonoBehaviour
         current_health = Mathf.Clamp(current_health, 0, int.MaxValue);
 
         on_health_changed_event.Invoke(current_health);
-        on_health_percentage_changed_event.Invoke(GetHealthPercentage());
+        health_percent_changed_events.Invoke(GetHealthPercentage());
 
         thresholds.ForEach(t => CheckThresholdTriggered(t, prev_health));
 
@@ -89,7 +89,7 @@ public class LifeForce : MonoBehaviour
         current_health = Mathf.Clamp(current_health, 0, max_health);//clamp to max value
 
         on_health_changed_event.Invoke(current_health);
-        on_health_percentage_changed_event.Invoke(GetHealthPercentage());
+        health_percent_changed_events.Invoke(GetHealthPercentage());
     }
 
 
@@ -107,7 +107,7 @@ public class LifeForce : MonoBehaviour
             return;
 
         on_health_changed_event.Invoke(current_health);
-        on_health_percentage_changed_event.Invoke(GetHealthPercentage());
+        health_percent_changed_events.Invoke(GetHealthPercentage());
 
         ResetHealth();
     }

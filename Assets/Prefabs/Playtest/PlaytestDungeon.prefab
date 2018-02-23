@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1079642974634468}
+  m_IsPrefabParent: 1
+--- !u!1 &1079642974634468
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4653704134441690}
+  - component: {fileID: 114877485759733174}
+  m_Layer: 0
+  m_Name: PlaytestDungeon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1172120711767516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4350123926088344}
+  m_Layer: 0
+  m_Name: EntityContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1970909570394834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4967347584469188}
+  m_Layer: 0
+  m_Name: TileContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4350123926088344
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1172120711767516}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4653704134441690}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4653704134441690
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079642974634468}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4967347584469188}
+  - {fileID: 4350123926088344}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4967347584469188
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1970909570394834}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4653704134441690}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114877485759733174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1079642974634468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d9ba80f0fa80f4a95478be416346e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dungeon_tile_prefabs:
+  - {fileID: 1739353493551678, guid: d86eae36b978e284cb4c888473566185, type: 2}
+  - {fileID: 1767187925305498, guid: 5291fd5b1c8a20b4fb0ffdfb65184f01, type: 2}
+  - {fileID: 1129573746960852, guid: d60221ea0c3b3ad49a155a16d763b2cc, type: 2}
+  - {fileID: 1916159561078622, guid: 5ed36c12288740e44a4c11ae27d4509c, type: 2}
+  - {fileID: 1916159561078622, guid: 5ed36c12288740e44a4c11ae27d4509c, type: 2}
+  - {fileID: 1544673877362992, guid: aa293ab4e2b04dd47a62dec00da54e21, type: 2}
+  - {fileID: 1474138822298500, guid: 71ea27047e6348646ac8f9c117e61527, type: 2}
+  - {fileID: 1474138822298500, guid: 71ea27047e6348646ac8f9c117e61527, type: 2}
+  - {fileID: 1719499133441472, guid: 6fb66612dfbb82947adf10fff2e05614, type: 2}
+  - {fileID: 1110625786274106, guid: 2f8c0761e32b4ff4385feba7037f0d2b, type: 2}
+  - {fileID: 1110625786274106, guid: 2f8c0761e32b4ff4385feba7037f0d2b, type: 2}
+  - {fileID: 1110625786274106, guid: 2f8c0761e32b4ff4385feba7037f0d2b, type: 2}
+  - {fileID: 1110625786274106, guid: 2f8c0761e32b4ff4385feba7037f0d2b, type: 2}
+  - {fileID: 1830485374345250, guid: 87848975fabd4ef4aa7a20c9804fd2dc, type: 2}
+  - {fileID: 1508992771797636, guid: 558cf9462629e4d42bbc404a4d75b0d3, type: 2}
+  - {fileID: 1880704094722530, guid: 9f1ff21e29bddad40910137b73a6dfa3, type: 2}
+  - {fileID: 1869983409839772, guid: 0382a8dc495e6704b9fa3dc92049fcef, type: 2}
+  - {fileID: 1869983409839772, guid: 0382a8dc495e6704b9fa3dc92049fcef, type: 2}
+  - {fileID: 1177325394154824, guid: 8f9f569580efec04c8cf72a6aec0db56, type: 2}
+  - {fileID: 1096599085538840, guid: 663d8fca21855bc4abcb45078012d01a, type: 2}
+  - {fileID: 1096599085538840, guid: 663d8fca21855bc4abcb45078012d01a, type: 2}
+  - {fileID: 1385931624273172, guid: d6460359537cb044994df3b0ed72c825, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1880704094722530, guid: 9f1ff21e29bddad40910137b73a6dfa3, type: 2}
+  - {fileID: 1869983409839772, guid: 0382a8dc495e6704b9fa3dc92049fcef, type: 2}
+  - {fileID: 1869983409839772, guid: 0382a8dc495e6704b9fa3dc92049fcef, type: 2}
+  - {fileID: 1385931624273172, guid: d6460359537cb044994df3b0ed72c825, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1177325394154824, guid: 8f9f569580efec04c8cf72a6aec0db56, type: 2}
+  - {fileID: 1096599085538840, guid: 663d8fca21855bc4abcb45078012d01a, type: 2}
+  - {fileID: 1096599085538840, guid: 663d8fca21855bc4abcb45078012d01a, type: 2}
+  - {fileID: 1385931624273172, guid: d6460359537cb044994df3b0ed72c825, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1385931624273172, guid: d6460359537cb044994df3b0ed72c825, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1543860391870104, guid: 96dd81fae5929d64e9c0fdf8c13cc0a4, type: 2}
+  - {fileID: 1739353493551678, guid: d86eae36b978e284cb4c888473566185, type: 2}
+  tile_container: {fileID: 4967347584469188}
+  entity_container: {fileID: 4350123926088344}
+  door_prefab: {fileID: 1341523072421226, guid: 9f0767ceeeaf61f41885a3a805d04cb1,
+    type: 2}
+  easy_enemy_prefab: {fileID: 1561210423811142, guid: bbb95899e6f5a3b45a397413edca23fb,
+    type: 2}
+  hard_enemy_prefab: {fileID: 1608456881428030, guid: 52fd8856a1ae52a47b00d1dfadc9961b,
+    type: 2}
+  potion_health_prefab: {fileID: 1827363204155216, guid: 069926773d02cb9419e298b3ddb44209,
+    type: 2}
+  potion_mana_prefab: {fileID: 1806521773260230, guid: 3b30d4746b8c4c346b9fb983126a1452,
+    type: 2}
+  treasure_prefab: {fileID: 1104112216265170, guid: e24f6852926b35c4dbab0e1ba1060070,
+    type: 2}
+  player: {fileID: 0}
+  debug: 1

@@ -179,8 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 2
-  min_value: 5
-  max_value: 10
+  min_value: 50
+  max_value: 100
 --- !u!114 &114889558472711138
 MonoBehaviour:
   m_ObjectHideFlags: 1

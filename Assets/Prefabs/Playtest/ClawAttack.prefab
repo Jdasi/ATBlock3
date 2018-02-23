@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ce4b9af5f0eb9341913787a55d2aa16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 7
+  damage: 10
   radius: 1
   knockback: 3
   hit_layers:

@@ -70,8 +70,6 @@ public class MapEditorUI : MonoBehaviour
 
     void Start()
     {
-        HideMenu();
-
         buttons[0].Click();
     }
 
