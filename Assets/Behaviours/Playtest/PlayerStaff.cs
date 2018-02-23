@@ -29,7 +29,7 @@ public class PlayerStaff : MonoBehaviour
 
     void Awake()
     {
-        origin = transform.position;
+        origin = transform.localPosition;
     }
 
 

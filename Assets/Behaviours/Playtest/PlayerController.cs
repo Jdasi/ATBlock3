@@ -44,9 +44,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal") * Time.deltaTime;
-        vertical = Input.GetAxis("Vertical") * Time.deltaTime;
-
         strafing = Input.GetMouseButton(1);
         sprinting = Input.GetKey(KeyCode.LeftShift);
 
@@ -84,6 +81,9 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
+        horizontal = Input.GetAxis("Horizontal") * Time.fixedDeltaTime;
+        vertical = Input.GetAxis("Vertical") * Time.fixedDeltaTime;
+
         Vector3 move = Vector3.zero;
 
         if (horizontal != 0)
