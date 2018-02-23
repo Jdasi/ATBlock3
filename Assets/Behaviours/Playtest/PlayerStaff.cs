@@ -58,8 +58,19 @@ public class PlayerStaff : MonoBehaviour
         swing_timer = 0;
         next_shoot_timestamp = Time.time + attack_cooldown;
 
-        Instantiate(projectile_prefab, shoot_point.position + shoot_point.forward,
+
+        RaycastHit hit;
+        bool shot_obstructed = Physics.Raycast(shoot_point.position, shoot_point.forward,
+            out hit, 1, ~LayerMask.NameToLayer("Player"));
+
+        var clone = Instantiate(projectile_prefab, shoot_point.position + shoot_point.forward,
             Quaternion.LookRotation(transform.forward));
+        var bolt = clone.GetComponent<FireBolt>();
+
+        if (shot_obstructed)
+        {
+            bolt.Explode();
+        }
     }
 
 

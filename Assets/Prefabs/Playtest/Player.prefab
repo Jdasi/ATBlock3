@@ -285,7 +285,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1461934040883308}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6, y: 0.010004938, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4056720352720526}
@@ -611,7 +611,7 @@ MonoBehaviour:
   vertical_sway: 0.2
   vertical_time_factor: 0.5
   sway_speed: 10
-  attack_cooldown: 0.4
+  attack_cooldown: 0.5
   projectile_prefab: {fileID: 1149808763525672, guid: d3163ef57beec7149af1e726667993d5,
     type: 2}
   shoot_point: {fileID: 4352971377168680}

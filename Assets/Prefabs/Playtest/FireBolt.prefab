@@ -168,6 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   speed: 15
+  knockback: 2
   destroy_delay: 1.5
   explosion_prefab: {fileID: 1562271492627298, guid: c5d79253e32f34f4da336e562f4e4569,
     type: 2}
