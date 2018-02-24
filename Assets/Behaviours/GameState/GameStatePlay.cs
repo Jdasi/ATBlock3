@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class GameStatePlay : GameState
 {
-    [SerializeField] PlaytestDungeon pdungeon;
+    [SerializeField] PlaytestDungeon playtest_dungeon;
     [SerializeField] PlayerCanvas player_canvas;
+    
+    private PocketGenerator pocket_generator;
+
+
+    void Awake()
+    {
+        pocket_generator = new PocketGenerator();
+        playtest_dungeon.dungeon_initialised_events.AddListener(DungeonInitialised);
+    }
 
 
     void Start()
     {
-        pdungeon.InitialiseDungeon(GameManager.playtest_map);
-
-        GameManager.scene.player.life.on_death_event.AddListener(PlayerDied);
-        pdungeon.exit_portal.portal_entered_events.AddListener(PortalEntered);
+        playtest_dungeon.InitialiseDungeon(GameManager.playtest_map);
     }
 
 
@@ -23,6 +29,13 @@ public class GameStatePlay : GameState
         {
             TogglePause();
         }
+    }
+
+
+    void DungeonInitialised()
+    {
+        GameManager.scene.player.life.on_death_event.AddListener(PlayerDied);
+        playtest_dungeon.exit_portal.portal_entered_events.AddListener(PortalEntered);
     }
 
 
@@ -64,9 +77,9 @@ public class GameStatePlay : GameState
 
     void PortalEntered()
     {
-        if (GameManager.extended_playtest)
+        if (GameManager.endless_playtest)
         {
-            // TODO: generate a new map and initialise ..
+            playtest_dungeon.InitialiseDungeon(pocket_generator.GeneratePackedMap());
         }
         else
         {

@@ -78,7 +78,7 @@ public class MapManager : MonoBehaviour, IMapManager
 
     public bool MapValid()
     {
-        return map.MapValid();
+        return map.MapValid() && player_spawn != null && level_exit != null;
     }
 
 
@@ -100,9 +100,9 @@ public class MapManager : MonoBehaviour, IMapManager
     public void GenerateMap()
     {
         map.CreateMap(settings.columns, settings.rows);
-        VisualiseMap();
+        dungeon.GenerateDungeon(settings, map);
 
-        dungeon.GenerateDungeon(settings);
+        VisualiseMap();
 
         map_generated_events.Invoke();
     }
@@ -114,6 +114,8 @@ public class MapManager : MonoBehaviour, IMapManager
             return;
 
         map.CreateMap(_pmap);
+        dungeon.ClearDungeon();
+
         VisualiseMap();
 
         map_loaded_events.Invoke();
@@ -196,17 +198,17 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    public void Paint(Vector2 _pos, TerrainType _terrain_type, bool _single_sprite)
+    public void Paint(Vector2 _pos, TerrainType _terrain_type)
     {
         if (!PosInMapBounds(_pos))
             return;
 
         int index = PosToTileIndex(_pos);
-        Paint(index, _terrain_type, _single_sprite);
+        Paint(index, _terrain_type);
     }
 
 
-    public void Paint(int _tile_index, TerrainType _terrain_type, bool _single_sprite)
+    public void Paint(int _tile_index, TerrainType _terrain_type)
     {
         if (!JHelper.ValidIndex(_tile_index, map_area))
         {
@@ -214,13 +216,10 @@ public class MapManager : MonoBehaviour, IMapManager
             return;
         }
 
-        map.UpdateTerrainType(_tile_index, _terrain_type);
+        map.SetTerrainType(_tile_index, _terrain_type);
 
         if (_terrain_type == TerrainType.ROCK)
             RemoveEntity(_tile_index);
-
-        if (_single_sprite)
-            return;
 
         // Update surrounding sprites ..
         int x = _tile_index % map_columns;
@@ -275,7 +274,7 @@ public class MapManager : MonoBehaviour, IMapManager
         }
         else if (map.GetTerrainType(_tile_index) == TerrainType.ROCK)
         {
-            Paint(_tile_index, TerrainType.STONE, false);
+            Paint(_tile_index, TerrainType.STONE);
         }
 
         DungeonEntity entity = null;
@@ -369,76 +368,6 @@ public class MapManager : MonoBehaviour, IMapManager
     }
 
 
-    public void VisualisePartition(int _from_index, int _to_index)
-    {
-        if (!JHelper.ValidIndex(_from_index, map_area) ||
-            !JHelper.ValidIndex(_to_index, map_area))
-        {
-            Debug.Log("Add Partition Visualisation out of bounds");
-            return;
-        }
-
-        Vector3 tl = sprite_tiles[_from_index].transform.position - new Vector3(half_tile_size.x, -half_tile_size.y);
-        Vector3 br = sprite_tiles[_to_index].transform.position + new Vector3(half_tile_size.x, -half_tile_size.y);
-
-        GameObject obj = new GameObject("PartitionVisualisation");
-        obj.transform.SetParent(lines_container);
-        obj.isStatic = true;
-
-        LineRenderer line = obj.AddComponent<LineRenderer>();
-        line.receiveShadows = false;
-        line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        line.positionCount = 5;
-
-        line.SetPosition(0, tl);
-        line.SetPosition(1, new Vector3(br.x, tl.y));
-        line.SetPosition(2, br);
-        line.SetPosition(3, new Vector3(tl.x, br.y));
-        line.SetPosition(4, tl);
-
-        line.material = line_material;
-        line.startColor = line_color;
-        line.endColor = line_color;
-
-        line.sortingLayerID = SortingLayer.GetLayerValueFromName(sorting_layer);
-        line.sortingOrder = order_in_layer;
-    }
-
-
-    public void VisualiseRoomGrid(RoomGrid _grid)
-    {
-        if (_grid == null)
-            return;
-
-        for (int i = 0; i < _grid.data.Length; ++i)
-        {
-            DataType data = _grid.data[i];
-            if (data == DataType.EMPTY)
-                continue;
-
-            int x = _grid.x + (i % _grid.width);
-            int y = _grid.y + (i / _grid.width);
-
-            int index = JHelper.CalculateIndex(x, y, map_columns);
-            Paint(index, TerrainType.STONE, true);
-
-            switch (data)
-            {
-                case DataType.DOOR:             AddEntity(index, EntityType.DOOR            ); break;
-                case DataType.SPAWN:            AddEntity(index, EntityType.PLAYER_SPAWN    ); break;
-                case DataType.EXIT:             AddEntity(index, EntityType.STAIRS          ); break;
-                case DataType.ENEMY_EASY:       AddEntity(index, EntityType.ENEMY_EASY      ); break;
-                case DataType.ENEMY_HARD:       AddEntity(index, EntityType.ENEMY_HARD      ); break;
-                case DataType.TREASURE_HEALTH:  AddEntity(index, EntityType.POTION_HEALTH   ); break;
-                case DataType.TREASURE_MANA:    AddEntity(index, EntityType.POTION_MANA     ); break;
-                case DataType.TREASURE:         AddEntity(index, EntityType.TREASURE        ); break;
-            }
-        }
-
-        RefreshAutoTileIDs();
-    }
-
-
     void Awake()
     {
         half_tile_size = tile_size / 2;
@@ -449,7 +378,7 @@ public class MapManager : MonoBehaviour, IMapManager
         }
 
         map = new Map();
-        dungeon = new Dungeon(this);
+        dungeon = new Dungeon();
     }
 
 
@@ -538,6 +467,13 @@ public class MapManager : MonoBehaviour, IMapManager
                 AddEntity(i, etype);
             }
         }
+
+        // Visualise partitions.
+        var pair_list = dungeon.GetPartitionIndices();
+        foreach (var pair in pair_list)
+        {
+            VisualisePartition(pair.start_index, pair.end_index);
+        }
     }
 
 
@@ -569,6 +505,42 @@ public class MapManager : MonoBehaviour, IMapManager
             SpriteRenderer tile = clone.GetComponent<SpriteRenderer>();
             sprite_tiles.Add(tile);
         }
+    }
+
+
+    void VisualisePartition(int _from_index, int _to_index)
+    {
+        if (!JHelper.ValidIndex(_from_index, map_area) ||
+            !JHelper.ValidIndex(_to_index, map_area))
+        {
+            Debug.Log("Add Partition Visualisation out of bounds");
+            return;
+        }
+
+        Vector3 tl = sprite_tiles[_from_index].transform.position - new Vector3(half_tile_size.x, -half_tile_size.y);
+        Vector3 br = sprite_tiles[_to_index].transform.position + new Vector3(half_tile_size.x, -half_tile_size.y);
+
+        GameObject obj = new GameObject("PartitionVisualisation");
+        obj.transform.SetParent(lines_container);
+        obj.isStatic = true;
+
+        LineRenderer line = obj.AddComponent<LineRenderer>();
+        line.receiveShadows = false;
+        line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        line.positionCount = 5;
+
+        line.SetPosition(0, tl);
+        line.SetPosition(1, new Vector3(br.x, tl.y));
+        line.SetPosition(2, br);
+        line.SetPosition(3, new Vector3(tl.x, br.y));
+        line.SetPosition(4, tl);
+
+        line.material = line_material;
+        line.startColor = line_color;
+        line.endColor = line_color;
+
+        line.sortingLayerID = SortingLayer.GetLayerValueFromName(sorting_layer);
+        line.sortingOrder = order_in_layer;
     }
 
 

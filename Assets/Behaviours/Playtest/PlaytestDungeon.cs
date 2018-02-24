@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlaytestDungeon : MonoBehaviour
 {
+    public UnityEvent dungeon_initialised_events;
     public ExitPortal exit_portal { get; private set; }
 
     [Header("Dungeon Stuff")]
@@ -20,11 +22,7 @@ public class PlaytestDungeon : MonoBehaviour
     [SerializeField] GameObject treasure_prefab;
     [SerializeField] GameObject exit_prefab;
 
-    [Header("Debug")]
-    [SerializeField] bool debug;
-
     private PackedMap pmap;
-
     private float model_scale = 2;
 
 
@@ -37,6 +35,8 @@ public class PlaytestDungeon : MonoBehaviour
 
         pmap = _pmap;
         ParseTileData();
+
+        dungeon_initialised_events.Invoke();
     }
 
 
@@ -141,19 +141,6 @@ public class PlaytestDungeon : MonoBehaviour
 
         foreach (Transform child in entity_container)
             Destroy(child.gameObject);
-    }
-
-
-    void Awake()
-    {
-        if (debug && GameManager.playtest_map == null)
-        {
-            if (FileIO.MapExists("Map1"))
-            {
-                GameManager.playtest_map = FileIO.LoadMap("Map1");
-                InitialiseDungeon(GameManager.playtest_map);
-            }
-        }
     }
 
 

@@ -8,16 +8,13 @@ public interface IMapManager
     Vector2 PosToTileCenter(Vector2 _pos);
     int PosToTileIndex(Vector2 _pos);
 
-    void Paint(Vector2 _pos, TerrainType _terrain_type, bool _single_sprite = false);
-    void Paint(int _tile_index, TerrainType _terrain_type, bool _single_sprite = false);
+    void Paint(Vector2 _pos, TerrainType _terrain_type);
+    void Paint(int _tile_index, TerrainType _terrain_type);
 
     void AddEntity(Vector2 _pos, EntityType _entity_type);
     void AddEntity(int _tile_index, EntityType _entity_type);
     void RemoveEntity(Vector2 _pos);
     void RemoveEntity(int _tile_index);
-
-    void VisualisePartition(int _from_index, int _to_index);
-    void VisualiseRoomGrid(RoomGrid _grid);
 
     void RefreshAutoTileIDs();
 

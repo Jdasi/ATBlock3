@@ -17,6 +17,7 @@ public class AppUI : MonoBehaviour
     [SerializeField] AppPanel panel_save;
     [SerializeField] AppPanel panel_load;
     [SerializeField] AppPanel panel_settings;
+    [SerializeField] AppPanel panel_playtest;
 
     [Header("Text")]
     [SerializeField] Text lbl_tooltip;
@@ -58,12 +59,10 @@ public class AppUI : MonoBehaviour
         {
             SmartToggle(panel_settings);
         }
-    }
-
-
-    public void ButtonPlaytest()
-    {
-        GameManager.StartPlaytest(GameManager.scene.map_manager.GetPackedMap());
+        else if (_panel_name == "PlaytestPanel")
+        {
+            SmartToggle(panel_playtest);
+        }
     }
 
 
@@ -72,6 +71,7 @@ public class AppUI : MonoBehaviour
         ClosePanel(panel_save);
         ClosePanel(panel_load);
         ClosePanel(panel_settings);
+        ClosePanel(panel_playtest);
     }
 
 

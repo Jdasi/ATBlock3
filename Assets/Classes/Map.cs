@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Map
+public class Map : IMap
 {
     public string name { get; private set; }
     public string description { get; private set; }
@@ -65,6 +65,34 @@ public class Map
         return tiles[_tile_index].terrain_type;
     }
 
+
+    public void SetTerrainType(int _index, TerrainType _type)
+    {
+        if (!JHelper.ValidIndex(_index, area))
+            return;
+
+        Tile tile = tiles[_index];
+        tile.terrain_type = _type;
+
+        int x = _index % columns;
+        int y = _index / columns;
+
+        for (int row = y - 1; row <= y + 1; ++row)
+        {
+            for (int col = x - 1; col <= x + 1; ++col)
+            {
+                if (col < 0 || col >= columns ||
+                    row < 0 || row >= rows)
+                {
+                    continue;
+                }
+
+                int index = JHelper.CalculateIndex(col, row, columns);
+                tiles[index].CalculateAutoTileID();
+            }
+        }
+    }
+
     
     public bool TileEmpty(int _tile_index)
     {
@@ -84,34 +112,6 @@ public class Map
     }
 
 
-    public void UpdateTerrainType(int _tile_index, TerrainType _type)
-    {
-        if (!JHelper.ValidIndex(_tile_index, area))
-            return;
-
-        Tile tile = tiles[_tile_index];
-        tile.terrain_type = _type;
-
-        int x = _tile_index % columns;
-        int y = _tile_index / columns;
-
-        for (int row = y - 1; row <= y + 1; ++row)
-        {
-            for (int col = x - 1; col <= x + 1; ++col)
-            {
-                if (col < 0 || col >= columns ||
-                    row < 0 || row >= rows)
-                {
-                    continue;
-                }
-
-                int index = JHelper.CalculateIndex(col, row, columns);
-                tiles[index].CalculateAutoTileID();
-            }
-        }
-    }
-
-
     public void RefreshAutoTileIDs()
     {
         for (int i = 0; i < area; ++i)
@@ -121,21 +121,21 @@ public class Map
     }
 
 
-    public void SetEntityType(int _tile_index, EntityType _entity_type)
+    public EntityType GetEntityType(int _index)
     {
-        if (!JHelper.ValidIndex(_tile_index, area))
-            return;
+        if (!JHelper.ValidIndex(_index, area))
+            return EntityType.NONE;
 
-        tiles[_tile_index].residing_entity = _entity_type;
+        return tiles[_index].residing_entity;
     }
 
 
-    public EntityType GetEntityType(int _tile_index)
+    public void SetEntityType(int _index, EntityType _entity_type)
     {
-        if (!JHelper.ValidIndex(_tile_index, area))
-            return EntityType.NONE;
+        if (!JHelper.ValidIndex(_index, area))
+            return;
 
-        return tiles[_tile_index].residing_entity;
+        tiles[_index].residing_entity = _entity_type;
     }
 
 

@@ -53,13 +53,13 @@ public abstract class AppPanel : MonoBehaviour
 
     public void DragStart()
     {
-        if (Input.GetMouseButton(1))
-            return;
+        if (Input.GetMouseButton(0))
+        {
+            dragging = true;
 
-        dragging = true;
-
-        old_pos = this.transform.position;
-        drag_origin = Input.mousePosition;
+            old_pos = this.transform.position;
+            drag_origin = Input.mousePosition;
+        }
     }
 
 
@@ -71,12 +71,18 @@ public abstract class AppPanel : MonoBehaviour
             this.transform.position = old_pos + diff;
 
             if (Input.GetMouseButtonUp(0))
+            {
                 dragging = false;
+            }
         }
+
+        OnUpdate();
     }
 
 
     public abstract void OnActivate();
     public abstract void OnDeactivate();
+
+    public virtual void OnUpdate() {}
 
 }

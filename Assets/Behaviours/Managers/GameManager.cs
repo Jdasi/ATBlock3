@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static PackedMap playtest_map;
-    public static bool extended_playtest;
+    public static bool endless_playtest = true;
 
     public static TempSceneRefs scene = new TempSceneRefs();
 

@@ -3,10 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public struct PartitionIndexPair
+{
+    public PartitionIndexPair(int _start_index, int _end_index)
+    {
+        start_index = _start_index;
+        end_index = _end_index;
+    }
+
+    public int start_index;
+    public int end_index;
+}
+
 public class Dungeon
 {
-    private IMapManager imap_manager;
     private GenerationSettings settings;
+    private IMap imap;
 
     private List<Leaf> leaves = new List<Leaf>();
     private Leaf root;
@@ -14,17 +26,39 @@ public class Dungeon
     private DungeonPopulator populator = new DungeonPopulator();
 
 
-    public Dungeon(IMapManager _imap_manager)
+    public Dungeon()
     {
-        imap_manager = _imap_manager;
         populator.Init();
     }
 
 
-    public void GenerateDungeon(GenerationSettings _settings)
+    public void GenerateDungeon(GenerationSettings _settings, IMap _imap)
     {
         settings = _settings;
+        imap = _imap;
+
         BSPGeneration();
+    }
+
+
+    public void ClearDungeon()
+    {
+        leaves.Clear();
+        root = null;
+    }
+
+
+    public List<PartitionIndexPair> GetPartitionIndices()
+    {
+        List<PartitionIndexPair> pair_list = new List<PartitionIndexPair>();
+
+        List<Leaf> lowest_leaves = leaves.Where(node => !node.is_branch).ToList();
+        foreach (Leaf leaf in lowest_leaves)
+        {
+            pair_list.Add(new PartitionIndexPair(leaf.start_tile, leaf.end_tile));
+        }
+
+        return pair_list;
     }
 
 
@@ -68,7 +102,7 @@ public class Dungeon
 
         populator.PopulateDungeon(settings, root.room_grid);
 
-        imap_manager.VisualiseRoomGrid(root.room_grid);
+        ExtractRootIntoMap();
     }
 
 
@@ -77,9 +111,6 @@ public class Dungeon
         List<Leaf> lowest_leaves = leaves.Where(node => !node.is_branch).ToList();
         foreach (Leaf leaf in lowest_leaves)
         {
-            // Create a visualisation of the leaf's partition area.
-            imap_manager.VisualisePartition(leaf.start_tile, leaf.end_tile);
-
             leaf.CreateRoom();
         }
 
@@ -155,6 +186,37 @@ public class Dungeon
 
         root.room_grid.data[left_center] = DataType.SPAWN;
         root.room_grid.data[right_center] = DataType.EXIT;
+    }
+
+
+    void ExtractRootIntoMap()
+    {
+        var room = root.room_grid;
+
+        for (int i = 0; i < room.data.Length; ++i)
+        {
+            DataType data = room.data[i];
+            if (data == DataType.EMPTY)
+                continue;
+
+            int x = room.x + (i % room.width);
+            int y = room.y + (i / room.width);
+
+            int index = JHelper.CalculateIndex(x, y, imap.columns);
+            imap.SetTerrainType(index, TerrainType.STONE);
+
+            switch (data)
+            {
+                case DataType.DOOR:             imap.SetEntityType(index, EntityType.DOOR           ); break;
+                case DataType.SPAWN:            imap.SetEntityType(index, EntityType.PLAYER_SPAWN   ); break;
+                case DataType.EXIT:             imap.SetEntityType(index, EntityType.STAIRS         ); break;
+                case DataType.ENEMY_EASY:       imap.SetEntityType(index, EntityType.ENEMY_EASY     ); break;
+                case DataType.ENEMY_HARD:       imap.SetEntityType(index, EntityType.ENEMY_HARD     ); break;
+                case DataType.TREASURE_HEALTH:  imap.SetEntityType(index, EntityType.POTION_HEALTH  ); break;
+                case DataType.TREASURE_MANA:    imap.SetEntityType(index, EntityType.POTION_MANA    ); break;
+                case DataType.TREASURE:         imap.SetEntityType(index, EntityType.TREASURE       ); break;
+            }
+        }
     }
 
 }
