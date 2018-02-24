@@ -172,5 +172,6 @@ MonoBehaviour:
     type: 2}
   treasure_prefab: {fileID: 1104112216265170, guid: e24f6852926b35c4dbab0e1ba1060070,
     type: 2}
-  player: {fileID: 0}
+  exit_prefab: {fileID: 1863881994671500, guid: 27d3ee6fcdf92214c89d25462bff3a34,
+    type: 2}
   debug: 1

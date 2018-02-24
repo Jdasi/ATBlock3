@@ -16,6 +16,7 @@ public class PlaytestDungeon : MonoBehaviour
     [SerializeField] GameObject potion_health_prefab;
     [SerializeField] GameObject potion_mana_prefab;
     [SerializeField] GameObject treasure_prefab;
+    [SerializeField] GameObject exit_prefab;
 
     [Header("Debug")]
     [SerializeField] bool debug;
@@ -76,6 +77,7 @@ public class PlaytestDungeon : MonoBehaviour
             case EntityType.PLAYER_SPAWN:
             {
                 GameManager.scene.player.transform.position = entity_pos;
+                GameManager.scene.player.life.on_death_event.AddListener(PlayerDied);
             } break;
 
             case EntityType.DOOR:
@@ -119,7 +121,8 @@ public class PlaytestDungeon : MonoBehaviour
 
             case EntityType.STAIRS:
             {
-
+                entity = Instantiate(exit_prefab, entity_pos, Quaternion.identity);
+                entity.GetComponent<ExitPortal>().portal_entered_events.AddListener(PortalEntered);
             } break;
         }
 
@@ -165,6 +168,18 @@ public class PlaytestDungeon : MonoBehaviour
     Vector3 CoordsToTilePos(int _x, int _y)
     {
         return new Vector3(_x, 0, -_y) * model_scale;
+    }
+
+
+    void PlayerDied(GameObject _obj)
+    {
+        GameManager.ExitPlaytest();
+    }
+
+
+    void PortalEntered()
+    {
+        GameManager.ExitPlaytest();
     }
 
 }
