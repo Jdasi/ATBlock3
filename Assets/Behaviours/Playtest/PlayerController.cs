@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerStaff staff;
     [SerializeField] LifeForce life_;
     [SerializeField] ShakeModule shake;
+    [SerializeField] CapsuleCollider capsule;
 
     private float horizontal;
     private float vertical;
@@ -49,6 +50,24 @@ public class PlayerController : MonoBehaviour
     private float modified_speed
     {
         get { return speed * (1 + (sprinting ? sprint_speed_modifier : 0)); }
+    }
+
+
+    public void Kill()
+    {
+        if (!this.enabled)
+            return;
+
+        rigid_body.AddForce(Vector3.up, ForceMode.Impulse);
+        staff.gameObject.SetActive(false);
+
+        capsule.radius = 0.1f;
+        capsule.height = 0.1f;
+        capsule.center = capsule.center + new Vector3(0, 0.4f, 0);
+
+        eyes_transform.Rotate(0, 0, 10);
+
+        this.enabled = false;
     }
 
 
@@ -76,6 +95,11 @@ public class PlayerController : MonoBehaviour
         HandleInteraction();
         HandlePotionConsumption();
         HandleManaRegen();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            life.Damage(999);
+        }
     }
 
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlaytestDungeon : MonoBehaviour
 {
+    public ExitPortal exit_portal { get; private set; }
+
     [Header("Dungeon Stuff")]
     [SerializeField] List<GameObject> dungeon_tile_prefabs;
     [SerializeField] Transform tile_container;
@@ -77,7 +79,6 @@ public class PlaytestDungeon : MonoBehaviour
             case EntityType.PLAYER_SPAWN:
             {
                 GameManager.scene.player.transform.position = entity_pos;
-                GameManager.scene.player.life.on_death_event.AddListener(PlayerDied);
             } break;
 
             case EntityType.DOOR:
@@ -122,7 +123,7 @@ public class PlaytestDungeon : MonoBehaviour
             case EntityType.STAIRS:
             {
                 entity = Instantiate(exit_prefab, entity_pos, Quaternion.identity);
-                entity.GetComponent<ExitPortal>().portal_entered_events.AddListener(PortalEntered);
+                exit_portal = entity.GetComponent<ExitPortal>();
             } break;
         }
 
@@ -168,18 +169,6 @@ public class PlaytestDungeon : MonoBehaviour
     Vector3 CoordsToTilePos(int _x, int _y)
     {
         return new Vector3(_x, 0, -_y) * model_scale;
-    }
-
-
-    void PlayerDied(GameObject _obj)
-    {
-        GameManager.ExitPlaytest();
-    }
-
-
-    void PortalEntered()
-    {
-        GameManager.ExitPlaytest();
     }
 
 }

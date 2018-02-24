@@ -53,6 +53,7 @@ GameObject:
   - component: {fileID: 4192450598091372}
   - component: {fileID: 212650737216497544}
   - component: {fileID: 114999190067907664}
+  - component: {fileID: 114831742194431400}
   m_Layer: 13
   m_Name: Body
   m_TagString: Untagged
@@ -103,7 +104,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1608456881428030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.21, y: 0, z: -5.58}
+  m_LocalPosition: {x: 3.54, y: 0.01000008, z: -4.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4192450598091372}
@@ -250,7 +251,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: CustomEvents+IntEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  on_health_percentage_changed_event:
+  health_percent_changed_events:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: CustomEvents+FloatEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
@@ -273,6 +274,19 @@ MonoBehaviour:
   damage_fade: {fileID: 114337192046079742}
   body_transform: {fileID: 4192450598091372}
   rigid_body: {fileID: 54910824046676196}
+--- !u!114 &114831742194431400
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1296954719641990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600e4143c92739949ba096ca3ce5b539, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strength: 0.1
+  speed: 2
 --- !u!114 &114999190067907664
 MonoBehaviour:
   m_ObjectHideFlags: 1

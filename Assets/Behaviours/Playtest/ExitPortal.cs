@@ -13,6 +13,10 @@ public class ExitPortal : MonoBehaviour
         if (!_other.CompareTag("Player"))
             return;
 
+        PlayerController player = _other.GetComponent<PlayerController>();
+        if (!player.life.IsAlive())
+            return;
+
         portal_entered_events.Invoke();
     }
 

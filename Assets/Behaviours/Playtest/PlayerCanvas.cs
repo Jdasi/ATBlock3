@@ -35,6 +35,32 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] TextGroup mana_potions_display;
     [SerializeField] TextGroup gold_display;
 
+    [Header("Miscellaneous")]
+    [SerializeField] Color menu_dead_color;
+    [SerializeField] Color menu_paused_color;
+    [SerializeField] GameObject playtest_menu_panel;
+
+
+    public void BtnReturnToEditor()
+    {
+        GameManager.ExitPlaytest();
+    }
+
+
+    public void ShowPlaytestMenu(bool _show)
+    {
+        playtest_menu_panel.GetComponent<Image>().color = GameManager.scene.player.life.IsAlive() ?
+            menu_dead_color : menu_paused_color;
+
+        playtest_menu_panel.SetActive(_show);
+    }
+
+
+    public void SetMenuText(string _str)
+    {
+        playtest_menu_panel.GetComponentInChildren<Text>().text = _str;
+    }
+
 
     void Start()
     {

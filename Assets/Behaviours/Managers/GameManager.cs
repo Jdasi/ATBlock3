@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static PackedMap playtest_map;
+    public static bool extended_playtest;
+
     public static TempSceneRefs scene = new TempSceneRefs();
 
     private static GameManager instance;
@@ -71,6 +73,7 @@ public class GameManager : MonoBehaviour
         if (instance != this)
             return;
 
+        Time.timeScale = 1; // Always reset timeScale on scene load.
         GameState state = GameObject.FindObjectOfType<GameState>();
 
         if (state != null)

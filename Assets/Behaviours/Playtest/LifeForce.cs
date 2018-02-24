@@ -30,6 +30,12 @@ public class LifeForce : MonoBehaviour
     }
 
 
+    public bool IsAlive()
+    {
+        return current_health > 0;
+    }
+
+
     public float GetHealthPercentage()
     {
         return (float)current_health / max_health;
