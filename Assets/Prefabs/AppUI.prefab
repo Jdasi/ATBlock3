@@ -1085,7 +1085,6 @@ GameObject:
   - component: {fileID: 222953112837129928}
   - component: {fileID: 114815460496306622}
   - component: {fileID: 114736164398176754}
-  - component: {fileID: 114864144778479196}
   m_Layer: 5
   m_Name: BtnSingle
   m_TagString: Untagged
@@ -1716,7 +1715,6 @@ GameObject:
   - component: {fileID: 222154538501650732}
   - component: {fileID: 114580940970137648}
   - component: {fileID: 114651446558443662}
-  - component: {fileID: 114890344196656022}
   m_Layer: 5
   m_Name: BtnEndless
   m_TagString: Untagged
@@ -6840,53 +6838,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &114864144778479196
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1527879922681004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114902160823004854}
-          m_MethodName: ButtonMouseEnter
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Toggle the Tilemap Editor.
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114902160823004854}
-          m_MethodName: ButtonMouseExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
 --- !u!114 &114883605990164730
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -6995,53 +6946,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114890344196656022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1851884476698026}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114902160823004854}
-          m_MethodName: ButtonMouseEnter
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Toggle the Tilemap Editor.
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  - eventID: 1
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 114902160823004854}
-          m_MethodName: ButtonMouseExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
 --- !u!114 &114902160823004854
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8712,7 +8616,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5297503, y: 0.26028895}
   m_AnchorMax: {x: 0.85217214, y: 0.45000002}
-  m_AnchoredPosition: {x: 0.09999734, y: -0.012435913}
+  m_AnchoredPosition: {x: 0.099990845, y: -0.012435913}
   m_SizeDelta: {x: -1.2000008, y: -1.4}
   m_Pivot: {x: 0.49999982, y: 0.5}
 --- !u!224 &224271007198473900
@@ -9727,7 +9631,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.122860596, y: 0.26028895}
   m_AnchorMax: {x: 0.44450054, y: 0.45000002}
-  m_AnchoredPosition: {x: -0.6000029, y: -0.012512207}
+  m_AnchoredPosition: {x: -0.6000061, y: -0.012512207}
   m_SizeDelta: {x: -0.29999924, y: -1}
   m_Pivot: {x: 0.49999982, y: 0.5}
 --- !u!224 &224697195776928058

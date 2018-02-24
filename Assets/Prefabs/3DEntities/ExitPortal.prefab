@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4428787063072038}
   - component: {fileID: 33583756371817192}
   - component: {fileID: 23697797906114818}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4589080755566178}
   - component: {fileID: 33811869219773498}
   - component: {fileID: 23006519654482880}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4129972346491144}
   - component: {fileID: 33833231534902732}
   - component: {fileID: 23436151744956792}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4233536435163298}
   - component: {fileID: 33033227012845302}
   - component: {fileID: 23892235130949306}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4248478465289478}
   - component: {fileID: 33766572359040344}
   - component: {fileID: 23825150061096826}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4985730601439230}
   - component: {fileID: 114892804016430180}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Billboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 4701711554407716}
   - component: {fileID: 198128037514041380}
   - component: {fileID: 199902035762975740}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 4936969637590148}
   - component: {fileID: 108578424651484300}
   - component: {fileID: 114402265388886924}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Torch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 4784192141982878}
   - component: {fileID: 135681425909231912}
   - component: {fileID: 114011295990107724}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ExitPortal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
