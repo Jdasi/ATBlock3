@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Attract.unity
+    guid: f890051de6edaec4fb4652766f2a9a7e
+  - enabled: 1
     path: Assets/Scenes/Editor.unity
     guid: dff421c1dad16634cb28b98ce4e380ad
   - enabled: 1

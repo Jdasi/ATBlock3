@@ -52,7 +52,7 @@ public class PlaytestPanel : AppPanel
 
     void StartPlaytest()
     {
-        GameManager.StartPlaytest(GameManager.scene.map_manager.GetPackedMap());
+        GameManager.GoToPlaytest(GameManager.scene.map_manager.GetPackedMap());
     }
 
 }

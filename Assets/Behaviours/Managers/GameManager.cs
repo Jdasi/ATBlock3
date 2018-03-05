@@ -13,19 +13,22 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
 
 
-    public static void StartPlaytest(PackedMap _pmap)
+    public static void GoToMenu()
     {
-        if (_pmap == null)
-            return;
+        instance.LoadScene(0);
+    }
 
-        playtest_map = _pmap;
+
+    public static void GoToEditor()
+    {
         instance.LoadScene(1);
     }
 
 
-    public static void ExitPlaytest()
+    public static void GoToPlaytest(PackedMap _pmap = null)
     {
-        instance.LoadScene(0);
+        playtest_map = _pmap;
+        instance.LoadScene(2);
     }
 
 

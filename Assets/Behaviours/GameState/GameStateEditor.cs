@@ -13,4 +13,13 @@ public class GameStateEditor : GameState
         }
     }
 
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.GoToMenu();
+        }
+    }
+
 }

@@ -41,9 +41,15 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] GameObject playtest_menu_panel;
 
 
+    public void BtnReturnToMenu()
+    {
+        GameManager.GoToMenu();
+    }
+
+
     public void BtnReturnToEditor()
     {
-        GameManager.ExitPlaytest();
+        GameManager.GoToEditor();
     }
 
 

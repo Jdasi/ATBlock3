@@ -84,7 +84,7 @@ public class GameStatePlay : GameState
         }
         else
         {
-            GameManager.ExitPlaytest();
+            GameManager.GoToEditor();
         }
     }
 

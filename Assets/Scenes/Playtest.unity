@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 47815528}
   - component: {fileID: 47815527}
   m_Layer: 0
-  m_Name: GameStatePlay
+  m_Name: GameState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

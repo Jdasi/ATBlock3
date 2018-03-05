@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 825f464a0fcc1a140a73a263b2adcaf0
+timeCreated: 1520275014
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Anklepants
+  fontNames:
+  - Anklepants
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
