@@ -154,6 +154,7 @@ GameObject:
   - component: {fileID: 92719905457122800}
   - component: {fileID: 124050076336625074}
   - component: {fileID: 81820626829738770}
+  - component: {fileID: 114791887717800532}
   m_Layer: 9
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -316,7 +317,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1461934040883308}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6, y: 0.010004938, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4056720352720526}
@@ -564,8 +565,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 0, g: 0.46206903, b: 1, a: 1}
-  m_Intensity: 2
-  m_Range: 3
+  m_Intensity: 3
+  m_Range: 4
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -600,8 +601,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0.8482758, b: 0, a: 1}
-  m_Intensity: 1
-  m_Range: 15
+  m_Intensity: 2
+  m_Range: 17
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -832,6 +833,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flicker_variance: 0.05
+--- !u!114 &114791887717800532
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1789361528046374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: cc4503a35e504d24eaff6cdaa142a356, type: 2}
 --- !u!124 &124050076336625074
 Behaviour:
   m_ObjectHideFlags: 1

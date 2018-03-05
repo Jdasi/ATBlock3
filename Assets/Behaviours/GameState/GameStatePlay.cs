@@ -19,7 +19,8 @@ public class GameStatePlay : GameState
 
     void Start()
     {
-        playtest_dungeon.InitialiseDungeon(GameManager.playtest_map);
+        var map = GameManager.playtest_map == null ? pocket_generator.GeneratePackedMap() : GameManager.playtest_map;
+        playtest_dungeon.InitialiseDungeon(map);
     }
 
 
