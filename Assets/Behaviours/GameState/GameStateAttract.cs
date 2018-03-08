@@ -1,15 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameStateAttract : GameState
 {
     [SerializeField] PlaytestDungeon playtest_dungeon;
     [SerializeField] string map_to_load = "MenuScene";
+    [SerializeField] Slider brightness_slider;
     
-    private PocketGenerator pocket_generator;
-
 
     public void BtnPlay()
     {
@@ -30,9 +29,9 @@ public class GameStateAttract : GameState
     }
 
 
-    void Awake()
+    public void BrightnessChanged(float _brightness)
     {
-        pocket_generator = new PocketGenerator();
+        GameManager.UpdateBrightness(_brightness);
     }
 
 
@@ -40,6 +39,8 @@ public class GameStateAttract : GameState
     {
         var map = FileIO.LoadMap(map_to_load);
         playtest_dungeon.InitialiseDungeon(map);
+
+        brightness_slider.value = GameManager.brightness;
     }
 
 

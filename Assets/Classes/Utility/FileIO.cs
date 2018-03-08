@@ -5,6 +5,25 @@ using LitJson;
 public static class FileIO
 {
     private static string maps_path = Application.streamingAssetsPath + "/Maps/";
+    private static string settings_path = Application.streamingAssetsPath + "/game_settings.json";
+
+
+    public static GameSettings LoadSettings()
+    {
+        GameSettings settings = new GameSettings();
+        JsonData settings_json = JsonMapper.ToObject(File.ReadAllText(settings_path));
+
+        settings.brightness = (double)settings_json["brightness"];
+
+        return settings;
+    }
+
+
+    public static void SaveSettings(GameSettings _settings)
+    {
+        JsonData settings_json = JsonMapper.ToJson(_settings);
+        File.WriteAllText(settings_path, settings_json.ToString());
+    }
 
 
     public static void DeleteMap(string _mapname)

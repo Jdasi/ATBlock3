@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 108565671529718540}
   - component: {fileID: 114217179310354446}
   m_Layer: 10
-  m_Name: Light
+  m_Name: Torch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -247,12 +247,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1694734250663960}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.12, z: 0}
+  m_LocalRotation: {x: 0.12818289, y: 0.20355642, z: 0.15575989, w: 0.9580568}
+  m_LocalPosition: {x: -0.029552266, y: 0.11023393, z: 0.03708291}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4661257861729520}
-  m_RootOrder: 0
+  m_Father: {fileID: 4984086761863310}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4157968291728722
 Transform:
@@ -376,8 +376,7 @@ Transform:
   m_LocalRotation: {x: 0.12818289, y: 0.20355642, z: 0.15575989, w: 0.9580568}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4110426404437004}
+  m_Children: []
   m_Father: {fileID: 4984086761863310}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 10.498, y: 25.931, z: 20.892}
@@ -405,6 +404,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4661257861729520}
+  - {fileID: 4110426404437004}
   m_Father: {fileID: 4317971165647732}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -565,8 +565,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 0, g: 0.46206903, b: 1, a: 1}
-  m_Intensity: 3
-  m_Range: 4
+  m_Intensity: 5
+  m_Range: 2
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -601,8 +601,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0.8482758, b: 0, a: 1}
-  m_Intensity: 2
-  m_Range: 20
+  m_Intensity: 1
+  m_Range: 30
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:

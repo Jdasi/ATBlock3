@@ -5,12 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static float brightness { get { return (float)settings.brightness; } }
+
     public static PackedMap playtest_map;
     public static bool endless_playtest = true;
 
     public static TempSceneRefs scene = new TempSceneRefs();
 
     private static GameManager instance;
+    private static GameSettings settings;
 
 
     public static void GoToMenu()
@@ -29,6 +32,15 @@ public class GameManager : MonoBehaviour
     {
         playtest_map = _pmap;
         instance.LoadScene(2);
+    }
+
+
+    public static void UpdateBrightness(float _brightness)
+    {
+        settings.brightness = Mathf.Clamp(_brightness, 0, 1);
+
+        float b = (float)settings.brightness;
+        RenderSettings.ambientLight = new Color(b, b, b);
     }
 
 
@@ -51,12 +63,8 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this.gameObject);
         SceneManager.sceneLoaded += SceneLoaded;
-    }
 
-
-    void Update()
-    {
-
+        settings = FileIO.LoadSettings();
     }
 
 
@@ -74,6 +82,8 @@ public class GameManager : MonoBehaviour
             return;
 
         Time.timeScale = 1; // Always reset timeScale on scene load.
+        UpdateBrightness((float)settings.brightness);
+
         GameState state = GameObject.FindObjectOfType<GameState>();
 
         if (state != null)
@@ -84,6 +94,12 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("No GameState found in scene.");
         }
+    }
+
+
+    void OnDestroy()
+    {
+        FileIO.SaveSettings(settings);
     }
 
 }

@@ -53,6 +53,12 @@ public class PlayerCanvas : MonoBehaviour
     }
 
 
+    public void BrightnessChanged(float _brightness)
+    {
+        GameManager.UpdateBrightness(_brightness);
+    }
+
+
     public void ShowPlaytestMenu(bool _show)
     {
         playtest_menu_panel.GetComponent<Image>().color = GameManager.scene.player.life.IsAlive() ?
