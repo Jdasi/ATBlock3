@@ -39,6 +39,7 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] Color menu_dead_color;
     [SerializeField] Color menu_paused_color;
     [SerializeField] GameObject playtest_menu_panel;
+    [SerializeField] Slider brightness_slider;
 
 
     public void BtnReturnToMenu()
@@ -65,6 +66,7 @@ public class PlayerCanvas : MonoBehaviour
             menu_dead_color : menu_paused_color;
 
         playtest_menu_panel.SetActive(_show);
+        brightness_slider.value = GameManager.brightness;
     }
 
 

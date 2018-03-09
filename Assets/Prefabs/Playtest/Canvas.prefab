@@ -647,6 +647,7 @@ MonoBehaviour:
   menu_dead_color: {r: 0, g: 0, b: 0, a: 0.09803922}
   menu_paused_color: {r: 1, g: 0, b: 0, a: 0.09803922}
   playtest_menu_panel: {fileID: 1673471397374410}
+  brightness_slider: {fileID: 114832988644993294}
 --- !u!114 &114063761936074648
 MonoBehaviour:
   m_ObjectHideFlags: 1
