@@ -309,9 +309,50 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1733549415626612, guid: 20532de8cc2fe1a48925527ef21bdae4, type: 2}
+      propertyPath: m_Name
+      value: PlaytestCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 114719081301737544, guid: 20532de8cc2fe1a48925527ef21bdae4,
+        type: 2}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224402051133851170, guid: 20532de8cc2fe1a48925527ef21bdae4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -26
+      objectReference: {fileID: 0}
+    - target: {fileID: 224385389198296800, guid: 20532de8cc2fe1a48925527ef21bdae4,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 224385389198296800, guid: 20532de8cc2fe1a48925527ef21bdae4,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 88
+      objectReference: {fileID: 0}
+    - target: {fileID: 114719081301737544, guid: 20532de8cc2fe1a48925527ef21bdae4,
+        type: 2}
+      propertyPath: m_FontData.m_MaxSize
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114719081301737544, guid: 20532de8cc2fe1a48925527ef21bdae4,
+        type: 2}
+      propertyPath: m_FontData.m_Font
+      value: 
+      objectReference: {fileID: 12800000, guid: 825f464a0fcc1a140a73a263b2adcaf0,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 20532de8cc2fe1a48925527ef21bdae4, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &567570437 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114723045867916042, guid: 20532de8cc2fe1a48925527ef21bdae4,
+    type: 2}
+  m_PrefabInternal: {fileID: 567570436}
+  m_Script: {fileID: 11500000, guid: 440d57b1b67a6d34b8dc4b4f4fba456e, type: 3}
 --- !u!1001 &1023273680
 Prefab:
   m_ObjectHideFlags: 0
@@ -512,6 +553,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114877485759733174, guid: a1d863fe49f266d4e99c0542b3f090ce,
+        type: 2}
+      propertyPath: dungeon_initialised_events.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 567570437}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a1d863fe49f266d4e99c0542b3f090ce, type: 2}
   m_IsPrefabParent: 0

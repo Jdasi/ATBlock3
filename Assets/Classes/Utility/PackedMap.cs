@@ -15,6 +15,7 @@ public class PackedMap
     private int area;
 
 
+    // Construct PackedMap format out of JSON map data.
     public PackedMap(JsonData _data)
     {
         InitDescriptionData((string)_data["name"], (string)_data["description"]);
@@ -29,6 +30,7 @@ public class PackedMap
     }
 
 
+    // Construct PackedMap format out of raw map data (i.e. from the editor).
     public PackedMap(Map _map)
     {
         InitDescriptionData(_map.name, _map.description);

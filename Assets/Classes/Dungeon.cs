@@ -37,6 +37,11 @@ public class Dungeon
         settings = _settings;
         imap = _imap;
 
+        if (_imap.NameBlank())
+        {
+            GenerateName();
+        }
+
         BSPGeneration();
     }
 
@@ -59,6 +64,17 @@ public class Dungeon
         }
 
         return pair_list;
+    }
+
+
+    void GenerateName()
+    {
+        string pre = JHelper.GetRandomElement(settings.dungeon_names.name_prefixes);
+        string suf = JHelper.GetRandomElement(settings.dungeon_names.name_suffixes);
+
+        string full = pre + " of " + suf;
+
+        imap.SetName(full);
     }
 
 

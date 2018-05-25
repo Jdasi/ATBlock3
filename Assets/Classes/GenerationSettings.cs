@@ -16,6 +16,14 @@ public class GenerationSettings
     [Range( 0, 100)] public float door_density = 50;
     [Range( 0, 100)] public float empty_room_chance = 5;
 
+    public DungeonNames dungeon_names;
+
+
+    public GenerationSettings()
+    {
+        dungeon_names = FileIO.LoadDungeonNames();
+    }
+
 
     public void RandomiseDimensions()
     {

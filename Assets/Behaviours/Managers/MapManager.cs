@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class MapManager : MonoBehaviour, IMapManager
 {
+    public GenerationSettings settings { get; private set; }
+
     public string map_name { get { return map.name; } }
     public string map_description { get { return map.description; } }
 
@@ -21,9 +23,6 @@ public class MapManager : MonoBehaviour, IMapManager
     public Bounds map_bounds { get; private set; }
     public Vector3 map_bounds_min { get { return map_bounds.min; } }
     public Vector3 map_bounds_max { get { return map_bounds.max; } }
-
-    [Header("Generation Settings")]
-    public GenerationSettings settings;
 
     [Header("Map Texture")]
     [SerializeField] List<Texture2D> map_textures;
@@ -377,6 +376,7 @@ public class MapManager : MonoBehaviour, IMapManager
             sprites_list.Add(Resources.LoadAll<Sprite>(map_textures[i].name));
         }
 
+        settings = new GenerationSettings();
         map = new Map();
         dungeon = new Dungeon();
     }

@@ -33,6 +33,7 @@ public class Map : IMap
     }
 
 
+    // Create a new blank map.
     public void CreateMap(int _width, int _height)
     {
         InitDescriptionData("", "");
@@ -40,6 +41,7 @@ public class Map : IMap
     }
 
 
+    // Create a map with information from a PackedMap format.
     public void CreateMap(PackedMap _pmap)
     {
         InitDescriptionData(_pmap.name, _pmap.description);
@@ -54,6 +56,18 @@ public class Map : IMap
             tile.terrain_type = (TerrainType)_pmap.tile_terraintype_ids[i];
             tile.residing_entity = (EntityType)_pmap.tile_entitytype_ids[i];
         }
+    }
+
+
+    public bool NameBlank()
+    {
+        return name.Length == 0;
+    }
+
+
+    public void SetName(string _name)
+    {
+        name = _name;
     }
 
 

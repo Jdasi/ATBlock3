@@ -7,6 +7,9 @@ public interface IMap
     int columns { get; }
     int rows { get; }
 
+    bool NameBlank();
+    void SetName(string _name);
+
     TerrainType GetTerrainType(int _index);
     void SetTerrainType(int _index, TerrainType _type);
 

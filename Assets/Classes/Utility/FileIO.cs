@@ -26,6 +26,18 @@ public static class FileIO
     }
 
 
+    public static DungeonNames LoadDungeonNames()
+    {
+        string file_path = Application.streamingAssetsPath + "/dungeon_names.json";
+
+        if (!File.Exists(file_path))
+            return null;
+
+        JsonData names_json = JsonMapper.ToObject(File.ReadAllText(file_path));
+        return new DungeonNames(names_json);
+    }
+
+
     public static void DeleteMap(string _mapname)
     {
         File.Delete(maps_path + _mapname + ".json");

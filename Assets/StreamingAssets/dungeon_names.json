@@ -1,0 +1,32 @@
+{
+    "prefixes":
+    [
+        "Halls",
+        "Labyrinth",
+        "Sewers",
+        "Nexus",
+        "Chambers",
+        "Trial",
+        "Dungeon",
+        "Tomb",
+        "Ruins",
+        "Temple",
+        "Shrine",
+        "Path"
+    ],
+    
+    "suffixes":
+    [
+        "Erudition",
+        "the Forbidden Valley",
+        "Perplexing Mists",
+        "Neverending Gloom",
+        "Artus",
+        "Disparity",
+        "Lost Secrets",
+        "Encroaching Darkness",
+        "the Dark Tide",
+        "Looming Agony",
+        "Grasping Vines"
+    ]
+}

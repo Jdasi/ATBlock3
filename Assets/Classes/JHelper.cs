@@ -55,6 +55,18 @@ public class JHelper
     }
 
 
+    public static T GetRandomElement<T>(List<T> _list)
+    {
+        if (_list.Count == 0)
+            return default(T);
+
+        var rand = new System.Random();
+        var elem = _list[rand.Next(_list.Count)];
+
+        return elem;
+    }
+
+
     private static Camera main_camera_;
 
 }

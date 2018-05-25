@@ -7,6 +7,17 @@ public class PlaytestDungeon : MonoBehaviour
 {
     public UnityEvent dungeon_initialised_events;
     public ExitPortal exit_portal { get; private set; }
+    
+    public string map_name
+    {
+        get
+        {
+            if (pmap == null)
+                return "";
+
+            return pmap.name;
+        }
+    }
 
     [Header("Dungeon Stuff")]
     [SerializeField] List<GameObject> dungeon_tile_prefabs;
